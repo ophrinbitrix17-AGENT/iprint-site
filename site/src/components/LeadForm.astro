@@ -1,21 +1,25 @@
 ---
 /**
  * Форма заявки → POST /api/lead (Cloudflare Worker → Telegram).
- * Работает и без JavaScript (обычная отправка → страница /dyakuyemo/).
- * С JavaScript — отправка без перезагрузки, сообщения в aria-live.
+ * Работает и без JavaScript (обычная отправка → /dyakuyemo/ или /pomylka/).
+ * С JavaScript — проверка в браузере, отправка без перезагрузки, сообщения в aria-live.
  * Варианты «Що потрібно» — из карточек услуг (любое число).
  */
 import site from '../content/site.json';
 import home from '../content/home.json';
 const f = home.hardCta.form;
 const needs = [...home.products.cards.map((c) => c.title), f.needs.other];
+const maxMb = site.lead.maxFileMb;
+const accept = site.lead.fileExt.map((e) => `.${e}`).join(',');
 const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY as string | undefined;
+const fill = (s: string) => s.replace('{max}', String(maxMb));
 ---
-<form class="lead" id="zapyt-forma" action="/api/lead" method="post" enctype="multipart/form-data" novalidate data-lead
-  data-msgs={JSON.stringify({ sending: f.sending, success: f.success, successTest: f.successTest, submit: f.submit, errors: f.errors })}>
-  <h3 class="lead__title">{f.title}</h3>
+<form class="lead-form" id="zapyt-forma" action="/api/lead" method="post" enctype="multipart/form-data" novalidate data-lead
+  data-max-mb={maxMb} data-ext={site.lead.fileExt.join(',')}
+  data-msgs={JSON.stringify({ sending: f.sending, success: f.success, successTest: f.successTest, fileFailed: f.fileFailed, submit: f.submit, errors: Object.fromEntries(Object.entries(f.errors).map(([k, v]) => [k, fill(v)])) })}>
+  <h3 class="lead-form__title">{f.title}</h3>
 
-  <div class="lead__row">
+  <div class="lead-form__row">
     <div class="field">
       <label for="lead-name">{f.name.label} <span aria-hidden="true">*</span></label>
       <input id="lead-name" name="name" type="text" required maxlength="80" autocomplete={f.name.autocomplete} aria-describedby="lead-name-err" />
@@ -23,7 +27,7 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY as string | undefi
     </div>
     <div class="field">
       <label for="lead-contact">{f.contact.label} <span aria-hidden="true">*</span></label>
-      <input id="lead-contact" name="contact" type="text" required maxlength="120" inputmode="text" autocomplete={f.contact.autocomplete} aria-describedby="lead-contact-hint lead-contact-err" />
+      <input id="lead-contact" name="contact" type="text" required maxlength="120" autocomplete={f.contact.autocomplete} aria-describedby="lead-contact-hint lead-contact-err" />
       <p class="field__hint" id="lead-contact-hint">{f.contact.hint}</p>
       <p class="field__err" id="lead-contact-err" hidden></p>
     </div>
@@ -32,15 +36,15 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY as string | undefi
   <fieldset class="field chips">
     <legend>{f.needs.label}</legend>
     <div class="chips__list">
-      {needs.map((n, i) => (
-        <label class="chip"><input type="checkbox" name="needs" value={n} id={`lead-need-${i}`} /><span>{n}</span></label>
+      {needs.map((n) => (
+        <label class="chip"><input type="checkbox" name="needs" value={n} /><span>{n}</span></label>
       ))}
     </div>
   </fieldset>
 
   <fieldset class="field chips">
     <legend>{f.qty.label}</legend>
-    <div class="chips__list">
+    <div class="chips__list chips__list--short">
       {f.qty.options.map((q) => (
         <label class="chip"><input type="radio" name="qty" value={q} /><span>{q}</span></label>
       ))}
@@ -50,30 +54,29 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY as string | undefi
   <div class="field">
     <label for="lead-file">{f.file.label}</label>
     <div class="filepick">
-      <input id="lead-file" name="file" type="file" class="filepick__input"
-        accept=".pdf,.ai,.eps,.svg,.png,.jpg,.jpeg,.tif,.tiff,.psd,.cdr,.zip,.rar,.7z,.webp" aria-describedby="lead-file-hint lead-file-err" />
-      <label for="lead-file" class="btn btn--ghost filepick__btn" aria-hidden="true">{f.file.button}</label>
+      <input id="lead-file" name="file" type="file" class="filepick__input" accept={accept} aria-describedby="lead-file-hint lead-file-err" />
+      <span class="btn btn--ghost filepick__btn" aria-hidden="true">{f.file.button}</span>
       <span class="filepick__name" data-file-name data-empty={f.file.empty}>{f.file.empty}</span>
     </div>
-    <p class="field__hint" id="lead-file-hint">{f.file.hint}</p>
+    <p class="field__hint" id="lead-file-hint">{fill(f.file.hint)}</p>
     <p class="field__err" id="lead-file-err" hidden></p>
   </div>
 
   <div class="field">
     <label for="lead-comment">{f.comment.label}</label>
-    <textarea id="lead-comment" name="comment" rows="3" maxlength="2000" placeholder={f.comment.placeholder}></textarea>
+    <textarea id="lead-comment" name="comment" rows="3" maxlength="1500" placeholder={f.comment.placeholder}></textarea>
   </div>
 
-  {/* ловушка для ботов — люди её не видят */}
-  <div class="hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label></div>
-  <input type="hidden" name="t" value="" data-lead-time />
+  {/* ловушка для ботов — люди её не видят; имя поля не распознаётся автозаполнением браузеров */}
+  <div class="hp" aria-hidden="true"><label>zx <input type="text" name="zx_extra" tabindex="-1" autocomplete="off" /></label></div>
+  <input type="hidden" name="e" value="" data-lead-elapsed />
 
   {turnstileKey && <div class="cf-turnstile" data-sitekey={turnstileKey} data-language="uk"></div>}
 
-  <p class="lead__consent">{f.consent} <a href={site.legal.privacyHref}>{site.ui.privacyLink}</a>.</p>
-  <button class="btn btn--primary lead__submit" type="submit">{f.submit}</button>
-  <p class="lead__status" role="status" aria-live="polite" data-lead-status></p>
-  <p class="lead__alt">{site.ui.orCall} <a href={`tel:${site.phone}`}>{site.phoneDisplay}</a></p>
+  <p class="lead-form__consent">{f.consent} <a href={site.legal.privacyHref}>{site.ui.privacyLink}</a>.</p>
+  <button class="btn btn--primary lead-form__submit" type="submit">{f.submit}</button>
+  <p class="lead-form__status" role="status" aria-live="polite" data-lead-status></p>
+  <p class="lead-form__alt">{site.ui.orCall} <a href={`tel:${site.phone}`}>{site.phoneDisplay}</a></p>
 </form>
 {turnstileKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
 
@@ -81,16 +84,15 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY as string | undefi
   const form = document.querySelector<HTMLFormElement>('[data-lead]');
   if (form) {
     const msgs = JSON.parse(form.dataset.msgs ?? '{}');
+    const maxMb = Number(form.dataset.maxMb ?? '20');
+    const exts = (form.dataset.ext ?? '').split(',');
     const status = form.querySelector<HTMLElement>('[data-lead-status]')!;
-    const btn = form.querySelector<HTMLButtonElement>('.lead__submit')!;
-    const time = form.querySelector<HTMLInputElement>('[data-lead-time]');
-    if (time) time.value = String(Date.now());
-    // имя выбранного файла (родная подпись браузера может быть не на украинском)
+    const btn = form.querySelector<HTMLButtonElement>('.lead-form__submit')!;
+    const elapsed = form.querySelector<HTMLInputElement>('[data-lead-elapsed]');
+    const started = performance.now();   // время заполнения считаем по часам браузера — не зависит от их точности
     const fileIn = form.querySelector<HTMLInputElement>('#lead-file');
     const fileName = form.querySelector<HTMLElement>('[data-file-name]');
     const showFile = () => { if (fileName) fileName.textContent = fileIn?.files?.[0]?.name ?? fileName.dataset.empty ?? ''; };
-    fileIn?.addEventListener('change', showFile);
-    form.addEventListener('reset', () => setTimeout(showFile));
 
     const setErr = (field: string, text: string | null) => {
       const input = form.querySelector<HTMLInputElement>(`[name="${field}"]`);
@@ -98,78 +100,104 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY as string | undefi
       if (input) input.setAttribute('aria-invalid', text ? 'true' : 'false');
       if (err) { err.textContent = text ?? ''; err.hidden = !text; }
     };
-    const clear = () => ['name', 'contact', 'file'].forEach((f) => setErr(f, null));
+    const fileError = (): string | null => {
+      const file = fileIn?.files?.[0];
+      if (!file) return null;
+      const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
+      if (!exts.includes(ext)) return msgs.errors['file-type'];
+      if (file.size > maxMb * 1024 * 1024) return msgs.errors['file-size'];
+      return null;
+    };
+    fileIn?.addEventListener('change', () => { showFile(); setErr('file', fileError()); });
+    form.addEventListener('reset', () => setTimeout(showFile));
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      clear();
-      status.className = 'lead__status';
-      // проверка обязательных полей в браузере
+      ['name', 'contact', 'file'].forEach((f) => setErr(f, null));
+      status.className = 'lead-form__status';
+      status.textContent = '';
+      // проверка в браузере: обязательные поля и файл
       let first: HTMLElement | null = null;
       for (const f of ['name', 'contact']) {
         const el = form.querySelector<HTMLInputElement>(`[name="${f}"]`)!;
         if (!el.value.trim()) { setErr(f, msgs.errors.required); first ??= el; }
       }
+      const fe = fileError();
+      if (fe) { setErr('file', fe); first ??= fileIn; }
       if (first) { first.focus(); return; }
 
-      btn.disabled = true; btn.textContent = msgs.sending; status.textContent = '';
+      if (elapsed) elapsed.value = String(Math.round(performance.now() - started));
+      btn.disabled = true; btn.textContent = msgs.sending;
       try {
         const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { accept: 'application/json' } });
         const data = await res.json().catch(() => ({ ok: false, error: 'default' }));
         if (data.ok) {
-          form.reset(); if (time) time.value = String(Date.now());
-          status.textContent = data.test ? msgs.successTest : msgs.success;
-          status.classList.add('lead__status--ok');
+          form.reset();
+          status.textContent = data.test ? msgs.successTest : data.fileFailed ? msgs.fileFailed : msgs.success;
+          status.classList.add('lead-form__status--ok');
         } else {
           const text = msgs.errors[data.error] ?? msgs.errors.default;
           if (data.field) { setErr(data.field, text); form.querySelector<HTMLElement>(`[name="${data.field}"]`)?.focus(); }
-          status.textContent = text; status.classList.add('lead__status--err');
+          status.textContent = text; status.classList.add('lead-form__status--err');
         }
       } catch {
-        status.textContent = msgs.errors.default; status.classList.add('lead__status--err');
+        status.textContent = msgs.errors.default; status.classList.add('lead-form__status--err');
       } finally {
         btn.disabled = false; btn.textContent = msgs.submit;
+        // токен Turnstile одноразовый — для повторной попытки нужен новый
+        (window as unknown as { turnstile?: { reset: () => void } }).turnstile?.reset();
       }
     });
   }
 </script>
 
 <style>
-  .lead { display: grid; gap: 18px; padding: 22px; border-radius: var(--radius-l); background: var(--surface); border: 1px solid var(--line); color: var(--text); }
-  .lead__title { font-size: var(--fs-h3); font-weight: var(--fw-bold); }
-  .lead__row { display: grid; gap: 18px; }
+  /* рамки полей — ≥ 3:1 к карточке формы (и в сцене, и в светлом контексте) */
+  .lead-form { --line-strong: var(--form-line); display: grid; gap: 18px; padding: 22px; border-radius: var(--radius-l); background: var(--surface); border: 1px solid var(--line); color: var(--text); }
+  .lead-form__title { font-size: var(--fs-h3); font-weight: var(--fw-bold); }
+  .lead-form__row { display: grid; gap: 18px; }
   .field { display: grid; gap: 6px; margin: 0; padding: 0; border: 0; min-width: 0; align-content: start; }
-  .field label, .field legend { font-weight: 600; font-size: var(--fs-ui); padding: 0; }
+  .field > label, .field > legend { font-weight: 600; font-size: var(--fs-ui); padding: 0; }
   .field input[type="text"], .field textarea {
     width: 100%; min-height: 48px; padding: 12px 14px; border-radius: var(--radius-s);
     border: 1.5px solid var(--line-strong); background: var(--bg); color: var(--text); font: inherit; font-size: var(--fs-body);
   }
   .field textarea { resize: vertical; min-height: 96px; }
-  .filepick { position: relative; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .filepick__input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-  .filepick__btn { pointer-events: none; }
-  .filepick__input:focus-visible + .filepick__btn { outline: 2.5px solid var(--focus); outline-offset: 3px; }
-  .filepick__name { color: var(--muted); font-size: var(--fs-small); overflow-wrap: anywhere; min-width: 0; }
+  .field input::placeholder, .field textarea::placeholder { color: var(--muted); opacity: 1; }
   .field input:focus-visible, .field textarea:focus-visible { outline: 2.5px solid var(--focus); outline-offset: 1px; }
-  .field [aria-invalid="true"] { border-color: var(--danger); }
+  .field input[aria-invalid="true"], .field textarea[aria-invalid="true"] { border-color: var(--danger); }
   .field__hint { font-size: var(--fs-small); color: var(--muted); }
   .field__err { font-size: var(--fs-small); color: var(--danger); font-weight: 600; }
-  .chips__list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
-  .chip { position: relative; display: inline-flex; }
+
+  .filepick { position: relative; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .filepick__input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 1; }
+  .filepick__input:focus-visible + .filepick__btn { outline: 2.5px solid var(--focus); outline-offset: 3px; }
+  .filepick__input[aria-invalid="true"] + .filepick__btn { border-color: var(--danger); }
+  .filepick__name { color: var(--muted); font-size: var(--fs-small); overflow-wrap: anywhere; min-width: 0; }
+
+  .chips__list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+  .chips__list--short { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
+  .chip { position: relative; display: flex; }
   .chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-  .chip span { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 14px; border-radius: 999px; border: 1.5px solid var(--line-strong); font-size: var(--fs-ui); font-weight: 500; cursor: pointer; user-select: none; }
-  .chip input:checked + span { background: var(--accent); border-color: var(--accent); color: var(--btn-fg); font-weight: var(--fw-bold); }
+  .chip span { display: flex; align-items: center; width: 100%; min-height: var(--tap); padding: 6px 14px; border-radius: 22px; border: 1.5px solid var(--line-strong); font-size: var(--fs-ui); font-weight: 500; line-height: 1.25; cursor: pointer; user-select: none; overflow-wrap: anywhere; }
+  .chip input:checked + span { background: var(--chip-on-bg); border-color: var(--chip-on-bg); color: var(--chip-on-fg); font-weight: var(--fw-bold); }
   .chip input:focus-visible + span { outline: 2.5px solid var(--focus); outline-offset: 2px; }
+
   .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-  .lead__consent { font-size: var(--fs-small); color: var(--muted); }
-  .lead__consent a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
-  .lead__submit { width: 100%; }
-  .lead__submit:disabled { opacity: .7; cursor: progress; }
-  .lead__status:empty { display: none; }
-  .lead__status { padding: 12px 14px; border-radius: var(--radius-s); font-weight: 600; }
-  .lead__status--ok { background: var(--ok-bg); color: var(--ok-fg); }
-  .lead__status--err { background: var(--danger-bg); color: var(--danger-fg); }
-  .lead__alt { font-size: var(--fs-small); color: var(--muted); }
-  .lead__alt a { color: var(--text); font-weight: var(--fw-bold); text-decoration: underline; text-underline-offset: 3px; display: inline-flex; min-height: var(--tap); align-items: center; }
-  @media (min-width: 700px) { .lead { padding: 28px; } .lead__row { grid-template-columns: 1fr 1fr; } }
+  .lead-form__consent { font-size: var(--fs-small); color: var(--muted); }
+  .lead-form__consent a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+  .lead-form__submit { width: 100%; }
+  .lead-form__submit:disabled { opacity: .7; cursor: progress; }
+  /* область статуса всегда в дереве доступности; оформление — только когда есть текст */
+  .lead-form__status:not(:empty) { padding: 12px 14px; border-radius: var(--radius-s); font-weight: 600; border-left: 4px solid currentColor; }
+  .lead-form__status--ok { background: var(--ok-bg); color: var(--ok-fg); }
+  .lead-form__status--err { background: var(--danger-bg); color: var(--danger-fg); }
+  .lead-form__alt { font-size: var(--fs-small); color: var(--muted); }
+  .lead-form__alt a { color: var(--text); font-weight: var(--fw-bold); text-decoration: underline; text-underline-offset: 3px; display: inline-flex; min-height: var(--tap); align-items: center; }
+  @media (min-width: 700px) {
+    .lead-form { padding: 28px; }
+    .lead-form__row { grid-template-columns: 1fr 1fr; }
+    .chips__list { display: flex; flex-wrap: wrap; }
+    .chip span { width: auto; border-radius: 999px; }
+  }
 </style>

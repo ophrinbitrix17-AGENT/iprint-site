@@ -2,31 +2,23 @@
 /** Простой экран-сообщение для служебных страниц (спасибо, 404). */
 import site from '../content/site.json';
 import Icon from './Icon.astro';
-interface Props { h1: string; text: string; back: string; errorH1?: string; errorText?: string }
-const { h1, text, back, errorH1, errorText } = Astro.props;
+interface Props { h1: string; text: string; back: string; backHref?: string }
+const { h1, text, back, backHref = '/' } = Astro.props;
 ---
-<section class="section msg" data-msg data-error-h1={errorH1} data-error-text={errorText}>
+<section class="section msg">
   <div class="wrap msg__inner">
     <span class="msg__dot" aria-hidden="true"></span>
-    <h1 class="h1 msg__h1" data-msg-h1>{h1}</h1>
-    <p class="lead" data-msg-text>{text}</p>
+    <h1 class="h1 msg__h1">{h1}</h1>
+    <p class="lead">{text}</p>
     <div class="msg__actions">
-      <a class="btn btn--primary" href="/">{back}</a>
+      <a class="btn btn--ghost" href={backHref}>{back}</a>
       <a class="btn btn--ghost" href={`tel:${site.phone}`}><Icon name="phone" />{site.phoneDisplay}</a>
     </div>
   </div>
 </section>
-<script>
-  // /dyakuyemo/?pomylka=… — показать текст ошибки (отправка формы без JavaScript)
-  const box = document.querySelector<HTMLElement>('[data-msg]');
-  if (box?.dataset.errorH1 && new URLSearchParams(location.search).has('pomylka')) {
-    box.querySelector('[data-msg-h1]')!.textContent = box.dataset.errorH1;
-    box.querySelector('[data-msg-text]')!.textContent = box.dataset.errorText ?? '';
-  }
-</script>
 <style>
   .msg { min-height: 60svh; display: flex; align-items: center; }
   .msg__inner { display: grid; gap: 16px; justify-items: start; }
-  .msg__dot { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 6px var(--bg), 0 0 0 8.5px var(--muted); margin-bottom: 8px; }
+  .msg__dot { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 6px var(--bg), 0 0 0 8.5px var(--muted); margin: 9px 0 8px 9px; }
   .msg__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
 </style>

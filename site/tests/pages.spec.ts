@@ -37,7 +37,7 @@ test.describe('Внутренние страницы', () => {
 
   test('ссылка на политику есть в форме и в подвале', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('.lead__consent a')).toHaveAttribute('href', '/polityka-konfidentsiinosti/');
+    await expect(page.locator('.lead-form__consent a')).toHaveAttribute('href', '/polityka-konfidentsiinosti/');
     await expect(page.locator('.ftr__copy a')).toHaveAttribute('href', '/polityka-konfidentsiinosti/');
   });
 

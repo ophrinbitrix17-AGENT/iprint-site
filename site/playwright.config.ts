@@ -11,7 +11,7 @@ export default defineConfig({
   webServer: [
     { command: 'node tests/mock-telegram.mjs', url: 'http://127.0.0.1:9911/__health', reuseExistingServer: true },
     {
-      command: 'npx wrangler dev --port 4321 --ip 127.0.0.1 --var TELEGRAM_BOT_TOKEN:test-token --var TELEGRAM_CHAT_ID:100 --var TELEGRAM_API_BASE:http://127.0.0.1:9911',
+      command: 'npx wrangler dev --port 4321 --ip 127.0.0.1 --var TELEGRAM_BOT_TOKEN:test-token --var TELEGRAM_CHAT_ID:100 --var TELEGRAM_API_BASE:http://127.0.0.1:9911 --var LEAD_RATE_DISABLED:1',
       url: 'http://127.0.0.1:4321', reuseExistingServer: false, timeout: 120_000, env: { WRANGLER_SEND_METRICS: 'false', CI: '1' },
     },
   ],

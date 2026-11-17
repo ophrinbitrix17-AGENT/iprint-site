@@ -4,7 +4,7 @@ import site from '../content/site.json';
 interface Crumb { label: string; href?: string }
 interface Props { crumbs: Crumb[]; h1: string; lead?: string; updated?: string; draft?: boolean }
 const { crumbs, h1, lead, updated, draft } = Astro.props;
-const date = updated ? new Date(updated).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric' }) : null;
+const date = updated ? new Date(updated).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }) : null;
 ---
 <header class="ph">
   <div class="wrap">
@@ -32,7 +32,8 @@ const date = updated ? new Date(updated).toLocaleDateString('uk-UA', { day: 'num
   .crumbs li + li::before { content: "/"; margin-right: 4px; color: var(--line-strong); }
   .crumbs a { display: inline-flex; align-items: center; min-height: var(--tap); text-decoration: underline; text-underline-offset: 3px; }
   .crumbs span { display: inline-flex; align-items: center; min-height: var(--tap); }
-  .ph__h1 { margin-top: 8px; }
+  .ph__h1 { margin-top: 8px; font-size: var(--fs-h1-page); }
+  :global(.ph + .section) { padding-top: 32px; }
   .ph__lead { margin-top: 14px; max-width: 60ch; }
   .ph__meta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 16px; font-size: var(--fs-small); color: var(--muted); }
   @media (min-width: 1100px) { .ph { padding-top: 48px; } }

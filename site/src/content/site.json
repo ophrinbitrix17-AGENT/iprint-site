@@ -78,5 +78,27 @@
   },
   "legal": {
     "privacyHref": "/polityka-konfidentsiinosti/"
-  }
+  },
+  "lead": {
+    "maxFileMb": 20,
+    "fileExt": [
+      "pdf",
+      "ai",
+      "eps",
+      "svg",
+      "png",
+      "jpg",
+      "jpeg",
+      "tif",
+      "tiff",
+      "psd",
+      "cdr",
+      "zip",
+      "rar",
+      "7z",
+      "webp"
+    ]
+  },
+  "ogSubtitle": "Шовкотрафарет · DTF · вишивка · пошив — Одеса",
+  "domain": "iprint.com.ua"
 }
