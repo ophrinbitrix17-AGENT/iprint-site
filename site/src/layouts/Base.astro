@@ -10,8 +10,9 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import StickyBar from '../components/StickyBar.astro';
 
-interface Props { title: string; description: string; noindex?: boolean; }
-const { title, description, noindex = false } = Astro.props;
+interface Props { title: string; description: string; noindex?: boolean; schema?: Record<string, unknown>[] }
+const { title, description, noindex = false, schema = [] } = Astro.props;
+const ogImage = `${site.url}/og-image.png`;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 
 // Индексация разрешена ТОЛЬКО в боевой сборке (SITE_ENV=production). Превью/зеркало — всегда noindex.
@@ -29,6 +30,7 @@ const jsonLd = {
       name: site.name,
       url: `${site.url}/`,
       logo: `${site.url}/logo.png`,
+      image: ogImage,
       description: site.description,
       telephone: site.phone,
       email: site.email,
@@ -38,6 +40,7 @@ const jsonLd = {
       ...(sameAs.length ? { sameAs } : {}),
     },
     { '@type': 'WebSite', '@id': `${site.url}/#website`, name: site.name, url: `${site.url}/`, inLanguage: 'uk', publisher: { '@id': orgId } },
+    ...schema,   // разметка конкретной страницы (AboutPage, ContactPage, BreadcrumbList …)
   ],
 };
 ---
@@ -64,6 +67,11 @@ const jsonLd = {
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content={`${site.name} — ${site.tagline}`} />
+  <meta name="twitter:card" content="summary_large_image" />
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 </head>
 <body>

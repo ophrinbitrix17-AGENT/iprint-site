@@ -129,6 +129,8 @@ test.describe('Главная', () => {
     await expect(page.locator('[data-sbar]')).toHaveClass(/sbar--hidden/);
     await page.evaluate(() => window.scrollTo(0, 1500));
     await expect(page.locator('[data-sbar]')).not.toHaveClass(/sbar--hidden/);
+    await page.locator('#lead-name').scrollIntoViewIfNeeded();
+    await expect(page.locator('[data-sbar]')).toHaveClass(/sbar--hidden/);   // у формы панель не мешает
   });
 
   test('режим «меньше движения»: анимации отключены', async ({ page }) => {

@@ -1,0 +1,39 @@
+---
+/** Шапка внутренней страницы: хлебные крошки, H1, вводный абзац, дата обновления. */
+import site from '../content/site.json';
+interface Crumb { label: string; href?: string }
+interface Props { crumbs: Crumb[]; h1: string; lead?: string; updated?: string; draft?: boolean }
+const { crumbs, h1, lead, updated, draft } = Astro.props;
+const date = updated ? new Date(updated).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric' }) : null;
+---
+<header class="ph">
+  <div class="wrap">
+    <nav class="crumbs" aria-label={site.ui.breadcrumbs}>
+      <ol>
+        {crumbs.map((c, i) => (
+          <li>{c.href && i < crumbs.length - 1 ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>
+        ))}
+      </ol>
+    </nav>
+    <h1 class="h1 ph__h1">{h1}</h1>
+    {lead && <p class="lead ph__lead">{lead}</p>}
+    {(date || draft) && (
+      <p class="ph__meta">
+        {date && <span>{site.ui.updated}: <time datetime={updated}>{date}</time></span>}
+        {draft && <span class="draft">{site.ui.draftText}</span>}
+      </p>
+    )}
+  </div>
+</header>
+
+<style>
+  .ph { padding: 24px 0 0; }
+  .crumbs ol { list-style: none; display: flex; flex-wrap: wrap; gap: 4px; font-size: var(--fs-small); color: var(--muted); }
+  .crumbs li + li::before { content: "/"; margin-right: 4px; color: var(--line-strong); }
+  .crumbs a { display: inline-flex; align-items: center; min-height: var(--tap); text-decoration: underline; text-underline-offset: 3px; }
+  .crumbs span { display: inline-flex; align-items: center; min-height: var(--tap); }
+  .ph__h1 { margin-top: 8px; }
+  .ph__lead { margin-top: 14px; max-width: 60ch; }
+  .ph__meta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 16px; font-size: var(--fs-small); color: var(--muted); }
+  @media (min-width: 1100px) { .ph { padding-top: 48px; } }
+</style>

@@ -49,8 +49,12 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY as string | undefi
 
   <div class="field">
     <label for="lead-file">{f.file.label}</label>
-    <input id="lead-file" name="file" type="file" class="file"
-      accept=".pdf,.ai,.eps,.svg,.png,.jpg,.jpeg,.tif,.tiff,.psd,.cdr,.zip,.rar,.7z,.webp" aria-describedby="lead-file-hint lead-file-err" />
+    <div class="filepick">
+      <input id="lead-file" name="file" type="file" class="filepick__input"
+        accept=".pdf,.ai,.eps,.svg,.png,.jpg,.jpeg,.tif,.tiff,.psd,.cdr,.zip,.rar,.7z,.webp" aria-describedby="lead-file-hint lead-file-err" />
+      <label for="lead-file" class="btn btn--ghost filepick__btn" aria-hidden="true">{f.file.button}</label>
+      <span class="filepick__name" data-file-name data-empty={f.file.empty}>{f.file.empty}</span>
+    </div>
     <p class="field__hint" id="lead-file-hint">{f.file.hint}</p>
     <p class="field__err" id="lead-file-err" hidden></p>
   </div>
@@ -66,7 +70,7 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY as string | undefi
 
   {turnstileKey && <div class="cf-turnstile" data-sitekey={turnstileKey} data-language="uk"></div>}
 
-  <p class="lead__consent">{f.consent}</p>
+  <p class="lead__consent">{f.consent} <a href={site.legal.privacyHref}>{site.ui.privacyLink}</a>.</p>
   <button class="btn btn--primary lead__submit" type="submit">{f.submit}</button>
   <p class="lead__status" role="status" aria-live="polite" data-lead-status></p>
   <p class="lead__alt">{site.ui.orCall} <a href={`tel:${site.phone}`}>{site.phoneDisplay}</a></p>
@@ -81,6 +85,12 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY as string | undefi
     const btn = form.querySelector<HTMLButtonElement>('.lead__submit')!;
     const time = form.querySelector<HTMLInputElement>('[data-lead-time]');
     if (time) time.value = String(Date.now());
+    // имя выбранного файла (родная подпись браузера может быть не на украинском)
+    const fileIn = form.querySelector<HTMLInputElement>('#lead-file');
+    const fileName = form.querySelector<HTMLElement>('[data-file-name]');
+    const showFile = () => { if (fileName) fileName.textContent = fileIn?.files?.[0]?.name ?? fileName.dataset.empty ?? ''; };
+    fileIn?.addEventListener('change', showFile);
+    form.addEventListener('reset', () => setTimeout(showFile));
 
     const setErr = (field: string, text: string | null) => {
       const input = form.querySelector<HTMLInputElement>(`[name="${field}"]`);
@@ -128,15 +138,18 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY as string | undefi
   .lead { display: grid; gap: 18px; padding: 22px; border-radius: var(--radius-l); background: var(--surface); border: 1px solid var(--line); color: var(--text); }
   .lead__title { font-size: var(--fs-h3); font-weight: var(--fw-bold); }
   .lead__row { display: grid; gap: 18px; }
-  .field { display: grid; gap: 6px; margin: 0; padding: 0; border: 0; min-width: 0; }
+  .field { display: grid; gap: 6px; margin: 0; padding: 0; border: 0; min-width: 0; align-content: start; }
   .field label, .field legend { font-weight: 600; font-size: var(--fs-ui); padding: 0; }
-  .field input[type="text"], .field textarea, .file {
+  .field input[type="text"], .field textarea {
     width: 100%; min-height: 48px; padding: 12px 14px; border-radius: var(--radius-s);
     border: 1.5px solid var(--line-strong); background: var(--bg); color: var(--text); font: inherit; font-size: var(--fs-body);
   }
   .field textarea { resize: vertical; min-height: 96px; }
-  .file { padding: 10px; }
-  .file::file-selector-button { font: inherit; font-weight: var(--fw-bold); margin-right: 12px; padding: 8px 14px; border-radius: var(--radius-s); border: 0; background: var(--line); color: var(--text); cursor: pointer; }
+  .filepick { position: relative; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .filepick__input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+  .filepick__btn { pointer-events: none; }
+  .filepick__input:focus-visible + .filepick__btn { outline: 2.5px solid var(--focus); outline-offset: 3px; }
+  .filepick__name { color: var(--muted); font-size: var(--fs-small); overflow-wrap: anywhere; min-width: 0; }
   .field input:focus-visible, .field textarea:focus-visible { outline: 2.5px solid var(--focus); outline-offset: 1px; }
   .field [aria-invalid="true"] { border-color: var(--danger); }
   .field__hint { font-size: var(--fs-small); color: var(--muted); }
@@ -149,6 +162,7 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY as string | undefi
   .chip input:focus-visible + span { outline: 2.5px solid var(--focus); outline-offset: 2px; }
   .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
   .lead__consent { font-size: var(--fs-small); color: var(--muted); }
+  .lead__consent a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
   .lead__submit { width: 100%; }
   .lead__submit:disabled { opacity: .7; cursor: progress; }
   .lead__status:empty { display: none; }

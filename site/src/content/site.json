@@ -37,11 +37,11 @@
         },
         {
           "label": "Про компанію",
-          "href": null
+          "href": "/pro-kompaniiu/"
         },
         {
           "label": "Контакти",
-          "href": "/#kontakty"
+          "href": "/kontakty/"
         }
       ]
     }
@@ -69,6 +69,14 @@
     "footerContacts": "Контакти",
     "emailSubject": "Запит з сайту",
     "orCall": "або зателефонуйте:",
-    "contactAlt": "Зручніше голосом або в месенджері?"
+    "contactAlt": "Зручніше голосом або в месенджері?",
+    "breadcrumbs": "Навігація сторінкою",
+    "home": "Головна",
+    "updated": "Оновлено",
+    "privacyLink": "Політика конфіденційності",
+    "draftText": "ДОРАБОТАТЬ — чернетка тексту"
+  },
+  "legal": {
+    "privacyHref": "/polityka-konfidentsiinosti/"
   }
 }

@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+import site from '../content/site.json';
+import pages from '../content/pages.json';
+import { breadcrumbs, webPage } from '../lib/schema';
+const p = pages.contacts;
+const path = `/${p.slug}/`;
+const crumbs = [{ label: site.ui.home, href: '/' }, { label: p.h1, href: path }];
+type Row = { label: string; value: string; href: string | null; icon: 'phone' | 'mail' | 'telegram' | 'instagram' | null };
+const rows = [
+  { label: p.labels.phone, value: site.phoneDisplay, href: `tel:${site.phone}`, icon: 'phone' },
+  { label: p.labels.email, value: site.email, href: `mailto:${site.email}`, icon: 'mail' },
+  site.telegram ? { label: p.labels.telegram, value: String(site.telegram).replace(/^https?:\/\/t\.me\//, '@'), href: site.telegram, icon: 'telegram' } : null,
+  site.instagram ? { label: p.labels.instagram, value: 'Instagram', href: site.instagram, icon: 'instagram' } : null,
+  { label: p.labels.city, value: `${site.city}, ${site.countryName}`, href: null, icon: null },
+  site.hours ? { label: p.labels.hours, value: site.hours, href: null, icon: null } : null,
+].filter(Boolean) as Row[];
+---
+<Base title={p.title} description={p.description} schema={[webPage('ContactPage', path, p.h1, p.description, p.updated), breadcrumbs(crumbs)]}>
+  <PageHeader crumbs={crumbs} h1={p.h1} lead={p.lead} updated={p.updated} />
+  <section class="section">
+    <div class="wrap">
+      <dl class="contacts">
+        {rows.map((r) => (
+          <div class="cc">
+            <dt class="cc__label">{r.label}</dt>
+            <dd class="cc__value">{r.href
+              ? <a href={r.href} rel={r.href.startsWith('http') ? 'noopener' : undefined}>{r.icon && <Icon name={r.icon} />}{r.value}</a>
+              : <span>{r.value}</span>}</dd>
+          </div>
+        ))}
+      </dl>
+      <a class="btn btn--primary cc__cta" href="/#zapyt">{p.formLink}<Icon name="arrow" /></a>
+    </div>
+  </section>
+</Base>
+<style>
+  .contacts { display: grid; gap: 12px; margin: 0; }
+  .cc { padding: 18px 20px; border-radius: var(--radius-m); background: var(--surface); border: 1px solid var(--line); }
+  .cc__label { font-size: var(--fs-eyebrow); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: var(--fw-bold); }
+  .cc__value { margin: 6px 0 0; font-size: var(--fs-accent); font-weight: var(--fw-bold); overflow-wrap: anywhere; }
+  .cc__value a { display: inline-flex; align-items: center; gap: 10px; min-height: var(--tap); }
+  .cc__value a:hover { color: var(--accent-ink); }
+  .cc__value :global(svg) { width: 22px; height: 22px; flex: none; }
+  .cc__cta { margin-top: 28px; }
+  @media (min-width: 700px) { .contacts { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .contacts { grid-template-columns: repeat(3, 1fr); } }
+</style>
