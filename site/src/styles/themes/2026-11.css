@@ -22,6 +22,15 @@
   --fs-h1: clamp(34px, 24px + 3.6vw, 72px);
   --fs-h2: clamp(27px, 20px + 2.2vw, 48px);
   --fs-h3: 19px;
+  --fs-h1-compact: clamp(26px, 10px + 6svh, 40px);   /* H1 на телефоне лёжа */
+  --fs-card-title: clamp(16px, 13px + 1vw, 19px);  /* заголовки карточек 2×2 на узких экранах */
+  --fs-num: 40px;           /* крупные номера пунктов */
+  --fs-accent: 19px;        /* акцентная строка (мягкий призыв) */
+  --fs-cta-text: 17px;
+  --fs-menu: 18px;          /* пункты мобильного меню */
+  --fs-ui: 15px;            /* кнопки в шапке */
+  --fs-eyebrow: 13px;       /* надзаголовки, подписи разделов */
+  --fs-tag: 11px;           /* метки «скоро», черновик */
   --fs-small: 14px;
   --lh-body: 1.6;
   --lh-tight: 1.06;
@@ -42,6 +51,8 @@
   --ease: cubic-bezier(.2, .7, .2, 1);
   --t-fast: 120ms;
   --t-mid: 240ms;
+  --t-slow: 400ms;
+  --shadow-pop: 0 16px 40px #0000002e;   /* выпадающие панели */
 
   /* ---- СВЕТЛАЯ ТЕМА (по умолчанию) ---- */
   color-scheme: light;
@@ -49,7 +60,7 @@
   --bg-alt: #ECE9E2;
   --surface: #FFFFFF;
   --line: #D9D4CA;
-  --line-strong: #8C877D;
+  --line-strong: #857F75;   /* ≥ 3:1 и на --bg, и на --bg-alt */
   --text: #1A1916;
   --muted: #5F5A51;
   --accent: var(--lime-light);
@@ -102,6 +113,8 @@
   --bg: #201F1B;
   --bg-alt: #201F1B;
   --surface: #2B2A25;
+  --line-strong: #75716A;   /* ≥ 3:1 на фоне сцены */
+  box-shadow: inset 0 1px 0 var(--line);   /* сцены различимы и в тёмной теме */
 }
 
 @media (min-width: 700px) {

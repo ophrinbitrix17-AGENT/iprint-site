@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/postbuild.mjs",
     "preview": "astro preview --host 127.0.0.1 --port 4321",
     "test": "playwright test",
     "test:all": "astro build && playwright test"

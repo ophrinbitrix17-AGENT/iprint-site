@@ -3,8 +3,9 @@
 import { Picture } from 'astro:assets';
 import { img } from '../lib/images';
 import Icon from './Icon.astro';
-interface Props { title: string; text?: string; image?: string | null; imageAlt?: string; placeholder?: string; href?: string | null; sizes: string; }
-const { title, text, image, imageAlt, placeholder, href, sizes } = Astro.props;
+import site from '../content/site.json';
+interface Props { title: string; titleDisplay?: string; text?: string; image?: string | null; imageAlt?: string; placeholder?: string; href?: string | null; sizes: string; }
+const { title, titleDisplay, text, image, imageAlt, placeholder, href, sizes } = Astro.props;
 const photo = img(image);
 const Tag = href ? 'a' : 'div';
 ---
@@ -12,10 +13,10 @@ const Tag = href ? 'a' : 'div';
   <div class="card__media">
     {photo
       ? <Picture src={photo} alt={imageAlt ?? ''} formats={['avif', 'webp']} widths={[320, 480, 720]} sizes={sizes} loading="lazy" />
-      : <div class="card__ph" role="img" aria-label={`Фото: ${title} — незабаром`}><span>{placeholder ?? 'ФОТО'}<br />ДОРАБОТАТЬ</span></div>}
+      : <div class="card__ph" role="img" aria-label={`${site.ui.photoPlaceholder}: ${title} — ${site.ui.photoSoon}`}><span>{placeholder ?? site.ui.photoPlaceholder}<br />{site.ui.placeholderDraft}</span></div>}
   </div>
   <div class="card__body">
-    <h3 class="h3">{title}</h3>
+    <h3 class="h3 card__title">{titleDisplay ?? title}</h3>
     {text && <p class="card__text">{text}</p>}
   </div>
   {href && <span class="card__go" aria-hidden="true"><Icon name="arrow-up-right" /></span>}
@@ -26,14 +27,16 @@ const Tag = href ? 'a' : 'div';
   .card--link { transition: transform var(--t-mid) var(--ease), border-color var(--t-mid); }
   .card--link:hover { transform: translateY(-3px); border-color: var(--line-strong); }
   .card__media { aspect-ratio: 1 / 1; overflow: hidden; background: var(--bg-alt); }
-  .card__media :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform 600ms var(--ease); }
+  .card__media :global(picture) { display: block; width: 100%; height: 100%; }
+  .card__media :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform var(--t-slow) var(--ease); }
   .card--link:hover .card__media :global(img) { transform: scale(1.04); }
-  .card__body { padding: 14px 14px 16px; }
-  .card__text { margin-top: 2px; color: var(--muted); line-height: 1.45; }
+  .card__body { padding: 14px 14px 16px; min-width: 0; }
+  .card__title { font-size: var(--fs-card-title); overflow-wrap: anywhere; hyphens: auto; }
+  .card__text { margin-top: 2px; color: var(--muted); line-height: 1.45; overflow-wrap: anywhere; hyphens: auto; }
   .card__go { position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--bg); color: var(--text); }
   .card__go :global(svg) { width: 16px; height: 16px; }
   .card__ph { position: relative; width: 100%; height: 100%; display: grid; place-items: center; }
   .card__ph::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle, var(--accent) 1.2px, transparent 1.7px); background-size: 8px 8px; opacity: .5; }
-  .card__ph span { position: relative; font-size: 10.5px; font-weight: var(--fw-black); letter-spacing: .06em; background: var(--bg); color: var(--text); padding: 4px 7px; border-radius: 4px; text-align: center; line-height: 1.25; }
+  .card__ph span { position: relative; font-size: var(--fs-tag); font-weight: var(--fw-black); letter-spacing: .06em; background: var(--bg); color: var(--text); padding: 4px 7px; border-radius: 4px; text-align: center; line-height: 1.25; }
   @media (min-width: 1100px) { .card__body { padding: 18px 20px 22px; } }
 </style>

@@ -1,13 +1,14 @@
 ---
-/** Шапка: логотип, меню (на компьютере — строкой, «Підтримка» выпадает), переключатель темы, CTA; на телефоне — кнопка «Меню» с подписью. */
+/** Шапка: логотип, меню (на компьютере — строкой, «Підтримка» выпадает), переключатель темы, CTA; на телефоне — кнопка «Меню» с подписью. Тексты — site.json. */
 import site from '../content/site.json';
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
+const ui = site.ui;
 ---
 <header class="hdr">
   <div class="wrap hdr__row">
     <Logo />
-    <nav class="hdr__nav" aria-label="Головне меню">
+    <nav class="hdr__nav" aria-label={ui.mainNav}>
       {site.nav.map((item) =>
         item.children ? (
           <details class="dd">
@@ -15,7 +16,7 @@ import Icon from './Icon.astro';
             <div class="dd__panel">
               {item.children.map((c) => c.href
                 ? <a class="dd__link" href={c.href}>{c.label}</a>
-                : <span class="dd__link dd__link--soon" aria-disabled="true">{c.label} <small>скоро</small></span>)}
+                : <span class="dd__link dd__link--soon">{c.label} <small>{ui.soon}</small></span>)}
             </div>
           </details>
         ) : (
@@ -23,16 +24,17 @@ import Icon from './Icon.astro';
         )
       )}
     </nav>
-    <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Увімкнути темну тему">
+    <button class="icon-btn theme-toggle" type="button" data-theme-toggle
+      data-label-dark={ui.themeToDark} data-label-light={ui.themeToLight} aria-label={ui.themeToDark}>
       <Icon name="moon" class="theme-toggle__moon" />
       <Icon name="sun" class="theme-toggle__sun" />
     </button>
     <a class="btn btn--primary hdr__cta" href={site.cta.href}>{site.cta.label}</a>
     <button class="icon-btn hdr__burger" type="button" aria-expanded="false" aria-controls="mnav" data-menu-toggle>
-      <Icon name="menu" class="hdr__burger-open" /><Icon name="close" class="hdr__burger-close" /><span>Меню</span>
+      <Icon name="menu" class="hdr__burger-open" /><Icon name="close" class="hdr__burger-close" /><span>{ui.menu}</span>
     </button>
   </div>
-  <nav class="mnav" id="mnav" aria-label="Мобільне меню" hidden>
+  <nav class="mnav" id="mnav" aria-label={ui.mobileNav} hidden>
     <div class="wrap">
       {site.nav.map((item) =>
         item.children ? (
@@ -40,7 +42,7 @@ import Icon from './Icon.astro';
             <p class="mnav__title">{item.label}</p>
             {item.children.map((c) => c.href
               ? <a class="mnav__link mnav__link--sub" href={c.href}>{c.label}</a>
-              : <span class="mnav__link mnav__link--sub mnav__link--soon" aria-disabled="true">{c.label} <small>скоро</small></span>)}
+              : <span class="mnav__link mnav__link--sub mnav__link--soon">{c.label} <small>{ui.soon}</small></span>)}
           </div>
         ) : (
           <a class="mnav__link" href={item.href}>{item.label}</a>
@@ -53,12 +55,12 @@ import Icon from './Icon.astro';
 
 <script>
   const root = document.documentElement;
-  // --- тема: по умолчанию светлая; выбор хранится в localStorage
+  // --- тема: по умолчанию светлая; выбор тёмной хранится в localStorage
   const toggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
   const syncLabel = () => {
     const dark = root.dataset.theme === 'dark';
-    toggle?.setAttribute('aria-label', dark ? 'Увімкнути світлу тему' : 'Увімкнути темну тему');
-    toggle?.setAttribute('aria-pressed', String(dark));
+    toggle?.setAttribute('aria-label', (dark ? toggle.dataset.labelLight : toggle.dataset.labelDark) ?? '');
   };
   syncLabel();
   toggle?.addEventListener('click', () => {
@@ -68,8 +70,7 @@ import Icon from './Icon.astro';
       if (next === 'light') localStorage.removeItem('iprint-theme');
       else localStorage.setItem('iprint-theme', next);
     } catch (e) { /* хранилище недоступно — тема просто не запомнится */ }
-    const meta = document.querySelector('meta[name="theme-color"]');
-    meta?.setAttribute('content', next === 'dark' ? '#161513' : '#F5F3EE');
+    if (meta) meta.content = (next === 'dark' ? meta.dataset.dark : meta.dataset.light) ?? meta.content;
     syncLabel();
   });
 
@@ -100,8 +101,8 @@ import Icon from './Icon.astro';
   .hdr__row { display: flex; align-items: center; gap: 10px; height: var(--header-h); }
   .hdr__row > :global(.logo) { margin-right: auto; }
   .hdr__nav { display: none; }
-  .hdr__cta { display: none; min-height: 42px; padding: 0 16px; font-size: 15px; }
-  .hdr__burger { gap: 6px; padding: 0 12px; font-weight: var(--fw-bold); font-size: 15px; display: inline-flex; align-items: center; }
+  .hdr__cta { display: none; min-height: 42px; padding: 0 16px; font-size: var(--fs-ui); }
+  .hdr__burger { gap: 6px; padding: 0 12px; font-weight: var(--fw-bold); font-size: var(--fs-ui); display: inline-flex; align-items: center; }
   .hdr__burger :global(.hdr__burger-close) { display: none; }
   .hdr__burger[aria-expanded="true"] :global(.hdr__burger-open) { display: none; }
   .hdr__burger[aria-expanded="true"] :global(.hdr__burger-close) { display: block; }
@@ -111,11 +112,11 @@ import Icon from './Icon.astro';
   :global(:root[data-theme="dark"]) .theme-toggle :global(.theme-toggle__moon) { display: none; }
 
   .mnav { border-top: 1px solid var(--line); background: var(--bg); padding: 4px 0 20px; max-height: calc(100svh - var(--header-h)); overflow-y: auto; }
-  .mnav__link { display: flex; align-items: center; min-height: 52px; border-bottom: 1px solid var(--line); font-weight: var(--fw-bold); font-size: 18px; }
-  .mnav__title { padding-top: 14px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: var(--fw-bold); }
-  .mnav__link--sub { font-size: 16px; font-weight: 500; padding-left: 12px; min-height: var(--tap); }
+  .mnav__link { display: flex; align-items: center; min-height: 52px; border-bottom: 1px solid var(--line); font-weight: var(--fw-bold); font-size: var(--fs-menu); }
+  .mnav__title { padding-top: 14px; font-size: var(--fs-eyebrow); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: var(--fw-bold); }
+  .mnav__link--sub { font-size: var(--fs-body); font-weight: 500; padding-left: 12px; min-height: var(--tap); }
   .mnav__link--soon, .dd__link--soon { color: var(--muted); cursor: default; }
-  .mnav__link small, .dd__link small { font-size: 11px; margin-left: 8px; text-transform: uppercase; letter-spacing: .05em; }
+  .mnav__link small, .dd__link small { font-size: var(--fs-tag); margin-left: 8px; text-transform: uppercase; letter-spacing: .05em; }
   .mnav__cta { width: 100%; margin-top: 20px; }
 
   @media (min-width: 1100px) {
@@ -126,7 +127,7 @@ import Icon from './Icon.astro';
     .hdr__link :global(.dd__chev) { width: 16px; height: 16px; transition: transform var(--t-mid) var(--ease); }
     .dd { position: relative; }
     .dd[open] :global(.dd__chev) { transform: rotate(180deg); }
-    .dd__panel { position: absolute; top: calc(100% + 8px); left: 0; min-width: 230px; padding: 8px; display: grid; border-radius: var(--radius-m); background: var(--surface); border: 1px solid var(--line); box-shadow: 0 16px 40px #0000002e; }
+    .dd__panel { position: absolute; top: calc(100% + 8px); left: 0; min-width: 230px; padding: 8px; display: grid; border-radius: var(--radius-m); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-pop); }
     .dd__link { display: flex; align-items: center; min-height: var(--tap); padding: 0 12px; border-radius: 8px; font-weight: 500; }
     a.dd__link:hover { background: var(--bg-alt); }
     .hdr__cta { display: inline-flex; }

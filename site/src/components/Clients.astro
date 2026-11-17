@@ -1,20 +1,21 @@
 ---
 /** «Результати співпраці»: логотипы клиентов (кликабельны, если есть ссылка). Пока — заготовка. */
 interface Logo { name: string | null; href: string | null; logo: string | null }
+import site from '../content/site.json';
 interface Props { data: { visible?: boolean; title: string; intro?: string | null; logos: Logo[] } }
 const { data } = Astro.props;
 ---
 {data.visible !== false && (
   <section class="section section--alt" aria-labelledby="clients-title">
     <div class="wrap">
-      <h2 class="h2 clients__title" id="clients-title">{data.title} <span class="draft">ДОРАБОТАТЬ</span></h2>
+      <h2 class="h2 clients__title" id="clients-title">{data.title}</h2>
       {data.intro && <p class="muted clients__intro">{data.intro}</p>}
       <ul class="clients">
         {data.logos.map((l) => (
           <li class="clients__item">
             {l.href
               ? <a class="clients__box" href={l.href} rel="noopener" target="_blank">{l.name}</a>
-              : <span class="clients__box">{l.name ?? 'Лого клієнта'}</span>}
+              : <span class="clients__box">{l.name ?? site.ui.clientLogo}</span>}
           </li>
         ))}
       </ul>
