@@ -1,10 +1,11 @@
 {
-  "_note": "Общие данные компании. Только подтверждённые владельцем факты. null = ещё не передано (элемент на сайте скрывается).",
+  "_note": "Общие данные компании и тексты интерфейса. Только подтверждённые владельцем факты. null = ещё не передано (элемент на сайте скрывается).",
   "name": "iPrint",
   "url": "https://iprint.com.ua",
   "tagline": "Виробничий партнер для брендів одягу",
   "description": "Виробництво в Одесі: шовкотрафаретний друк, DTF, вишивка, флок та пошив одягу для брендів — від ідеї до готового виробу.",
   "city": "Одеса",
+  "countryName": "Україна",
   "country": "UA",
   "foundingYear": 2007,
   "phone": "+380939013050",
@@ -14,6 +15,7 @@
   "telegram": null,
   "instagram": null,
   "hours": null,
+  "themeColors": { "light": "#F5F3EE", "dark": "#161513" },
   "nav": [
     { "label": "Послуги", "href": "/#poslugy" },
     { "label": "Технології", "href": "/#tekhnolohii" },
@@ -26,5 +28,24 @@
       ]
     }
   ],
-  "cta": { "label": "Розрахувати", "href": "/#zapyt" }
+  "cta": { "label": "Розрахувати", "href": "/#zapyt" },
+  "ui": {
+    "skipLink": "Перейти до змісту",
+    "homeLink": "iPrint — на головну",
+    "mainNav": "Головне меню",
+    "mobileNav": "Мобільне меню",
+    "menu": "Меню",
+    "soon": "скоро",
+    "themeToDark": "Увімкнути темну тему",
+    "themeToLight": "Увімкнути світлу тему",
+    "stickyMain": "Розрахувати вартість",
+    "writeTelegram": "Написати в Telegram",
+    "callPrefix": "Подзвонити",
+    "photoSoon": "незабаром",
+    "photoPlaceholder": "ФОТО",
+    "placeholderDraft": "ДОРАБОТАТЬ",
+    "clientLogo": "Лого клієнта",
+    "footerContacts": "Контакти",
+    "emailSubject": "Запит з сайту"
+  }
 }

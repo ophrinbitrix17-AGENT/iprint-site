@@ -1,17 +1,22 @@
 ---
 /** Каркас страницы: <head> (мета, Schema.org, тема без вспышки), шапка, подвал, липкая панель. */
 import '@fontsource-variable/manrope/wght.css';
+import manropeCyr from '@fontsource-variable/manrope/files/manrope-cyrillic-wght-normal.woff2?url';
 import '../styles/themes/2026-11.css';   /* ← файл стиля: рестайлинг = смена этой строки */
 import '../styles/base.css';
 import site from '../content/site.json';
+import home from '../content/home.json';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import StickyBar from '../components/StickyBar.astro';
-import logoLight from '../assets/images/logo-light-bg.svg';
 
 interface Props { title: string; description: string; noindex?: boolean; }
 const { title, description, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).href;
+
+// Индексация разрешена ТОЛЬКО в боевой сборке (SITE_ENV=production). Превью/зеркало — всегда noindex.
+const isProduction = process.env.SITE_ENV === 'production';
+const robotsNoindex = noindex || !isProduction;
 
 const orgId = `${site.url}/#org`;
 const sameAs = [site.instagram, site.telegram].filter(Boolean);
@@ -23,14 +28,13 @@ const jsonLd = {
       '@id': orgId,
       name: site.name,
       url: `${site.url}/`,
-      logo: new URL(logoLight.src, site.url).href,
+      logo: `${site.url}/logo.png`,
       description: site.description,
       telephone: site.phone,
       email: site.email,
       foundingDate: String(site.foundingYear),
       address: { '@type': 'PostalAddress', addressLocality: site.city, addressCountry: site.country },
-      areaServed: { '@type': 'Country', name: 'Україна' },
-      knowsAbout: ['шовкотрафаретний друк', 'DTF-друк', 'вишивка', 'флок', 'пошив одягу'],
+      knowsAbout: home.tech.cards.map((c) => c.title),   // из тех же данных, что и видимые карточки
       ...(sameAs.length ? { sameAs } : {}),
     },
     { '@type': 'WebSite', '@id': `${site.url}/#website`, name: site.name, url: `${site.url}/`, inLanguage: 'uk', publisher: { '@id': orgId } },
@@ -45,13 +49,14 @@ const jsonLd = {
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonical} />
-  {noindex && <meta name="robots" content="noindex, nofollow" />}
-  <meta name="theme-color" content="#F5F3EE" />
-  <meta name="color-scheme" content="light dark" />
-  <!-- Тема до отрисовки: по умолчанию светлая; тёмная — только если пользователь выбрал её переключателем -->
+  {robotsNoindex && <meta name="robots" content="noindex, nofollow" />}
+  <meta name="theme-color" content={site.themeColors.light} data-light={site.themeColors.light} data-dark={site.themeColors.dark} />
+  <meta name="color-scheme" content="light" />
+  {/* Тема до отрисовки: по умолчанию светлая; тёмная — только если пользователь выбрал её переключателем */}
   <script is:inline>
-    try { if (localStorage.getItem('iprint-theme') === 'dark') { document.documentElement.dataset.theme = 'dark'; document.querySelector('meta[name="theme-color"]').setAttribute('content', '#161513'); } } catch (e) {}
+    try { if (localStorage.getItem('iprint-theme') === 'dark') { document.documentElement.dataset.theme = 'dark'; var m = document.querySelector('meta[name="theme-color"]'); m.setAttribute('content', m.dataset.dark); } } catch (e) {}
   </script>
+  <link rel="preload" href={manropeCyr} as="font" type="font/woff2" crossorigin />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="uk_UA" />
@@ -62,7 +67,7 @@ const jsonLd = {
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 </head>
 <body>
-  <a class="skip-link" href="#main">Перейти до змісту</a>
+  <a class="skip-link" href="#main">{site.ui.skipLink}</a>
   <Header />
   <main id="main">
     <slot />
