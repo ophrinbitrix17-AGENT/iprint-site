@@ -1,0 +1,9 @@
+---
+import Base from '../layouts/Base.astro';
+import ServiceMessage from '../components/ServiceMessage.astro';
+import pages from '../content/service-pages.json';
+const t = pages.thanks;
+---
+<Base title={t.title} description={t.text} noindex hideStickyBar>
+  <ServiceMessage h1={t.h1} text={t.text} back={t.back} />
+</Base>

@@ -21,6 +21,8 @@
   --fs-lead: clamp(17px, 15px + 0.6vw, 21px);
   --fs-h1: clamp(34px, 24px + 3.6vw, 72px);
   --fs-h2: clamp(27px, 20px + 2.2vw, 48px);
+  --fs-h2-sm: clamp(22px, 18px + 1vw, 30px);  /* H2 текстовых страниц */
+  --fs-h1-page: clamp(30px, 22px + 2.6vw, 52px);  /* H1 внутренних страниц */
   --fs-h3: 19px;
   --fs-h1-compact: clamp(26px, 10px + 6svh, 40px);   /* H1 на телефоне лёжа */
   --fs-card-title: clamp(16px, 13px + 1vw, 19px);  /* заголовки карточек 2×2 на узких экранах */
@@ -70,6 +72,15 @@
   --btn-bg-hover: #2E2D28;
   --shadow: 0 1px 2px #1a19160f, 0 8px 24px #1a19160a;
   --focus: #4A6A00;
+  --form-line: #857F75;          /* рамки полей формы ≥ 3:1 к карточке */
+  --chip-on-bg: var(--graphite);  /* выбранный вариант в форме */
+  --chip-on-fg: var(--lime-light);
+  /* состояния формы */
+  --danger: #B3261E;
+  --danger-bg: #FBE4E1;
+  --danger-fg: #7A1A14;
+  --ok-bg: #E8F3D2;
+  --ok-fg: #2F4A00;
 }
 
 /* ---- ТЁМНАЯ ТЕМА (по переключателю) ---- */
@@ -89,6 +100,14 @@
   --btn-bg-hover: #8FD100;
   --shadow: 0 1px 0 #ffffff0a inset;
   --focus: var(--lime-dark);
+  --form-line: #857F75;
+  --chip-on-bg: var(--lime-dark);
+  --chip-on-fg: var(--graphite-deep);
+  --danger: #FF8A7A;
+  --danger-bg: #3A1F1C;
+  --danger-fg: #FFC9C0;
+  --ok-bg: #26341A;
+  --ok-fg: #D6F28F;
 }
 
 /* ---- ТЁМНЫЕ СЦЕНЫ (Hero, Комплексні вироби, нижний CTA, подвал) ---- */
@@ -107,6 +126,14 @@
   --btn-bg-hover: #8FD100;
   --shadow: none;
   --focus: var(--lime-dark);
+  --form-line: #857F75;
+  --chip-on-bg: var(--lime-dark);
+  --chip-on-fg: var(--graphite-deep);
+  --danger: #FF8A7A;
+  --danger-bg: #3A1F1C;
+  --danger-fg: #FFC9C0;
+  --ok-bg: #26341A;
+  --ok-fg: #D6F28F;
   color-scheme: dark;
 }
 :root[data-theme="dark"] .stage {

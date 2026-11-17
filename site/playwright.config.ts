@@ -7,7 +7,14 @@ export default defineConfig({
   fullyParallel: true,
   reporter: [['list'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],
   use: { baseURL: 'http://127.0.0.1:4321' },
-  webServer: { command: 'npm run preview', url: 'http://127.0.0.1:4321', reuseExistingServer: true, timeout: 60_000 },
+  // Сайт + обработчик форм (локальный Cloudflare), Telegram подменён имитацией на :9911
+  webServer: [
+    { command: 'node tests/mock-telegram.mjs', url: 'http://127.0.0.1:9911/__health', reuseExistingServer: true },
+    {
+      command: 'npx wrangler dev --port 4321 --ip 127.0.0.1 --var TELEGRAM_BOT_TOKEN:test-token --var TELEGRAM_CHAT_ID:100 --var TELEGRAM_API_BASE:http://127.0.0.1:9911 --var LEAD_RATE_DISABLED:1',
+      url: 'http://127.0.0.1:4321', reuseExistingServer: false, timeout: 120_000, env: { WRANGLER_SEND_METRICS: 'false', CI: '1' },
+    },
+  ],
   projects: [
     { name: 'desktop-chrome', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } } },
     { name: 'desktop-firefox', use: { ...devices['Desktop Firefox'], viewport: { width: 1280, height: 800 } } },

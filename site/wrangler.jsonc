@@ -1,0 +1,23 @@
+{
+  // Cloudflare Workers со статическими ассетами (Б2 §1). Сайт — из dist/, код — только для /api/*.
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "iprint-site",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  },
+  // Не больше 5 заявок в минуту с одного IP
+  "ratelimits": [
+    { "name": "LEAD_LIMITER", "namespace_id": "1001", "simple": { "limit": 5, "period": 60 } }
+  ],
+  "vars": {
+    // Секреты (TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, TURNSTILE_SECRET) задаются в панели Cloudflare
+    // или `wrangler secret put` — НИКОГДА не в этом файле.
+    "LEAD_MAX_FILE_MB": "20"
+  },
+  "observability": { "enabled": true }
+}

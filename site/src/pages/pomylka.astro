@@ -1,0 +1,10 @@
+---
+/** Ошибка отправки формы без JavaScript (обработчик перенаправляет сюда). Не индексируется. */
+import Base from '../layouts/Base.astro';
+import ServiceMessage from '../components/ServiceMessage.astro';
+import pages from '../content/pages.json';
+const t = pages.error;
+---
+<Base title={t.title} description={t.text} noindex>
+  <ServiceMessage h1={t.h1} text={t.text} back={t.back} backHref={t.backHref} />
+</Base>

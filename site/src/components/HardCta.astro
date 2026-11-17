@@ -1,39 +1,39 @@
 ---
-/** Нижний призыв: тёмная сцена, лаймовая кнопка, полоса и растр. Сюда позже встанет форма → Telegram. */
+/** Нижний блок «Запит»: тёмная сцена, текст + альтернативные контакты слева, форма справа (на телефоне — друг под другом). */
 import site from '../content/site.json';
 import Icon from './Icon.astro';
-interface Props { data: { id?: string; title: string; text: string; primary: { label: string; href?: string; action?: 'email' } } }
+import LeadForm from './LeadForm.astro';
+interface Props { data: { id?: string; title: string; text: string } }
 const { data } = Astro.props;
-// временно, до формы → Telegram: письмо на адрес из site.json
-const primaryHref = data.primary.action === 'email'
-  ? `mailto:${site.email}?subject=${encodeURIComponent(site.ui.emailSubject)}`
-  : data.primary.href;
 ---
 <section class="cta stage" id={data.id} aria-labelledby="cta-title">
   <div class="wrap cta__grid">
-    <div>
+    <div class="cta__intro">
       <h2 class="h2" id="cta-title">{data.title}</h2>
       <p class="cta__text">{data.text}</p>
+      <p class="cta__alt-title">{site.ui.contactAlt}</p>
+      <div class="cta__actions">
+        {site.telegram && <a class="btn btn--ghost" href={site.telegram} rel="noopener"><Icon name="telegram" />{site.ui.writeTelegram}</a>}
+        <a class="btn btn--ghost" href={`tel:${site.phone}`}><Icon name="phone" />{site.phoneDisplay}</a>
+      </div>
     </div>
-    <div class="cta__actions">
-      <a class="btn btn--primary" href={primaryHref}>{data.primary.label}<Icon name="arrow" /></a>
-      {site.telegram && <a class="btn btn--ghost" href={site.telegram} rel="noopener">{site.ui.writeTelegram}</a>}
-      <a class="btn btn--ghost" href={`tel:${site.phone}`}><Icon name="phone" />{site.phoneDisplay}</a>
-    </div>
+    <LeadForm />
   </div>
 </section>
 
 <style>
   .cta { position: relative; padding: 48px 0; background: var(--bg); color: var(--text); border-top: 6px solid var(--lime-dark); }
-  .cta::before { content: ""; position: absolute; right: 0; top: 0; width: 45%; height: 100%; pointer-events: none; opacity: .35;
+  .cta::before { content: ""; display: none; position: absolute; right: 0; top: 0; width: 40%; height: 340px; pointer-events: none; opacity: .3;
     background-image: radial-gradient(circle, var(--lime-dark) 1.3px, transparent 1.8px); background-size: 10px 10px;
-    -webkit-mask-image: radial-gradient(ellipse 90% 80% at 100% 30%, #000 0%, transparent 75%); mask-image: radial-gradient(ellipse 90% 80% at 100% 30%, #000 0%, transparent 75%); }
-  .cta__grid { position: relative; display: grid; gap: 24px; }
+    -webkit-mask-image: radial-gradient(ellipse 90% 60% at 100% 10%, #000 0%, transparent 70%); mask-image: radial-gradient(ellipse 90% 60% at 100% 10%, #000 0%, transparent 70%); }
+  .cta__grid { position: relative; display: grid; gap: 28px; }
   .cta__text { margin-top: 12px; font-size: var(--fs-cta-text); max-width: 56ch; color: var(--muted); }
-  .cta__actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .cta__alt-title { margin-top: 24px; font-weight: 600; }
+  .cta__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
   @media (min-width: 1100px) {
-    .cta { padding: 72px 0; }
-    .cta__grid { grid-template-columns: 1.4fr 1fr; align-items: end; gap: 40px; }
-    .cta__actions { justify-content: flex-end; }
+    .cta::before { display: block; }   /* на широком экране растр в углу над формой, не под текстом */
+    .cta { padding: 88px 0; }
+    .cta__grid { grid-template-columns: 1fr 1.15fr; align-items: start; gap: 56px; }
+    .cta__intro { position: sticky; top: calc(var(--header-h) + 24px); }
   }
 </style>

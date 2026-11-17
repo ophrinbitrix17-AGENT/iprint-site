@@ -2,6 +2,12 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import home from './src/content/home.json' with { type: 'json' };
+import pages from './src/content/pages.json' with { type: 'json' };
+
+// дата изменения содержания по адресу страницы
+const updated = { '/': home.meta.updated };
+for (const p of Object.values(pages)) if (p && typeof p === 'object' && 'slug' in p) updated[`/${p.slug}/`] = p.updated;
+const SERVICE = new Set(['/dyakuyemo/', '/pomylka/', '/404/']);
 
 export default defineConfig({
   site: 'https://iprint.com.ua',
@@ -10,8 +16,10 @@ export default defineConfig({
   integrations: [
     sitemap({
       // lastmod = дата реального изменения содержания (поле meta.updated в текстах страницы), не дата сборки
+      filter: (page) => !SERVICE.has(new URL(page).pathname),
       serialize(item) {
-        if (new URL(item.url).pathname === '/') item.lastmod = home.meta.updated;
+        const lm = updated[new URL(item.url).pathname];
+        if (lm) item.lastmod = lm;
         return item;
       },
     }),

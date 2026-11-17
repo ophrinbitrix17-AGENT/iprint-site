@@ -12,10 +12,16 @@ import Icon from './Icon.astro';
 
 <script>
   // Пока на экране главная кнопка Hero — панель спрятана (не дублируем CTA). Без JS панель просто видна.
+  // и пока на экране блок с формой заявки (#zapyt) — панель там лишняя и перекрывает поля.
   const bar = document.querySelector<HTMLElement>('[data-sbar]');
-  const heroCta = document.querySelector('.hero .btn--primary');
-  if (bar && heroCta && 'IntersectionObserver' in window) {
-    new IntersectionObserver(([e]) => bar.classList.toggle('sbar--hidden', e.isIntersecting)).observe(heroCta);
+  const targets = [document.querySelector('.hero .btn--primary'), document.getElementById('zapyt')].filter(Boolean) as Element[];
+  if (bar && targets.length && 'IntersectionObserver' in window) {
+    const visible = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => (e.isIntersecting ? visible.add(e.target) : visible.delete(e.target)));
+      bar.classList.toggle('sbar--hidden', visible.size > 0);
+    });
+    targets.forEach((t) => io.observe(t));
   }
 </script>
 

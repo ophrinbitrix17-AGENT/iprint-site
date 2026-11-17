@@ -1,0 +1,29 @@
+---
+/** Текстовые разделы страницы из данных: заголовок H2 + абзацы и/или список. listFrom — список из карточек главной (услуги/технологии). */
+import home from '../content/home.json';
+interface Section { h2: string; paragraphs?: string[]; list?: string[]; listFrom?: string }
+interface Props { sections: Section[] }
+const { sections } = Astro.props;
+const fromHome = (k?: string) => {
+  const cards = k === 'tech' ? home.tech.cards : home.products.cards;
+  return cards.map((c) => (c.text ? `${c.title} — ${c.text.charAt(0).toLowerCase()}${c.text.slice(1)}.` : c.title));
+};
+---
+<div class="cs">
+  {sections.map((s) => (
+    <section class="cs__s">
+      <h2 class="cs__h2">{s.h2}</h2>
+      {s.paragraphs?.map((p) => <p>{p}</p>)}
+      {(s.list || s.listFrom) && <ul class="cs__list">{(s.list ?? fromHome(s.listFrom)).map((li) => <li>{li}</li>)}</ul>}
+    </section>
+  ))}
+</div>
+
+<style>
+  .cs { display: grid; gap: 36px; max-width: 72ch; }
+  .cs__h2 { font-size: var(--fs-h2-sm); font-weight: var(--fw-black); letter-spacing: -.01em; line-height: 1.15; margin-bottom: 12px; }
+  .cs__s p + p { margin-top: 12px; }
+  .cs__list { display: grid; gap: 10px; list-style: none; }
+  .cs__list li { position: relative; padding-left: 22px; }
+  .cs__list li::before { content: ""; position: absolute; left: 2px; top: .62em; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--muted); }
+</style>

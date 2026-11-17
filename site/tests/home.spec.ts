@@ -39,6 +39,17 @@ test.describe('Главная', () => {
     }
   });
 
+  test('внутренние и служебные страницы: ничего не вылезает за экран', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', 'одним движком');
+    for (const path of ['/pro-kompaniiu/', '/kontakty/', '/polityka-konfidentsiinosti/', '/dyakuyemo/', '/pomylka/']) {
+      for (const w of [320, 360, 390, 768, 1440]) {
+        await page.setViewportSize({ width: w, height: 800 });
+        await page.goto(path);
+        expect(await overflowReport(page), `${path} ширина ${w}`).toEqual([]);
+      }
+    }
+  });
+
   test('первый экран: виден H1 и главная кнопка', async ({ page }) => {
     await page.goto('/');
     const vh = page.viewportSize()!.height;
@@ -129,6 +140,8 @@ test.describe('Главная', () => {
     await expect(page.locator('[data-sbar]')).toHaveClass(/sbar--hidden/);
     await page.evaluate(() => window.scrollTo(0, 1500));
     await expect(page.locator('[data-sbar]')).not.toHaveClass(/sbar--hidden/);
+    await page.locator('#lead-name').scrollIntoViewIfNeeded();
+    await expect(page.locator('[data-sbar]')).toHaveClass(/sbar--hidden/);   // у формы панель не мешает
   });
 
   test('режим «меньше движения»: анимации отключены', async ({ page }) => {
