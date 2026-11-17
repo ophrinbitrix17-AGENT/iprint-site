@@ -8,3 +8,5 @@ site/playwright-report/
 .dev.vars
 *.log
 site/screenshots/
+site/.wrangler/
+site/.dev.vars
