@@ -108,6 +108,7 @@ test.describe('Главная', () => {
     const small = await page.evaluate(() => [...document.querySelectorAll<HTMLElement>('#mnav a, #mnav .btn')]
       .map((el) => el.getBoundingClientRect().height).filter((h) => h < 44));
     expect(small).toEqual([]);
+    await expect(page.locator('[data-sbar]')).toBeHidden();   // нижняя панель не мешает меню
     await page.keyboard.press('Escape');
     await expect(page.locator('#mnav')).toBeHidden();
   });

@@ -23,7 +23,7 @@ import Icon from './Icon.astro';
   .sbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; display: flex; gap: 8px;
     padding: 10px max(var(--gutter), env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(var(--gutter), env(safe-area-inset-left)); background: var(--bg); border-top: 1px solid var(--line);
     transition: transform var(--t-mid) var(--ease), visibility var(--t-mid); }
-  .sbar--hidden { transform: translateY(110%); visibility: hidden; }
+  .sbar--hidden, :global(body.menu-open) .sbar { transform: translateY(110%); visibility: hidden; }
   .sbar__main { flex: 1; }
   .sbar__icon { flex: none; width: 48px; height: 48px; }
   @media (min-width: 1100px) { .sbar { display: none; } }

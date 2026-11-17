@@ -81,6 +81,7 @@ const ui = site.ui;
     if (!burger || !mnav) return;
     burger.setAttribute('aria-expanded', String(open));
     mnav.hidden = !open;
+    document.body.classList.toggle('menu-open', open);   // нижняя панель прячется, пока открыто меню
   };
   burger?.addEventListener('click', () => setMenu(burger.getAttribute('aria-expanded') !== 'true'));
   mnav?.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) setMenu(false); });
