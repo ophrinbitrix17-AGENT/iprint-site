@@ -24,6 +24,7 @@ const FILE_EXT = ['pdf', 'ai', 'eps', 'svg', 'png', 'jpg', 'jpeg', 'tif', 'tiff'
 const LIMITS = { name: 80, contact: 120, comment: 1500, item: 80, items: 12, fileName: 120, page: 200 };
 const MIN_FILL_MS = 2500;            // быстрее человек форму не заполнит
 const TG_TIMEOUT_MS = 15_000;
+const TG_FILE_TIMEOUT_MS = 60_000;   // загрузка файла до 20 МБ
 
 type Lead = { name: string; contact: string; needs: string[]; qty: string; comment: string; page: string; file: File | null };
 type ErrorCode = 'required' | 'contact-short' | 'file-size' | 'file-type' | 'captcha' | 'rate' | 'origin' | 'format' | 'too-large' | 'delivery';
@@ -126,7 +127,7 @@ async function handleLead(req: Request, env: Env): Promise<Response> {
       fd.set('chat_id', env.TELEGRAM_CHAT_ID);
       fd.set('caption', `Файл до заявки: ${lead.name}`.slice(0, 1000));
       fd.set('document', lead.file, safeFileName(lead.file.name));
-      await tg(env, 'sendDocument', { body: fd });
+      await tg(env, 'sendDocument', { body: fd }, TG_FILE_TIMEOUT_MS);
     } catch (e) {
       // Текст заявки уже дошёл — не пугаем клиента ошибкой и не провоцируем дубль; предупреждаем менеджеров.
       console.error('[lead:file-failed]', String(e));
@@ -137,9 +138,9 @@ async function handleLead(req: Request, env: Env): Promise<Response> {
   return respond({ ok: true });
 }
 
-async function tg(env: Env, method: string, init: RequestInit) {
+async function tg(env: Env, method: string, init: RequestInit, timeoutMs = TG_TIMEOUT_MS) {
   const api = `${env.TELEGRAM_API_BASE ?? 'https://api.telegram.org'}/bot${env.TELEGRAM_BOT_TOKEN}`;
-  const r = await fetch(`${api}/${method}`, { method: 'POST', ...init, signal: AbortSignal.timeout(TG_TIMEOUT_MS) });
+  const r = await fetch(`${api}/${method}`, { method: 'POST', ...init, signal: AbortSignal.timeout(timeoutMs) });
   if (!r.ok) throw new Error(`${method} ${r.status}`);
 }
 
