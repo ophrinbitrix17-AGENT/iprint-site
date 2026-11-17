@@ -10,6 +10,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       // lastmod = дата реального изменения содержания (поле meta.updated в текстах страницы), не дата сборки
+      filter: (page) => !page.includes('/dyakuyemo/') && !page.includes('/404'),
       serialize(item) {
         if (new URL(item.url).pathname === '/') item.lastmod = home.meta.updated;
         return item;

@@ -15,20 +15,41 @@
   "telegram": null,
   "instagram": null,
   "hours": null,
-  "themeColors": { "light": "#F5F3EE", "dark": "#161513" },
+  "themeColors": {
+    "light": "#F5F3EE",
+    "dark": "#161513"
+  },
   "nav": [
-    { "label": "Послуги", "href": "/#poslugy" },
-    { "label": "Технології", "href": "/#tekhnolohii" },
+    {
+      "label": "Послуги",
+      "href": "/#poslugy"
+    },
+    {
+      "label": "Технології",
+      "href": "/#tekhnolohii"
+    },
     {
       "label": "Підтримка",
       "children": [
-        { "label": "Довідник", "href": null },
-        { "label": "Про компанію", "href": null },
-        { "label": "Контакти", "href": "/#kontakty" }
+        {
+          "label": "Довідник",
+          "href": null
+        },
+        {
+          "label": "Про компанію",
+          "href": null
+        },
+        {
+          "label": "Контакти",
+          "href": "/#kontakty"
+        }
       ]
     }
   ],
-  "cta": { "label": "Розрахувати", "href": "/#zapyt" },
+  "cta": {
+    "label": "Розрахувати",
+    "href": "/#zapyt"
+  },
   "ui": {
     "skipLink": "Перейти до змісту",
     "homeLink": "iPrint — на головну",
@@ -46,6 +67,8 @@
     "placeholderDraft": "ДОРАБОТАТЬ",
     "clientLogo": "Лого клієнта",
     "footerContacts": "Контакти",
-    "emailSubject": "Запит з сайту"
+    "emailSubject": "Запит з сайту",
+    "orCall": "або зателефонуйте:",
+    "contactAlt": "Зручніше голосом або в месенджері?"
   }
 }
