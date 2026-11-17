@@ -34,7 +34,7 @@ const jsonLd = {
       email: site.email,
       foundingDate: String(site.foundingYear),
       address: { '@type': 'PostalAddress', addressLocality: site.city, addressCountry: site.country },
-      knowsAbout: home.tech.cards.map((c) => c.title),   // из тех же данных, что и видимые карточки
+      knowsAbout: [...home.tech.cards, ...home.products.cards].map((c) => c.title),   // из тех же данных, что и видимые карточки
       ...(sameAs.length ? { sameAs } : {}),
     },
     { '@type': 'WebSite', '@id': `${site.url}/#website`, name: site.name, url: `${site.url}/`, inLanguage: 'uk', publisher: { '@id': orgId } },

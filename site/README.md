@@ -5,7 +5,7 @@
 |---|---|
 | `npm run dev` | Локальный просмотр с автообновлением: http://localhost:4321 |
 | `npm run build` | Сборка в `dist/`. **По умолчанию — превью: закрыто от индексации** (meta robots + `X-Robots-Tag` в `_headers`) |
-| `SITE_ENV=production npm run build` | **Боевая** сборка для iprint.com.ua: индексация разрешена |
+| `SITE_ENV=production npm run build` (bash) / `$env:SITE_ENV="production"; npm run build` (PowerShell) | **Боевая** сборка для iprint.com.ua: индексация разрешена. В Cloudflare задаётся переменной окружения сборки |
 | `npm run preview` | Показ собранного `dist/` на http://127.0.0.1:4321 |
 | `npx playwright test --project=desktop-chrome --project=desktop-safari --project=android --project=iphone --project=tablet` | Автотесты (Firefox на этой машине Windows не запускается — гоняется в CI на Linux) |
 
