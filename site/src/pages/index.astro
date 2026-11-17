@@ -1,0 +1,22 @@
+---
+/** Главная. Порядок блоков — из утверждённой архитектуры. Тексты — src/content/home.json. */
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Advantages from '../components/Advantages.astro';
+import Complex from '../components/Complex.astro';
+import SoftCta from '../components/SoftCta.astro';
+import CardGrid from '../components/CardGrid.astro';
+import Clients from '../components/Clients.astro';
+import HardCta from '../components/HardCta.astro';
+import home from '../content/home.json';
+---
+<Base title={home.meta.title} description={home.meta.description}>
+  <Hero data={home.hero} />
+  <Advantages data={home.advantages} />
+  <Complex data={home.complex} />
+  <SoftCta data={home.softCta} />
+  <CardGrid data={home.tech} variant="tech" alt />
+  <CardGrid data={home.products} variant="products" />
+  <Clients data={home.clients} />
+  <HardCta data={home.hardCta} />
+</Base>

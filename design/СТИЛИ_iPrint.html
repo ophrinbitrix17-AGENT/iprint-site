@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="uk" data-variant="c" data-theme="light" data-btn="graphite">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>iPrint — витрина стилей</title>
+<script>
+  // Тема до отрисовки (без «вспышки»): сохранённый выбор → иначе системная настройка.
+  (function () {
+    var s = {};
+    try { s = JSON.parse(localStorage.getItem('iprint-sg') || '{}'); } catch (e) {}
+    var pref = s.theme || 'light';
+    var dark = pref === 'dark' || (pref === 'system' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    document.documentElement.dataset.variant = s.variant || 'c';
+    document.documentElement.dataset.btn = s.btn || 'graphite';
+  })();
+</script>
+<style>
+@font-face {
+  font-family: "Manrope";
+  src: url("fonts/Manrope-VariableFont_wght.ttf") format("truetype");
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+/* ============ ТОКЕНЫ СТИЛЯ ============ */
+:root {
+  --font: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --lime-light: #A6D93C;      /* лайм для светлого фона (из logo.svg) */
+  --lime-dark: #A5F200;       /* лайм для тёмного фона (из logo.svg) — ярче */
+  --lime: var(--lime-light);
+  --radius-s: 6px;
+  --radius-m: 12px;
+  --radius-l: 20px;
+  --space: 8px;
+  --ease: cubic-bezier(.2,.7,.2,1);
+}
+/* Вариант A — «Тёплый графит» (серые от цвета логотипа) */
+[data-variant="a"][data-theme="dark"]  { --line-strong:#6B675E; --bg:#161513; --bg-alt:#1D1C19; --surface:#25241F; --line:#3A3832; --text:#F3F1EC; --muted:#ABA69C; --lime:var(--lime-dark); --accent:var(--lime-dark); --on-accent:#161513; --accent-ink:#A5F200; --shadow:0 1px 0 #ffffff0a inset; }
+[data-variant="a"][data-theme="light"] { --line-strong:#8C877D; --bg:#F5F3EE; --bg-alt:#EBE8E1; --surface:#FFFFFF; --line:#D9D4CA; --text:#1A1916; --muted:#5F5A51; --lime:var(--lime-light); --accent:var(--lime-light); --on-accent:#1A1916; --accent-ink:#4A6A00; --shadow:0 1px 2px #1a19160f, 0 8px 24px #1a19160a; }
+/* Вариант B — «Сталь» (холодные нейтральные, технично) */
+[data-variant="b"][data-theme="dark"]  { --line-strong:#66707A; --bg:#0E1012; --bg-alt:#15181B; --surface:#1C2024; --line:#2D3338; --text:#EDF0F2; --muted:#98A1A9; --lime:var(--lime-dark); --accent:var(--lime-dark); --on-accent:#0E1012; --accent-ink:#A5F200; --shadow:0 1px 0 #ffffff0a inset; }
+[data-variant="b"][data-theme="light"] { --line-strong:#7E8790; --bg:#F2F4F5; --bg-alt:#E6EAEC; --surface:#FFFFFF; --line:#D2D8DC; --text:#11151A; --muted:#535D66; --lime:var(--lime-light); --accent:var(--lime-light); --on-accent:#11151A; --accent-ink:#476600; --shadow:0 1px 2px #11151a0f, 0 8px 24px #11151a0a; }
+/* Вариант C — «Бумага + сцена»: светлая страница, ключевые блоки — тёмные «сцены» */
+[data-variant="c"][data-theme="light"] { --line-strong:#8C877D; --bg:#F5F3EE; --bg-alt:#ECE9E2; --surface:#FFFFFF; --line:#D9D4CA; --text:#1A1916; --muted:#5F5A51; --lime:var(--lime-light); --accent:var(--lime-light); --on-accent:#1A1916; --accent-ink:#4A6A00; --shadow:0 1px 2px #1a19160f, 0 8px 24px #1a19160a; }
+[data-variant="c"][data-theme="light"] .stage { --lime:var(--lime-dark); --accent:var(--lime-dark); --line-strong:#6B675E; --bg:#161513; --bg-alt:#161513; --surface:#25241F; --line:#3A3832; --text:#F3F1EC; --muted:#ABA69C; --accent-ink:#A5F200; --on-accent:#161513; --shadow:none; }
+[data-variant="c"][data-theme="dark"]  { --line-strong:#6B675E; --bg:#161513; --bg-alt:#1D1C19; --surface:#25241F; --line:#3A3832; --text:#F3F1EC; --muted:#ABA69C; --lime:var(--lime-dark); --accent:var(--lime-dark); --on-accent:#161513; --accent-ink:#A5F200; --shadow:0 1px 0 #ffffff0a inset; }
+[data-variant="c"][data-theme="dark"] .stage { --bg:#201F1B; --bg-alt:#201F1B; --surface:#2B2A25; }
+
+/* ============ ПАНЕЛЬ ВИТРИНЫ (не часть сайта) ============ */
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font-family: var(--font); background: #8a877f; color: #1a1916; }
+.sg-bar { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center;
+  padding: 10px 16px; background: #1a1916; color: #f3f1ec; font-size: 14px; }
+.sg-bar b { font-weight: 700; margin-right: 6px; color: var(--lime); }
+.sg-group { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.sg-group span { opacity: .7; margin-right: 4px; }
+.sg-bar button { font: inherit; font-size: 13px; padding: 7px 11px; border-radius: 6px; border: 1px solid #45433d; background: #25241f; color: #f3f1ec; cursor: pointer; }
+.sg-bar button[aria-pressed="true"] { background: var(--lime); color: #1a1916; border-color: var(--lime); font-weight: 700; }
+.sg-note { max-width: 1100px; margin: 16px auto; padding: 0 16px; color: #1a1916; font-size: 15px; line-height: 1.55; }
+.sg-note h1 { font-size: 22px; margin: 0 0 6px; }
+.sg-note p { margin: 4px 0; }
+.frame { margin: 0 auto 32px; transition: max-width .3s var(--ease); box-shadow: 0 20px 60px #0004; background: var(--bg); }
+.frame[data-device="phone"] { max-width: 390px; border-radius: 28px; overflow: clip; outline: 10px solid #1a1916; margin-top: 10px; }
+.frame[data-device="tablet"] { max-width: 768px; border-radius: 18px; overflow: clip; outline: 10px solid #1a1916; margin-top: 10px; }
+.frame[data-device="desktop"] { max-width: 1440px; }
+
+/* ============ САЙТ (макет) ============ */
+.site { container-type: inline-size; background: var(--bg); color: var(--text); font-family: var(--font);
+  font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; position: relative; }
+.site a { color: inherit; text-decoration: none; }
+.site img { display: block; max-width: 100%; height: auto; }
+.wrap { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 16px; }
+.section { padding: 56px 0; background: var(--bg); color: var(--text); }
+.section.alt { background: var(--bg-alt); }
+.eyebrow { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); font-weight: 700; margin: 0 0 10px; display: flex; align-items: center; gap: 8px; }
+.eyebrow::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--bg), 0 0 0 4.5px var(--muted); }
+.h1 { font-size: clamp(32px, 22px + 4.2cqi, 72px); line-height: 1.04; letter-spacing: -.02em; font-weight: 800; margin: 0; }
+.h2 { font-size: clamp(26px, 18px + 2.6cqi, 48px); line-height: 1.1; letter-spacing: -.015em; font-weight: 750; margin: 0 0 12px; }
+.h3 { font-size: 19px; line-height: 1.25; font-weight: 700; margin: 0 0 6px; }
+.lead { font-size: clamp(17px, 15px + .6cqi, 21px); color: var(--muted); margin: 14px 0 0; max-width: 46ch; }
+.muted { color: var(--muted); }
+.sec-head { display: flex; flex-direction: column; gap: 4px; margin-bottom: 28px; }
+.sec-head p { margin: 0; max-width: 60ch; color: var(--muted); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 22px;
+  border-radius: var(--radius-s); font-weight: 700; font-size: 16px; border: 1.5px solid transparent; cursor: pointer;
+  transition: transform .15s var(--ease), background .2s, border-color .2s; font-family: inherit; }
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--accent); color: var(--on-accent); }
+.btn-primary:hover { background: color-mix(in srgb, var(--accent) 86%, #000); }
+/* Вид главной кнопки на СВЕТЛОМ фоне (на тёмном всегда лайм + графитовый текст) */
+[data-theme="light"][data-btn="outline"] .btn-primary { box-shadow: inset 0 0 0 1.5px #1A1916; }
+[data-theme="light"][data-btn="graphite"] .btn-primary { background: #1A1916; color: var(--lime-light); }
+[data-theme="light"][data-btn="graphite"] .btn-primary:hover { background: #2E2D28; }
+[data-theme="light"][data-variant="c"] .stage .btn-primary { background: var(--lime-dark); color: #161513; box-shadow: none; }
+.btn-ghost { border-color: var(--line-strong); color: var(--text); background: transparent; }
+.btn-ghost:hover { border-color: var(--text); }
+.btn-dark { background: #161513; color: #F3F1EC; }
+.btn-dark:hover { background: #2b2a26; }
+.site :focus-visible { outline: 2.5px solid var(--accent-ink); outline-offset: 3px; border-radius: 4px; }
+.arrow { width: 18px; height: 18px; flex: none; }
+
+/* halftone — фирменный растр */
+.halftone { background-image: radial-gradient(circle at center, var(--accent) 1.3px, transparent 1.8px); background-size: 9px 9px; }
+
+/* ---------- шапка ---------- */
+.hdr { position: sticky; top: 0; z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); }
+.hdr .wrap { display: flex; align-items: center; gap: 12px; height: 64px; }
+.logo { display: flex; align-items: center; margin-right: auto; }
+.logo img { height: 30px; width: auto; }
+.logo .for-light { display: none; }
+[data-theme="light"] .logo .for-light { display: block; }
+[data-theme="light"] .logo .for-dark { display: none; }
+[data-variant="c"][data-theme="light"] .stage .logo .for-light { display: none; }
+[data-variant="c"][data-theme="light"] .stage .logo .for-dark { display: block; }
+.nav { display: none; }
+.hdr .btn { min-height: 42px; padding: 0 16px; font-size: 15px; }
+.hdr .cta-desk { display: none; }
+.icon-btn { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--line-strong); background: transparent; color: var(--text); cursor: pointer; }
+.icon-btn svg { width: 20px; height: 20px; }
+.burger { width: auto; padding: 0 12px; gap: 6px; display: inline-flex; align-items: center; font: inherit; font-weight: 700; font-size: 15px; }
+.theme-toggle .moon { display: none; }
+[data-theme="dark"] .theme-toggle .sun { display: none; }
+[data-theme="dark"] .theme-toggle .moon { display: block; }
+.mnav { display: none; border-top: 1px solid var(--line); padding: 8px 16px 20px; background: var(--bg); }
+.mnav.open { display: block; }
+.mnav a { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--line); font-weight: 600; font-size: 18px; }
+.mnav .sub a { font-size: 16px; font-weight: 500; color: var(--muted); padding-left: 16px; }
+
+/* ---------- hero ---------- */
+.hero { padding: 0; }
+.hero-media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--surface); }
+.hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; }
+.hero-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, var(--bg) 100%); }
+.hero-draft { position: absolute; left: 12px; top: 12px; z-index: 2; }
+.hero-body { position: relative; margin-top: -48px; z-index: 2; padding-bottom: 40px; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.hero-actions .btn { flex: 1 1 auto; }
+.hero { overflow: hidden; }
+.hero-dots { position: absolute; right: 12px; top: 12px; width: 120px; height: 120px; opacity: .6; z-index: 1;
+  -webkit-mask-image: radial-gradient(circle at 70% 30%, #000 0%, transparent 70%); mask-image: radial-gradient(circle at 70% 30%, #000 0%, transparent 70%); }
+
+/* ---------- преимущества ---------- */
+.adv { display: grid; gap: 4px 28px; }
+.adv-item { border-top: 2px solid var(--line-strong); padding: 18px 0 22px; }
+.adv-item .num { display: block; font-size: 40px; font-weight: 800; line-height: 1; letter-spacing: -.03em; color: var(--accent-ink); margin-bottom: 12px; font-variant-numeric: tabular-nums; }
+.adv-item p { margin: 0; color: var(--muted); font-size: 16px; }
+
+/* ---------- комплексные изделия ---------- */
+.complex-media { position: relative; border-radius: var(--radius-m); overflow: hidden; background: #000; }
+.complex-media img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.pin { position: absolute; width: 30px; height: 30px; border-radius: 50%; background: var(--lime-dark); color: #161513; font-weight: 800; font-size: 14px; display: grid; place-items: center; box-shadow: 0 0 0 5px #16151380; }
+.callouts { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; counter-reset: c; }
+.callouts li { display: flex; gap: 12px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.callouts li::before { counter-increment: c; content: counter(c); flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--on-accent); font-weight: 800; font-size: 13px; }
+.draft { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .06em; padding: 3px 7px; border-radius: 4px; background: #ffcf3d; color: #1a1916; vertical-align: middle; }
+
+/* ---------- мягкий CTA ---------- */
+.soft-cta { display: grid; gap: 18px; align-items: center; padding: 28px; border-radius: var(--radius-l); border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
+.soft-cta p { margin: 0; font-size: 19px; font-weight: 600; max-width: 60ch; }
+
+/* ---------- карточки ---------- */
+.cards { display: grid; gap: 12px; }
+.tech-cards { grid-template-columns: 1fr 1fr; }
+.card { position: relative; display: block; border-radius: var(--radius-m); overflow: hidden; background: var(--surface); border: 1px solid var(--line); isolation: isolate; transition: transform .3s var(--ease), border-color .2s; }
+.card:hover { transform: translateY(-3px); border-color: var(--muted); }
+.card .media { aspect-ratio: 1 / 1; overflow: hidden; }
+.card .media img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--ease); }
+.card:hover .media img { transform: scale(1.04); }
+.card .body { padding: 14px 14px 16px; }
+.card .body p { margin: 2px 0 0; color: var(--muted); font-size: 16px; line-height: 1.45; }
+.card .go { position: absolute; top: 10px; right: 10px; width: 34px; height: 34px; border-radius: 50%; background: var(--bg); color: var(--text); display: grid; place-items: center; opacity: .92; }
+.card .go svg { width: 16px; height: 16px; }
+/* продукты на телефоне — компактные строки */
+.prod-cards .card { display: grid; grid-template-columns: 112px 1fr; align-items: center; }
+.prod-cards .card .media { aspect-ratio: 1 / 1; height: 100%; }
+.prod-cards .card .go { position: static; margin-right: 12px; }
+.prod-cards .card { grid-template-columns: 112px 1fr auto; }
+.placeholder { width: 100%; height: 100%; display: grid; place-items: center; background-color: var(--bg-alt); position: relative; }
+.placeholder::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle, var(--accent) 1.2px, transparent 1.7px); background-size: 8px 8px; opacity: .45; }
+.placeholder span { position: relative; font-size: 10.5px; font-weight: 800; letter-spacing: .06em; background: var(--bg); color: var(--text); padding: 4px 7px; border-radius: 4px; text-align: center; line-height: 1.2; }
+
+/* ---------- клиенты ---------- */
+.logos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.logo-ph { aspect-ratio: 5 / 3; border: 1px dashed var(--line); border-radius: var(--radius-m); display: grid; place-items: center; color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: .04em; }
+
+/* ---------- жёсткий CTA ---------- */
+.hard-cta { background: #161513; color: #F3F1EC; padding: 48px 0; position: relative; border-top: 6px solid var(--lime-dark); }
+.hard-cta::before { content: ""; position: absolute; right: 0; top: 0; width: 45%; height: 100%; background-image: radial-gradient(circle, var(--lime-dark) 1.3px, transparent 1.8px); background-size: 10px 10px; opacity: .35; -webkit-mask-image: linear-gradient(90deg, transparent, #000); mask-image: linear-gradient(90deg, transparent, #000); pointer-events: none; }
+.hard-cta .wrap { position: relative; }
+.hard-cta .h2 { color: #F3F1EC; }
+.hard-cta p { margin: 0 0 22px; font-size: 17px; max-width: 56ch; color: #ABA69C; }
+.hard-cta .row { display: flex; flex-wrap: wrap; gap: 10px; }
+.hard-cta .btn-primary { background: var(--lime-dark); color: #161513; box-shadow: none; }
+.hard-cta .btn-ghost { border-color: #6B675E; color: #F3F1EC; }
+
+/* ---------- подвал ---------- */
+.ftr { padding: 44px 0 96px; background: var(--bg-alt); color: var(--text); border-top: 1px solid var(--line); }
+.ftr-grid { display: grid; gap: 28px; }
+.ftr h4 { margin: 0 0 10px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.ftr ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.ftr li a, .ftr li.muted { display: inline-flex; align-items: center; min-height: 44px; }
+.ftr .copy { margin-top: 32px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+.socials { display: flex; gap: 8px; margin-top: 14px; }
+
+/* ---------- липкая кнопка на телефоне ---------- */
+.sticky-cta { position: sticky; bottom: 0; z-index: 15; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: var(--bg); border-top: 1px solid var(--line); display: flex; gap: 8px; }
+.sticky-cta .btn { flex: 1; }
+.sticky-cta .icon-btn { flex: none; width: 48px; height: 48px; }
+
+/* ============ ПЛАНШЕТ ============ */
+@container (min-width: 700px) {
+  .wrap { padding: 0 32px; }
+  .section { padding: 80px 0; }
+  .adv { grid-template-columns: 1fr 1fr; }
+  .hero-media { aspect-ratio: 16 / 10; }
+  .hero-body { margin-top: -180px; }
+  .hero-actions .btn { flex: 0 0 auto; }
+  .soft-cta { grid-template-columns: 1fr auto; padding: 32px 40px; }
+  .prod-cards { grid-template-columns: 1fr 1fr; }
+  .logos { grid-template-columns: repeat(5, 1fr); }
+  .ftr-grid { grid-template-columns: 1.4fr 1fr 1fr; }
+}
+/* ============ КОМПЬЮТЕР ============ */
+@container (min-width: 1100px) {
+  .wrap { padding: 0 48px; }
+  .section { padding: 112px 0; }
+  .nav { display: flex; gap: 6px; align-items: center; margin-right: 12px; }
+  .nav > a, .nav summary { padding: 10px 14px; border-radius: 8px; font-weight: 600; font-size: 16px; cursor: pointer; list-style: none; }
+  .nav summary::-webkit-details-marker { display: none; }
+  .nav > a:hover, .nav summary:hover { background: var(--surface); }
+  .nav details { position: relative; }
+  .nav details > div { position: absolute; top: calc(100% + 8px); left: 0; min-width: 220px; padding: 8px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 16px 40px #0003; display: grid; }
+  .nav details > div a { padding: 10px 12px; border-radius: 8px; font-weight: 500; }
+  .nav details > div a:hover { background: var(--bg-alt); }
+  .hdr .wrap { height: 76px; }
+  .hdr .cta-desk { display: inline-flex; }
+  .burger { display: none !important; }
+  .mnav { display: none !important; }
+  .sticky-cta { display: none; }
+  .hero { position: relative; min-height: min(86vh, 820px); display: flex; align-items: center; }
+  .hero-media { position: absolute; top: 0; right: 0; bottom: 0; width: 50%; aspect-ratio: auto; }
+  .hero-media::after { background: linear-gradient(90deg, var(--bg) 0%, transparent 30%); }
+  .hero-body { margin: 0; padding: 96px 0; width: 100%; }
+  .hero-body .inner { max-width: 46%; }
+  .hero-dots { right: 24px; top: 24px; width: 200px; height: 200px; }
+  .adv { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .complex-grid { display: grid; grid-template-columns: 1.7fr 1fr; gap: 40px; align-items: center; }
+  .callouts { margin: 0; }
+  .tech-cards { grid-template-columns: repeat(4, 1fr); gap: 20px; align-items: start; }
+  .tech-cards .card:nth-child(even) { margin-top: 40px; }  /* «лесенка» — только на широком экране */
+  .tech-cards .card .media { aspect-ratio: 1 / 1; }
+  .prod-cards { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .prod-cards .card { display: block; }
+  .prod-cards .card .media { aspect-ratio: 4 / 3; height: auto; }
+  .prod-cards .card .go { position: absolute; }
+  .prod-cards .card:nth-child(3n+2) { transform: translateY(24px); }
+  .prod-cards .card:nth-child(3n+2):hover { transform: translateY(21px); }
+  .card .body { padding: 18px 20px 22px; }
+  .hard-cta { padding: 72px 0; }
+  .hard-cta .grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: end; }
+  .hard-cta .row { justify-content: flex-end; }
+  .ftr { padding-bottom: 44px; }
+  .ftr-grid { grid-template-columns: 1.6fr 1fr 1fr 1fr; }
+}
+
+/* ============ ТОКЕНЫ (панель) ============ */
+.tokens { max-width: 1100px; margin: 0 auto 60px; padding: 24px; border-radius: 16px; background: var(--bg); color: var(--text); font-family: var(--font); }
+.tokens h2 { margin: 0 0 16px; font-size: 20px; }
+.sw { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.sw div { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: 12.5px; background: var(--surface); }
+.sw i { display: block; height: 64px; }
+.sw span { display: block; padding: 8px 10px; line-height: 1.35; }
+.contrast { margin-top: 18px; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.contrast div { padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); font-size: 14px; }
+.ok { color: #2d8a2d; font-weight: 800; } .bad { color: #c0392b; font-weight: 800; }
+[data-theme="dark"] .ok { color: #7fd97f; } [data-theme="dark"] .bad { color: #ff8a7a; }
+.compare { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; max-width: 1100px; margin: 0 auto 60px; padding: 0 16px; }
+.mini { border-radius: 14px; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--font); border: 1px solid #0002; cursor: pointer; }
+.mini .top { padding: 18px; }
+.mini .top b { font-size: 22px; line-height: 1.1; display: block; margin: 6px 0; letter-spacing: -.01em; }
+.mini .top p { margin: 0 0 12px; color: var(--muted); font-size: 13.5px; }
+.mini .strip { display: flex; height: 22px; }
+.mini .strip i { flex: 1; }
+.mini .lbl { font-size: 12px; font-weight: 800; color: var(--accent-ink); letter-spacing: .05em; text-transform: uppercase; }
+.mini .card-s { margin-top: 10px; padding: 12px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) { .site *, .frame { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="sg-bar" role="toolbar" aria-label="Настройки витрины">
+  <b>iPrint · витрина стилей</b>
+  <div class="sg-group" data-ctl="variant"><span>Вариант:</span>
+    <button data-v="a">A · Тёплый, ровный фон</button><button data-v="b">B · Холодный (сталь)</button><button data-v="c">C · Тёплый + тёмные блоки ★</button></div>
+  <div class="sg-group" data-ctl="theme"><span>Тема:</span>
+    <button data-v="light">Светлая</button><button data-v="dark">Тёмная</button><button data-v="system">Как в системе</button></div>
+  <div class="sg-group" data-ctl="btn"><span>Кнопка на светлом:</span>
+    <button data-v="outline">Лайм + обводка</button><button data-v="plain">Лайм без обводки</button><button data-v="graphite">Графит + лайм ✓</button></div>
+  <div class="sg-group" data-ctl="device"><span>Экран:</span>
+    <button data-v="phone">Телефон</button><button data-v="tablet">Планшет</button><button data-v="desktop">Компьютер</button></div>
+</div>
+
+<div class="sg-note">
+  <h1>Как смотреть</h1>
+  <p>Сверху переключайте <b>вариант</b>, <b>тему</b> (светлая/тёмная) и <b>экран</b>. Ниже — макет главной на реальных фото, под ним — палитра с проверкой читаемости и сравнение всех вариантов. Кнопка ☀/☾ в шапке макета — это и есть будущий переключатель темы на сайте.</p>
+  <p><b>Что такое «тёмные блоки (сцены)»:</b> в варианте C страница светлая, но главные блоки — первый экран, «Комплексні вироби», нижний призыв и подвал — тёмные, как подиум для принтов на тёмной ткани. В A весь фон одного светлого тона, в B то же самое, но в холодной гамме.</p>
+  <p><b>Почему иногда открывалось тёмным:</b> раньше витрина по умолчанию брала тему из настроек Windows/телефона и запоминала последний выбор. Теперь по умолчанию всегда светлая; «Как в системе» — отдельная кнопка.</p>
+  <p><b>Лайм — из вашего logo.svg:</b> на светлом фоне <code>#A6D93C</code>, на тёмном — более яркий <code>#A5F200</code>. Переключатель «Кнопка на светлом» показывает три способа, чтобы лаймовая кнопка не «сливалась» со светлым фоном.</p>
+  <p><b>★ Рекомендация агента — вариант C</b>: светлая страница (исследования читаемости) + тёмные «сцены» для Hero, комплексных изделий и подвала (там лайм и фото «светятся»), плюс переключатель темы для тех, кто любит тёмную. A и B — для сравнения: полностью тёплая и полностью холодная гамма. Переключение «по времени суток» не предлагаю: телефоны и компьютеры уже умеют это сами, а сайт следует за их настройкой.</p>
+  <p>Тексты — из утверждённой текстовки. Жёлтая метка <span class="draft">ДОРАБОТАТЬ</span> — заглушка (фото/текст будут позже). Это эскиз стиля, а не финальная вёрстка.</p>
+</div>
+
+<div class="frame" id="frame" data-device="phone">
+<div class="site" id="site">
+
+  <header class="hdr">
+    <div class="wrap">
+      <a class="logo" href="#" aria-label="iPrint — на головну">
+        <img class="for-dark" src="img/logo-on-dark.png" alt="iPrint" width="180" height="62">
+        <img class="for-light" src="img/logo-on-light.png" alt="iPrint" width="180" height="62">
+      </a>
+      <nav class="nav" aria-label="Головне меню">
+        <a href="#">Послуги</a>
+        <a href="#">Технології</a>
+        <details><summary>Підтримка ▾</summary>
+          <div><a href="#">Довідник</a><a href="#">Про компанію</a><a href="#">Контакти</a></div>
+        </details>
+      </nav>
+      <button class="icon-btn theme-toggle" type="button" aria-label="Перемкнути світлу/темну тему">
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>
+      </button>
+      <a class="btn btn-primary cta-desk" href="#">Розрахувати</a>
+      <button class="icon-btn burger" type="button" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>Меню</span>
+      </button>
+    </div>
+    <nav class="mnav" aria-label="Мобільне меню">
+      <a href="#">Послуги <span>›</span></a>
+      <a href="#">Технології <span>›</span></a>
+      <a href="#">Підтримка</a>
+      <div class="sub"><a href="#">Довідник</a><a href="#">Про компанію</a><a href="#">Контакти</a></div>
+    </nav>
+  </header>
+
+  <section class="hero section stage">
+    <div class="hero-media"><img src="img/hero-silk-stack.webp" alt="Стос чорних футболок з повноколірним растровим шовкотрафаретним принтом" width="1355" height="1800"><div class="halftone hero-dots" aria-hidden="true"></div><span class="draft hero-draft">ФОТО ТИМЧАСОВЕ</span></div>
+    <div class="hero-body"><div class="wrap"><div class="inner">
+      <p class="eyebrow">Виробничий партнер для брендів одягу</p>
+      <h1 class="h1">Друк на тканині та пошив для брендів одягу</h1>
+      <p class="lead">Усі етапи — від ідеї до готового виробу.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#">Розрахувати вартість
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-ghost" href="#">Технології друку</a>
+      </div>
+    </div></div></div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Чому з нами спокійно</p><h2 class="h2">Виробництво без зайвих ризиків</h2></div>
+      <div class="adv">
+        <div class="adv-item">
+          <span class="num">01</span>
+          <h3 class="h3">Результат відповідає вашій ідеї</h3>
+          <p>Колір, розміщення принтів, параметри виробу — готова колекція виглядає саме так, як ви задумали.</p></div>
+        <div class="adv-item">
+          <span class="num">02</span>
+          <h3 class="h3">Технологія підбирається під задачу</h3>
+          <p>Під кожну ідею — своя техніка друку й декорування від простого принту до поєднання кількох технологій.</p></div>
+        <div class="adv-item">
+          <span class="num">03</span>
+          <h3 class="h3">Передбачуваність тиражу</h3>
+          <p>Кожен етап перевіряється від першого відбитка до останнього виробу.</p></div>
+        <div class="adv-item">
+          <span class="num">04</span>
+          <h3 class="h3">Один партнер замість кількох підрядників</h3>
+          <p>Вам не потрібно координувати різні виробництва та кожен етап колекції окремо.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt stage">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Повага до деталей</p><h2 class="h2">Комплексні вироби</h2><p>Розбір реального виробу: що саме робить його складним. <span class="draft">ДОРАБОТАТЬ</span> текст виносок; фото — чистий кадр без впечатаних ліній.</p></div>
+      <div class="complex-grid">
+        <div class="complex-media">
+          <img src="img/complex.webp" alt="Зіп-худі з повноколірним шовкотрафаретним принтом-картиною, крупний план" width="1800" height="1200">
+        </div>
+        <ol class="callouts">
+          <li><span><b>Багатокольоровий шовкотрафарет</b> — повноколірне зображення растром.</span></li>
+          <li><span><b>Точна стиковка принта по блискавці</b> — малюнок не зміщується на стику.</span></li>
+          <li><span><b>Декоративна відстрочка та шви</b> — пошив у тому ж проєкті.</span></li>
+          <li><span><b>Висока деталізація та градієнти</b> — плавні переходи тонів шкіри й тіней.</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="soft-cta">
+        <p>Є ідея для принта або проєкту колекції? Подивимось разом, як найкраще втілити її у виробництві.</p>
+        <a class="btn btn-primary" href="#">Обговорити ідею</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Технології</p><h2 class="h2">Технології друку та декорування</h2></div>
+      <div class="cards tech-cards">
+        <a class="card" href="#"><div class="media"><img src="img/tekhnolohyia-1-shelk.webp" alt="Макрознімок повноколірного шовкотрафаретного відбитка на темній тканині" loading="lazy"></div>
+          <div class="body"><h3 class="h3">Шовкотрафарет</h3><p>Повноколірний прямий друк на будь-якій тканині</p></div>
+          <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
+        <a class="card" href="#"><div class="media"><div class="placeholder"><span>МАКРО DTF<br>ДОРАБОТАТЬ</span></div></div>
+          <div class="body"><h3 class="h3">DTF</h3><p>Цифровий друк фотографічної якості</p></div>
+          <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
+        <a class="card" href="#"><div class="media"><img src="img/tekhnolohyia-3-vyshyvka.webp" alt="Крупний план вишивки нитками" loading="lazy"></div>
+          <div class="body"><h3 class="h3">Вишивка</h3><p>Виразна ниткова фактура для написів та графіки</p></div>
+          <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
+        <a class="card" href="#"><div class="media"><img src="img/tekhnolohyia-4-flok.webp" alt="Оксамитова флок-фактура принта на тканині" loading="lazy"></div>
+          <div class="body"><h3 class="h3">Флокування</h3><p>Оксамитова фактура на тканині</p></div>
+          <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Послуги</p><h2 class="h2">Що можна замовити</h2></div>
+      <div class="cards prod-cards">
+        <a class="card" href="#"><div class="media"><img src="img/turnkey-bears.webp" alt="Готові дитячі світшоти з принтом, пошиті під ключ, на робочому столі" loading="lazy"></div>
+          <div class="body"><h3 class="h3">Створення одягу з нуля</h3><p>Розробка, пошив, друк</p></div><span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
+        <a class="card" href="#"><div class="media"><img src="img/shcho-2-druk-na-zamovlennia.webp" alt="Принт, надрукований на панелі виробу замовника" loading="lazy"></div>
+          <div class="body"><h3 class="h3">Друк на замовлення</h3><p>Принт на ваших виробах</p></div><span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
+        <a class="card" href="#"><div class="media"><img src="img/shcho-3-poshyv-na-zamovlennia.webp" alt="Пошита чорна куртка на блискавці без принта" loading="lazy"></div>
+          <div class="body"><h3 class="h3">Пошив на замовлення</h3><p>Розробка лекал та виготовлення одягу</p></div><span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
+        <a class="card" href="#"><div class="media"><div class="placeholder"><span>ФОТО<br>ДОРАБОТАТЬ</span></div></div>
+          <div class="body"><h3 class="h3">Корпоративний мерч</h3><p>Брендовані футболки, худі, зіпки</p></div><span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
+        <a class="card" href="#"><div class="media"><img src="img/shcho-5-birky-ta-brend-strichky.webp" alt="Брендовані стрічки та бірки крупним планом" loading="lazy"></div>
+          <div class="body"><h3 class="h3">Бірки та брендовані стрічки</h3><p>Для одягу, букетів, упаковки</p></div><span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
+        <a class="card" href="#"><div class="media"><div class="placeholder"><span>ФОТО<br>ДОРАБОТАТЬ</span></div></div>
+          <div class="body"><h3 class="h3">DTF у рулонах</h3><p>Готові наліпки під термопрес</p></div><span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Клієнти</p><h2 class="h2">Результати співпраці</h2><p>Бренди, з якими ми працюємо. <span class="draft">ДОРАБОТАТЬ</span> блок у розробці.</p></div>
+      <div class="logos">
+        <div class="logo-ph">SSUR</div><div class="logo-ph">ЛОГО</div><div class="logo-ph">ЛОГО</div><div class="logo-ph">ЛОГО</div><div class="logo-ph">ЛОГО</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hard-cta">
+    <div class="wrap grid">
+      <div>
+        <h2 class="h2">Надішліть дизайн або проєкт колекції</h2>
+        <p>Підготуємо розрахунок, строки виконання і підкажемо найкращі технології для вашого задуму. <span class="draft">ДОРАБОТАТЬ</span> CTA</p>
+      </div>
+      <div class="row">
+        <a class="btn btn-primary" href="#">Надіслати запит</a>
+        <a class="btn btn-ghost" href="#">Написати в Telegram</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="ftr stage">
+    <div class="wrap">
+      <div class="ftr-grid">
+        <div>
+          <a class="logo" href="#" aria-label="iPrint"><img class="for-dark" src="img/logo-on-dark.png" alt="iPrint" width="180" height="62"><img class="for-light" src="img/logo-on-light.png" alt="iPrint" width="180" height="62"></a>
+          <p class="muted" style="margin:12px 0 0;max-width:34ch">Виробничий партнер для брендів одягу. Одеса, відправка по Україні.</p>
+          <div class="socials">
+            <a class="icon-btn" href="#" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.4 4.3 2.9 11.4c-1.3.5-1.3 1.2-.2 1.6l4.7 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.8-1.4-1.5ZM8.9 14.1l9.3-5.9c.4-.3.8-.1.5.2l-7.6 6.9-.3 3.2-1.9-4.4Z"/></svg></a>
+            <a class="icon-btn" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          </div>
+        </div>
+        <div><h4>Послуги</h4><ul><li><a href="#">Створення одягу з нуля</a></li><li><a href="#">Друк на замовлення</a></li><li><a href="#">Пошив на замовлення</a></li><li><a href="#">Корпоративний мерч</a></li></ul></div>
+        <div><h4>Підтримка</h4><ul><li><a href="#">Довідник</a></li><li><a href="#">Про компанію</a></li><li><a href="#">Контакти</a></li></ul></div>
+        <div><h4>Контакти</h4><ul><li><a href="tel:+380939013050">093 901 30 50</a></li><li><a href="#">office@iprint.com.ua</a></li><li class="muted">Пн–Пт <span class="draft">ДОРАБОТАТЬ</span></li></ul></div>
+      </div>
+      <div class="copy"><span>© 2007–<span id="yr"></span> iPrint</span><a href="#">Політика конфіденційності</a></div>
+    </div>
+  </footer>
+
+  <div class="sticky-cta">
+    <a class="btn btn-primary" href="#">Розрахувати вартість</a>
+    <a class="icon-btn" href="#" aria-label="Написати в Telegram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.4 4.3 2.9 11.4c-1.3.5-1.3 1.2-.2 1.6l4.7 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.8-1.4-1.5ZM8.9 14.1l9.3-5.9c.4-.3.8-.1.5.2l-7.6 6.9-.3 3.2-1.9-4.4Z"/></svg></a>
+  </div>
+</div>
+</div>
+
+<div class="tokens" id="tokens"><div class="stage" id="stageProbe" hidden></div>
+  <h2>Палитра текущего варианта и проверка читаемости</h2>
+  <div class="sw" id="sw"></div>
+  <div class="contrast" id="contrast"></div>
+  <p class="muted" style="font-size:13px;margin:14px 0 0">Норма читаемости (WCAG AA): обычный текст ≥ 4.5, крупный текст и иконки ≥ 3.0. Лайм на светлом фоне как цвет текста не проходит — поэтому в светлой теме для текста используется тёмно-оливковый, а лайм работает только заливкой (кнопки, точки, полосы).</p>
+</div>
+
+<div class="sg-note"><h1>Все варианты рядом</h1><p>Клик по карточке — включить этот вариант и тему в макете выше.</p></div>
+<div class="compare" id="compare"></div>
+
+<script>
+(function () {
+  var html = document.documentElement;
+  var state = { variant: html.dataset.variant || 'c', theme: 'light', device: 'phone', btn: 'graphite' };
+  try { var s = JSON.parse(localStorage.getItem('iprint-sg') || '{}'); Object.assign(state, s); } catch (e) {}
+  var mq = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
+  function resolved() { return state.theme === 'system' ? (mq && mq.matches ? 'dark' : 'light') : state.theme; }
+  function save() { try { localStorage.setItem('iprint-sg', JSON.stringify(state)); } catch (e) {} }
+  function apply() {
+    html.dataset.variant = state.variant;
+    html.dataset.theme = resolved();
+    html.dataset.btn = state.btn;
+    document.getElementById('frame').dataset.device = state.device;
+    document.querySelectorAll('.sg-group').forEach(function (g) {
+      var key = g.dataset.ctl;
+      g.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === state[key])); });
+    });
+    renderTokens();
+  }
+  document.querySelectorAll('.sg-group button').forEach(function (b) {
+    b.addEventListener('click', function () { state[b.parentNode.dataset.ctl] = b.dataset.v; save(); apply(); });
+  });
+  if (mq && mq.addEventListener) mq.addEventListener('change', function () { if (state.theme === 'system') apply(); });
+  document.querySelectorAll('.theme-toggle').forEach(function (b) {
+    b.addEventListener('click', function () { state.theme = resolved() === 'dark' ? 'light' : 'dark'; save(); apply(); });
+  });
+  var burger = document.querySelector('.burger'), mnav = document.querySelector('.mnav');
+  burger.addEventListener('click', function () { var o = mnav.classList.toggle('open'); burger.setAttribute('aria-expanded', String(o)); });
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // ---- контраст ----
+  function hex(c) { var m = c.match(/\d+(\.\d+)?/g).map(Number); return '#' + m.slice(0, 3).map(function (x) { return ('0' + Math.round(x).toString(16)).slice(-2); }).join('').toUpperCase(); }
+  function lum(c) { var m = c.match(/\d+(\.\d+)?/g).map(Number).slice(0, 3).map(function (v) { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }); return .2126 * m[0] + .7152 * m[1] + .0722 * m[2]; }
+  function ratio(a, b) { var x = lum(a), y = lum(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); }
+  var names = { bg: 'Фон', 'bg-alt': 'Фон 2', surface: 'Карточка', line: 'Линия', text: 'Текст', muted: 'Вторичный текст', accent: 'Акцент (лайм)', 'accent-ink': 'Акцент-текст', 'on-accent': 'Текст на лайме', 'line-strong': 'Обводка кнопок' };
+  function tok(el, n) { var p = document.createElement('i'); p.style.background = 'var(--' + n + ')'; el.appendChild(p); var c = getComputedStyle(p).backgroundColor; p.remove(); return c; }
+  function renderTokens() {
+    var t = document.getElementById('tokens'), sw = document.getElementById('sw'), ct = document.getElementById('contrast');
+    var v = {}; Object.keys(names).forEach(function (n) { v[n] = tok(t, n); });
+    var st = document.getElementById('stageProbe'), sv = {}; ['bg', 'text', 'muted', 'surface', 'accent-ink', 'line-strong'].forEach(function (n) { sv[n] = tok(st, n); });
+    sw.innerHTML = Object.keys(names).map(function (n) { return '<div><i style="background:' + v[n] + '"></i><span><b>' + names[n] + '</b><br>' + hex(v[n]) + '</span></div>'; }).join('');
+    var pairs = [['text', 'bg', 4.5], ['muted', 'bg', 4.5], ['muted', 'surface', 4.5], ['accent-ink', 'bg', 4.5], ['on-accent', 'accent', 4.5], ['line-strong', 'bg', 3]];
+    function row(a, b, th, label, src) { var r = ratio(src[a], src[b]); return '<div style="background:' + src[b] + ';color:' + src[a] + '"><b>' + names[a] + '</b> на «' + names[b] + '»' + (label || '') + '</div><div>' + r.toFixed(2) + ' : 1 — <span class="' + (r >= th ? 'ok">OK' : 'bad">мало') + '</span> (нужно ≥ ' + th + ')</div>'; }
+    var html = pairs.map(function (p) { return row(p[0], p[1], p[2], '', v); }).join('');
+    if (sv.bg !== v.bg) html += [['text', 'bg', 4.5], ['muted', 'bg', 4.5], ['accent-ink', 'bg', 4.5]].map(function (p) { return row(p[0], p[1], p[2], ' — тёмная сцена', sv); }).join('');
+    html += '<div style="background:' + v.bg + '"><span class="btn btn-primary" style="min-height:34px;font-size:13px">Лайм</span></div><div>Лайм на фоне: ' + ratio(v.accent, v.bg).toFixed(2) + ' : 1 — <b>только заливка</b>: кнопку опознают по тексту, норма для текста здесь не применяется</div>';
+    ct.innerHTML = html;
+  }
+
+  // ---- сравнение ----
+  var list = [['a', 'light', 'A · Тёплый, ровный фон'], ['a', 'dark', 'A · Тёплый, ровный фон'], ['b', 'light', 'B · Холодный (сталь)'], ['b', 'dark', 'B · Холодный (сталь)'], ['c', 'light', 'C · Тёплый + тёмные блоки'], ['c', 'dark', 'C · Тёплый + тёмные блоки']];
+  var cmp = document.getElementById('compare');
+  cmp.innerHTML = list.map(function (x) {
+    return '<div class="mini" data-variant="' + x[0] + '" data-theme="' + x[1] + '" data-pick="' + x[0] + ',' + x[1] + '"><div class="top"><span class="lbl">' + x[2] + ' · ' + (x[1] === 'light' ? 'светлая' : 'тёмная') + '</span><b>Друк на тканині та пошив для брендів одягу</b><p>Усі етапи — від ідеї до готового виробу.</p><span class="btn btn-primary" style="min-height:38px;font-size:14px">Розрахувати</span><div class="card-s">Карточка · вторичный текст для проверки</div></div><div class="strip"><i style="background:var(--bg)"></i><i style="background:var(--bg-alt)"></i><i style="background:var(--surface)"></i><i style="background:var(--muted)"></i><i style="background:var(--text)"></i><i style="background:var(--accent)"></i></div></div>';
+  }).join('');
+  cmp.addEventListener('click', function (e) { var m = e.target.closest('.mini'); if (!m) return; var p = m.dataset.pick.split(','); state.variant = p[0]; state.theme = p[1]; save(); apply(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+  apply();
+})();
+</script>
+</body>
+</html>

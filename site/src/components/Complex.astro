@@ -1,0 +1,39 @@
+---
+/** «Комплексні вироби»: тёмная сцена, фото изделия + нумерованные выноски отдельным слоем (текстом в HTML — читаемо на телефоне и для ИИ). */
+import { Picture } from 'astro:assets';
+import { img } from '../lib/images';
+interface Props { data: { title: string; intro?: string | null; image?: string | null; imageAlt?: string; imageDraft?: string; callouts: { title: string; text: string }[] } }
+const { data } = Astro.props;
+const photo = img(data.image);
+---
+<section class="section stage" aria-labelledby="complex-title">
+  <div class="wrap">
+    <h2 class="h2 complex__title" id="complex-title">{data.title}</h2>
+    {data.intro && <p class="complex__intro muted">{data.intro}</p>}
+    <div class="complex">
+      <figure class="complex__media">
+        {photo && <Picture src={photo} alt={data.imageAlt ?? ''} formats={['avif', 'webp']} widths={[480, 768, 1200]} sizes="(min-width: 1100px) 60vw, 100vw" loading="lazy" />}
+        {data.imageDraft && <span class="draft complex__draft">{data.imageDraft}</span>}
+      </figure>
+      <ol class="callouts">
+        {data.callouts.map((c) => <li><span><strong>{c.title}</strong> — {c.text}</span></li>)}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .complex__title { margin-bottom: 24px; }
+  .complex__intro { margin: -8px 0 24px; max-width: 60ch; }
+  .complex__media { position: relative; margin: 0; border-radius: var(--radius-m); overflow: hidden; background: var(--surface); }
+  .complex__media :global(img) { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+  .complex__draft { position: absolute; left: 12px; top: 12px; }
+  .callouts { list-style: none; counter-reset: c; display: grid; margin-top: 18px; }
+  .callouts li { display: flex; gap: 12px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .callouts li::before { counter-increment: c; content: counter(c); flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--btn-fg); font-weight: var(--fw-black); font-size: 13px; }
+  .callouts strong { font-weight: var(--fw-bold); }
+  @media (min-width: 1100px) {
+    .complex { display: grid; grid-template-columns: 1.7fr 1fr; gap: 40px; align-items: center; }
+    .callouts { margin-top: 0; }
+  }
+</style>

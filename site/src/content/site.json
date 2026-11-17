@@ -1,0 +1,30 @@
+{
+  "_note": "Общие данные компании. Только подтверждённые владельцем факты. null = ещё не передано (элемент на сайте скрывается).",
+  "name": "iPrint",
+  "url": "https://iprint.com.ua",
+  "tagline": "Виробничий партнер для брендів одягу",
+  "description": "Виробництво в Одесі: шовкотрафаретний друк, DTF, вишивка, флок та пошив одягу для брендів — від ідеї до готового виробу.",
+  "city": "Одеса",
+  "country": "UA",
+  "foundingYear": 2007,
+  "phone": "+380939013050",
+  "phoneDisplay": "093 901 30 50",
+  "email": "office@iprint.od.ua",
+  "_emailTodo": "ДОРАБОТАТЬ: заменить на office@iprint.com.ua, когда почта на новом домене будет создана",
+  "telegram": null,
+  "instagram": null,
+  "hours": null,
+  "nav": [
+    { "label": "Послуги", "href": "/#poslugy" },
+    { "label": "Технології", "href": "/#tekhnolohii" },
+    {
+      "label": "Підтримка",
+      "children": [
+        { "label": "Довідник", "href": null },
+        { "label": "Про компанію", "href": null },
+        { "label": "Контакти", "href": "/#kontakty" }
+      ]
+    }
+  ],
+  "cta": { "label": "Розрахувати", "href": "/#zapyt" }
+}

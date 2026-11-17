@@ -1,0 +1,22 @@
+---
+/** Логотип iPrint из лого.svg владельца. Две версии: для светлого и тёмного фона — CSS показывает нужную по теме/сцене. */
+import onLight from '../assets/images/logo-light-bg.svg';
+import onDark from '../assets/images/logo-dark-bg.svg';
+interface Props { href?: string; height?: number; }
+const { href = '/', height = 30 } = Astro.props;
+const width = Math.round(height * (onLight.width / onLight.height));
+---
+<a class="logo" href={href} aria-label="iPrint — на головну">
+  <img class="logo__img logo__img--light" src={onLight.src} alt="iPrint" width={width} height={height} />
+  <img class="logo__img logo__img--dark" src={onDark.src} alt="" aria-hidden="true" width={width} height={height} />
+</a>
+
+<style>
+  .logo { display: inline-flex; align-items: center; min-height: var(--tap); }
+  .logo__img { height: var(--logo-h, 30px); width: auto; }
+  .logo__img--dark { display: none; }
+  :global(:root[data-theme="dark"]) .logo__img--light,
+  :global(.stage) .logo__img--light { display: none; }
+  :global(:root[data-theme="dark"]) .logo__img--dark,
+  :global(.stage) .logo__img--dark { display: block; }
+</style>

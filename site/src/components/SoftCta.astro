@@ -1,0 +1,19 @@
+---
+/** Мягкий призыв к действию. */
+interface Props { data: { text: string; button: { label: string; href: string } } }
+const { data } = Astro.props;
+---
+<section class="section">
+  <div class="wrap">
+    <div class="soft">
+      <p class="soft__text">{data.text}</p>
+      <a class="btn btn--primary" href={data.button.href}>{data.button.label}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .soft { display: grid; gap: 18px; align-items: center; padding: 28px; border-radius: var(--radius-l); border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
+  .soft__text { font-size: 19px; font-weight: 600; max-width: 60ch; }
+  @media (min-width: 700px) { .soft { grid-template-columns: 1fr auto; padding: 32px 40px; } }
+</style>

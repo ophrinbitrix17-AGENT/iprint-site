@@ -1,0 +1,39 @@
+---
+/** Карточка технологии/услуги. href = null → карточка не кликабельна (страница ещё не создана). image = null → фирменная заглушка-растр. */
+import { Picture } from 'astro:assets';
+import { img } from '../lib/images';
+import Icon from './Icon.astro';
+interface Props { title: string; text?: string; image?: string | null; imageAlt?: string; placeholder?: string; href?: string | null; sizes: string; }
+const { title, text, image, imageAlt, placeholder, href, sizes } = Astro.props;
+const photo = img(image);
+const Tag = href ? 'a' : 'div';
+---
+<Tag class:list={['card', { 'card--link': href }]} href={href ?? undefined}>
+  <div class="card__media">
+    {photo
+      ? <Picture src={photo} alt={imageAlt ?? ''} formats={['avif', 'webp']} widths={[320, 480, 720]} sizes={sizes} loading="lazy" />
+      : <div class="card__ph" role="img" aria-label={`Фото: ${title} — незабаром`}><span>{placeholder ?? 'ФОТО'}<br />ДОРАБОТАТЬ</span></div>}
+  </div>
+  <div class="card__body">
+    <h3 class="h3">{title}</h3>
+    {text && <p class="card__text">{text}</p>}
+  </div>
+  {href && <span class="card__go" aria-hidden="true"><Icon name="arrow-up-right" /></span>}
+</Tag>
+
+<style>
+  .card { position: relative; display: block; border-radius: var(--radius-m); overflow: hidden; background: var(--surface); border: 1px solid var(--line); isolation: isolate; }
+  .card--link { transition: transform var(--t-mid) var(--ease), border-color var(--t-mid); }
+  .card--link:hover { transform: translateY(-3px); border-color: var(--line-strong); }
+  .card__media { aspect-ratio: 1 / 1; overflow: hidden; background: var(--bg-alt); }
+  .card__media :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform 600ms var(--ease); }
+  .card--link:hover .card__media :global(img) { transform: scale(1.04); }
+  .card__body { padding: 14px 14px 16px; }
+  .card__text { margin-top: 2px; color: var(--muted); line-height: 1.45; }
+  .card__go { position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--bg); color: var(--text); }
+  .card__go :global(svg) { width: 16px; height: 16px; }
+  .card__ph { position: relative; width: 100%; height: 100%; display: grid; place-items: center; }
+  .card__ph::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle, var(--accent) 1.2px, transparent 1.7px); background-size: 8px 8px; opacity: .5; }
+  .card__ph span { position: relative; font-size: 10.5px; font-weight: var(--fw-black); letter-spacing: .06em; background: var(--bg); color: var(--text); padding: 4px 7px; border-radius: 4px; text-align: center; line-height: 1.25; }
+  @media (min-width: 1100px) { .card__body { padding: 18px 20px 22px; } }
+</style>

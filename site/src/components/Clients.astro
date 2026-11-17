@@ -1,0 +1,31 @@
+---
+/** «Результати співпраці»: логотипы клиентов (кликабельны, если есть ссылка). Пока — заготовка. */
+interface Logo { name: string | null; href: string | null; logo: string | null }
+interface Props { data: { visible?: boolean; title: string; intro?: string | null; logos: Logo[] } }
+const { data } = Astro.props;
+---
+{data.visible !== false && (
+  <section class="section section--alt" aria-labelledby="clients-title">
+    <div class="wrap">
+      <h2 class="h2 clients__title" id="clients-title">{data.title} <span class="draft">ДОРАБОТАТЬ</span></h2>
+      {data.intro && <p class="muted clients__intro">{data.intro}</p>}
+      <ul class="clients">
+        {data.logos.map((l) => (
+          <li class="clients__item">
+            {l.href
+              ? <a class="clients__box" href={l.href} rel="noopener" target="_blank">{l.name}</a>
+              : <span class="clients__box">{l.name ?? 'Лого клієнта'}</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+<style>
+  .clients__title { margin-bottom: 24px; }
+  .clients__intro { margin: -8px 0 24px; }
+  .clients { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .clients__box { aspect-ratio: 5 / 3; display: grid; place-items: center; border: 1px dashed var(--line-strong); border-radius: var(--radius-m); color: var(--muted); font-size: 14px; font-weight: var(--fw-bold); letter-spacing: .04em; text-align: center; padding: 8px; }
+  @media (min-width: 700px) { .clients { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); } }
+</style>

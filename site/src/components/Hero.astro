@@ -1,0 +1,61 @@
+---
+/** Первый экран: один статичный Hero (без слайдера). Тёмная «сцена». */
+import { Picture } from 'astro:assets';
+import { img } from '../lib/images';
+import Icon from './Icon.astro';
+interface Props { data: { eyebrow?: string; title: string; lead?: string; image?: string | null; imageAlt?: string; imageDraft?: string; imageFocus?: string; imageFocusDesktop?: string; primary?: { label: string; href: string }; secondary?: { label: string; href: string } } }
+const { data } = Astro.props;
+const photo = img(data.image);
+---
+<section class="hero stage" aria-labelledby="hero-title" style={`--focus-m: ${data.imageFocus ?? '50% 50%'}; --focus-d: ${data.imageFocusDesktop ?? data.imageFocus ?? '50% 50%'}`}>
+  <div class="hero__media">
+    {photo && (
+      <Picture src={photo} alt={data.imageAlt ?? ''} formats={['avif', 'webp']} widths={[480, 768, 1080, 1440]}
+        sizes="(min-width: 1100px) 50vw, 100vw" loading="eager" fetchpriority="high" class="hero__img" />
+    )}
+    <div class="hero__dots halftone" aria-hidden="true"></div>
+    {data.imageDraft && <span class="draft hero__draft">{data.imageDraft}</span>}
+  </div>
+  <div class="hero__body">
+    <div class="wrap">
+      <div class="hero__inner">
+        {data.eyebrow && <p class="eyebrow">{data.eyebrow}</p>}
+        <h1 class="h1" id="hero-title">{data.title}</h1>
+        {data.lead && <p class="lead hero__lead">{data.lead}</p>}
+        <div class="hero__actions">
+          {data.primary && <a class="btn btn--primary" href={data.primary.href}>{data.primary.label}<Icon name="arrow" /></a>}
+          {data.secondary && <a class="btn btn--ghost" href={data.secondary.href}>{data.secondary.label}</a>}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { position: relative; overflow: hidden; background: var(--bg); color: var(--text); }
+  .hero__media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--surface); }
+  .hero__media :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: var(--focus-m); }
+  .hero__media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, var(--bg) 100%); pointer-events: none; }
+  .hero__dots { position: absolute; right: 12px; top: 12px; width: 120px; height: 120px; opacity: .6; z-index: 1;
+    -webkit-mask-image: radial-gradient(circle at 70% 30%, #000 0%, transparent 70%); mask-image: radial-gradient(circle at 70% 30%, #000 0%, transparent 70%); }
+  .hero__draft { position: absolute; left: 12px; top: 12px; z-index: 2; }
+  .hero__body { position: relative; z-index: 2; margin-top: -48px; padding-bottom: 44px; }
+  .hero__lead { margin-top: 14px; }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  .hero__actions .btn { flex: 1 1 auto; }
+
+  @media (min-width: 700px) {
+    .hero__media { aspect-ratio: 16 / 10; }
+    .hero__body { margin-top: -120px; }
+    .hero__actions .btn { flex: 0 0 auto; }
+  }
+  @media (min-width: 1100px) {
+    .hero { min-height: min(86svh, 820px); display: flex; align-items: center; }
+    .hero__media { position: absolute; top: 0; right: 0; bottom: 0; width: 50%; aspect-ratio: auto; }
+    .hero__media :global(img) { object-position: var(--focus-d); }
+    .hero__media::after { background: linear-gradient(90deg, var(--bg) 0%, transparent 30%); }
+    .hero__dots { right: 24px; top: 24px; width: 200px; height: 200px; }
+    .hero__body { margin: 0; padding: 96px 0; width: 100%; }
+    .hero__inner { max-width: 46%; }
+  }
+</style>

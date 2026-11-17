@@ -1,0 +1,135 @@
+---
+/** Шапка: логотип, меню (на компьютере — строкой, «Підтримка» выпадает), переключатель темы, CTA; на телефоне — кнопка «Меню» с подписью. */
+import site from '../content/site.json';
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+---
+<header class="hdr">
+  <div class="wrap hdr__row">
+    <Logo />
+    <nav class="hdr__nav" aria-label="Головне меню">
+      {site.nav.map((item) =>
+        item.children ? (
+          <details class="dd">
+            <summary class="hdr__link">{item.label}<Icon name="chevron" class="dd__chev" /></summary>
+            <div class="dd__panel">
+              {item.children.map((c) => c.href
+                ? <a class="dd__link" href={c.href}>{c.label}</a>
+                : <span class="dd__link dd__link--soon" aria-disabled="true">{c.label} <small>скоро</small></span>)}
+            </div>
+          </details>
+        ) : (
+          <a class="hdr__link" href={item.href}>{item.label}</a>
+        )
+      )}
+    </nav>
+    <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Увімкнути темну тему">
+      <Icon name="moon" class="theme-toggle__moon" />
+      <Icon name="sun" class="theme-toggle__sun" />
+    </button>
+    <a class="btn btn--primary hdr__cta" href={site.cta.href}>{site.cta.label}</a>
+    <button class="icon-btn hdr__burger" type="button" aria-expanded="false" aria-controls="mnav" data-menu-toggle>
+      <Icon name="menu" class="hdr__burger-open" /><Icon name="close" class="hdr__burger-close" /><span>Меню</span>
+    </button>
+  </div>
+  <nav class="mnav" id="mnav" aria-label="Мобільне меню" hidden>
+    <div class="wrap">
+      {site.nav.map((item) =>
+        item.children ? (
+          <div class="mnav__group">
+            <p class="mnav__title">{item.label}</p>
+            {item.children.map((c) => c.href
+              ? <a class="mnav__link mnav__link--sub" href={c.href}>{c.label}</a>
+              : <span class="mnav__link mnav__link--sub mnav__link--soon" aria-disabled="true">{c.label} <small>скоро</small></span>)}
+          </div>
+        ) : (
+          <a class="mnav__link" href={item.href}>{item.label}</a>
+        )
+      )}
+      <a class="btn btn--primary mnav__cta" href={site.cta.href}>{site.cta.label}</a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const root = document.documentElement;
+  // --- тема: по умолчанию светлая; выбор хранится в localStorage
+  const toggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  const syncLabel = () => {
+    const dark = root.dataset.theme === 'dark';
+    toggle?.setAttribute('aria-label', dark ? 'Увімкнути світлу тему' : 'Увімкнути темну тему');
+    toggle?.setAttribute('aria-pressed', String(dark));
+  };
+  syncLabel();
+  toggle?.addEventListener('click', () => {
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try {
+      if (next === 'light') localStorage.removeItem('iprint-theme');
+      else localStorage.setItem('iprint-theme', next);
+    } catch (e) { /* хранилище недоступно — тема просто не запомнится */ }
+    const meta = document.querySelector('meta[name="theme-color"]');
+    meta?.setAttribute('content', next === 'dark' ? '#161513' : '#F5F3EE');
+    syncLabel();
+  });
+
+  // --- мобильное меню
+  const burger = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const mnav = document.getElementById('mnav');
+  const setMenu = (open: boolean) => {
+    if (!burger || !mnav) return;
+    burger.setAttribute('aria-expanded', String(open));
+    mnav.hidden = !open;
+  };
+  burger?.addEventListener('click', () => setMenu(burger.getAttribute('aria-expanded') !== 'true'));
+  mnav?.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) setMenu(false); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (burger?.getAttribute('aria-expanded') === 'true') { setMenu(false); burger.focus(); }
+    document.querySelectorAll<HTMLDetailsElement>('.dd[open]').forEach((d) => { d.open = false; d.querySelector('summary')?.focus(); });
+  });
+
+  // --- выпадающее меню: закрыть по клику вне
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll<HTMLDetailsElement>('.dd[open]').forEach((d) => { if (!d.contains(e.target as Node)) d.open = false; });
+  });
+</script>
+
+<style>
+  .hdr { position: sticky; top: 0; z-index: 30; background: var(--bg); border-bottom: 1px solid var(--line); }
+  .hdr__row { display: flex; align-items: center; gap: 10px; height: var(--header-h); }
+  .hdr__row > :global(.logo) { margin-right: auto; }
+  .hdr__nav { display: none; }
+  .hdr__cta { display: none; min-height: 42px; padding: 0 16px; font-size: 15px; }
+  .hdr__burger { gap: 6px; padding: 0 12px; font-weight: var(--fw-bold); font-size: 15px; display: inline-flex; align-items: center; }
+  .hdr__burger :global(.hdr__burger-close) { display: none; }
+  .hdr__burger[aria-expanded="true"] :global(.hdr__burger-open) { display: none; }
+  .hdr__burger[aria-expanded="true"] :global(.hdr__burger-close) { display: block; }
+
+  .theme-toggle :global(.theme-toggle__sun) { display: none; }
+  :global(:root[data-theme="dark"]) .theme-toggle :global(.theme-toggle__sun) { display: block; }
+  :global(:root[data-theme="dark"]) .theme-toggle :global(.theme-toggle__moon) { display: none; }
+
+  .mnav { border-top: 1px solid var(--line); background: var(--bg); padding: 4px 0 20px; max-height: calc(100svh - var(--header-h)); overflow-y: auto; }
+  .mnav__link { display: flex; align-items: center; min-height: 52px; border-bottom: 1px solid var(--line); font-weight: var(--fw-bold); font-size: 18px; }
+  .mnav__title { padding-top: 14px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: var(--fw-bold); }
+  .mnav__link--sub { font-size: 16px; font-weight: 500; padding-left: 12px; min-height: var(--tap); }
+  .mnav__link--soon, .dd__link--soon { color: var(--muted); cursor: default; }
+  .mnav__link small, .dd__link small { font-size: 11px; margin-left: 8px; text-transform: uppercase; letter-spacing: .05em; }
+  .mnav__cta { width: 100%; margin-top: 20px; }
+
+  @media (min-width: 1100px) {
+    .hdr__nav { display: flex; align-items: center; gap: 4px; margin-right: 8px; }
+    .hdr__link { display: inline-flex; align-items: center; gap: 4px; min-height: var(--tap); padding: 0 14px; border-radius: 8px; font-weight: 600; cursor: pointer; list-style: none; }
+    .hdr__link::-webkit-details-marker { display: none; }
+    .hdr__link:hover { background: var(--surface); }
+    .hdr__link :global(.dd__chev) { width: 16px; height: 16px; transition: transform var(--t-mid) var(--ease); }
+    .dd { position: relative; }
+    .dd[open] :global(.dd__chev) { transform: rotate(180deg); }
+    .dd__panel { position: absolute; top: calc(100% + 8px); left: 0; min-width: 230px; padding: 8px; display: grid; border-radius: var(--radius-m); background: var(--surface); border: 1px solid var(--line); box-shadow: 0 16px 40px #0000002e; }
+    .dd__link { display: flex; align-items: center; min-height: var(--tap); padding: 0 12px; border-radius: 8px; font-weight: 500; }
+    a.dd__link:hover { background: var(--bg-alt); }
+    .hdr__cta { display: inline-flex; }
+    .hdr__burger, .mnav { display: none !important; }
+  }
+</style>

@@ -1,0 +1,5 @@
+# iPrint — відкрито для пошукових систем і ІІ-асистентів (див. bible/Б3_GEO_SEO.md)
+User-agent: *
+Allow: /
+
+Sitemap: https://iprint.com.ua/sitemap-index.xml

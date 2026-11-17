@@ -1,0 +1,46 @@
+---
+/** Секция с сеткой карточек. variant: tech (2×2 на телефоне) | products (строки на телефоне). Число карточек — любое. */
+import Card from './Card.astro';
+type CardData = { title: string; text?: string; image?: string | null; imageAlt?: string; placeholder?: string; href?: string | null };
+interface Props { data: { id?: string; eyebrow?: string; title: string; cards: CardData[] }; variant: 'tech' | 'products'; alt?: boolean; }
+const { data, variant, alt = false } = Astro.props;
+const sizes = variant === 'tech'
+  ? '(min-width: 1100px) 25vw, (min-width: 700px) 50vw, 50vw'
+  : '(min-width: 1100px) 33vw, (min-width: 700px) 30vw, 120px';
+const titleId = `${data.id ?? variant}-title`;
+---
+<section class:list={['section', { 'section--alt': alt }]} id={data.id} aria-labelledby={titleId}>
+  <div class="wrap">
+    {data.eyebrow && <p class="eyebrow">{data.eyebrow}</p>}
+    <h2 class="h2 grid__title" id={titleId}>{data.title}</h2>
+    <div class:list={['grid', `grid--${variant}`]}>
+      {data.cards.map((c) => <Card {...c} sizes={sizes} />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid__title { margin-bottom: 28px; }
+  .grid { display: grid; gap: 12px; }
+  .grid--tech { grid-template-columns: 1fr 1fr; }
+
+  /* продукты на телефоне — компактные строки: миниатюра + текст */
+  .grid--products :global(.card) { display: grid; grid-template-columns: 112px 1fr; align-items: center; }
+  .grid--products :global(.card .card__media) { height: 100%; aspect-ratio: auto; min-height: 112px; }
+  .grid--products :global(.card .card__go) { position: static; margin-right: 12px; }
+  .grid--products :global(.card--link) { grid-template-columns: 112px 1fr auto; }
+
+  @media (min-width: 700px) {
+    .grid--products { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 1100px) {
+    .grid { gap: 20px; }
+    .grid--tech { grid-template-columns: repeat(4, 1fr); align-items: start; }
+    .grid--tech > :global(:nth-child(even)) { margin-top: 40px; }        /* «лесенка» — только сеткой */
+    .grid--products { grid-template-columns: repeat(3, 1fr); align-items: start; }
+    .grid--products :global(.card) { display: block; }
+    .grid--products :global(.card .card__media) { aspect-ratio: 4 / 3; height: auto; min-height: 0; }
+    .grid--products :global(.card .card__go) { position: absolute; margin: 0; }
+    .grid--products > :global(:nth-child(3n + 2)) { margin-top: 24px; }
+  }
+</style>

@@ -1,0 +1,30 @@
+---
+/** Липкая нижняя панель действий — только на телефоне/планшете (Б1 §8). Telegram появится, когда владелец даст ссылку; пока — звонок. */
+import site from '../content/site.json';
+import Icon from './Icon.astro';
+---
+<div class="sbar" data-sbar>
+  <a class="btn btn--primary sbar__main" href={site.cta.href}>Розрахувати вартість</a>
+  {site.telegram
+    ? <a class="icon-btn sbar__icon" href={site.telegram} rel="noopener" aria-label="Написати в Telegram"><Icon name="telegram" /></a>
+    : <a class="icon-btn sbar__icon" href={`tel:${site.phone}`} aria-label={`Подзвонити: ${site.phoneDisplay}`}><Icon name="phone" /></a>}
+</div>
+
+<script>
+  // Пока на экране главная кнопка Hero — панель спрятана (не дублируем CTA). Без JS панель просто видна.
+  const bar = document.querySelector<HTMLElement>('[data-sbar]');
+  const heroCta = document.querySelector('.hero .btn--primary');
+  if (bar && heroCta && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => bar.classList.toggle('sbar--hidden', e.isIntersecting)).observe(heroCta);
+  }
+</script>
+
+<style>
+  .sbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; display: flex; gap: 8px;
+    padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom)); background: var(--bg); border-top: 1px solid var(--line);
+    transition: transform var(--t-mid) var(--ease), visibility var(--t-mid); }
+  .sbar--hidden { transform: translateY(110%); visibility: hidden; }
+  .sbar__main { flex: 1; }
+  .sbar__icon { flex: none; width: 48px; height: 48px; }
+  @media (min-width: 1100px) { .sbar { display: none; } }
+</style>
