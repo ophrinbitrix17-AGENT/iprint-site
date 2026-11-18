@@ -153,7 +153,20 @@ test.describe('Главная', () => {
 
   test('все картинки загрузились и имеют alt', async ({ page }) => {
     await page.goto('/');
-    await page.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 600) { window.scrollTo(0, y); await new Promise((r) => setTimeout(r, 60)); } });
+    // Ленивые картинки (loading="lazy") грузятся только у экрана: подводим к каждой и ждём её загрузки.
+    // Быстрая прокрутка «насквозь» давала гонку в WebKit на Linux (CI 18.11.2026: картинка ещё не complete).
+    await page.evaluate(async () => {
+      for (const img of [...document.images]) {
+        img.scrollIntoView({ block: 'center' });
+        if (!img.complete) {
+          await new Promise((r) => {
+            img.addEventListener('load', r, { once: true });
+            img.addEventListener('error', r, { once: true });
+            setTimeout(r, 3_000); // не дольше: при поломке тест упадёт понятным списком `bad`, а не по общему тайм-ауту
+          });
+        }
+      }
+    });
     await page.waitForLoadState('networkidle');
     const bad = await page.evaluate(() => [...document.images].filter((i) => !i.complete || i.naturalWidth === 0).map((i) => i.currentSrc || i.src));
     expect(bad).toEqual([]);
