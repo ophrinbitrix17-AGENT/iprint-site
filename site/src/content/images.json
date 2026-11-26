@@ -2,73 +2,73 @@
   "_note": "Реестр фото сайта: файл → где используется → источник (папка владельца). alt — в текстах блоков (home.json). Обновляет агент при каждой замене фото.",
   "images": [
     {
-      "file": "home/hero-silk-stack.jpg",
+      "file": "home/shovkotrafaretnyi-druk-chorni-futbolky.jpg",
       "block": "Hero",
       "source": "Контент/ОТ Кати/КОНТЕНТ САЙТ/1. Шелкография/79004 (2).jpg",
       "status": "временное — ждём фото по ТЗ"
     },
     {
-      "file": "home/complex-draft.jpg",
+      "file": "home/zip-khudi-povnokolirnyi-shovkotrafaret.jpg",
       "block": "Комплексні вироби",
       "source": "Контент/картинки/Черновики Главная/Complex.jpg",
       "status": "временное — впечатаны выноски, ждём чистый кадр"
     },
     {
-      "file": "tech/tech-silkscreen.jpg",
+      "file": "tech/shovkotrafaretnyi-druk-na-futboltsi.jpg",
       "block": "Технології: Шовкотрафарет",
       "source": "AGENT/assets-inbox/2026-11-26_карточки/ФИН/ (копия из Site/Корректировка фото и текстов/ФИН/) Шовкотрафарет.png",
       "status": "финальное (26.11.2026), проверено VLM владельца — без кадрирования, только сжатие"
     },
     {
-      "file": "tech/tech-dtf.jpg",
+      "file": "tech/dtf-druk-na-chornii-tkanyni.jpg",
       "block": "Технології: ДТФ",
       "source": "AGENT/assets-inbox/2026-11-26_карточки/ФИН/ (копия из Site/Корректировка фото и текстов/ФИН/) ДТФ_ФИНАЛ.jpg",
       "status": "финальное (26.11.2026), проверено VLM владельца — без кадрирования, только сжатие"
     },
     {
-      "file": "tech/tech-embroidery.jpg",
+      "file": "tech/vyshyvka-na-tkanyni.jpg",
       "block": "Технології: Вишивка",
       "source": "AGENT/assets-inbox/2026-11-26_карточки/ФИН/ (копия из Site/Корректировка фото и текстов/ФИН/) Вишивка_VISHNI_ФИНАЛ.jpg",
       "status": "финальное (26.11.2026), проверено VLM владельца — без кадрирования, только сжатие"
     },
     {
-      "file": "tech/tech-flock.jpg",
+      "file": "tech/flok-vizerunok-na-tkanyni.jpg",
       "block": "Технології: Флок",
       "source": "AGENT/assets-inbox/2026-11-26_карточки/ФИН/ (копия из Site/Корректировка фото и текстов/ФИН/) Флок_черный_узор_v1.jpg (замена 26.11 по решению владельца: сердечки перетягивали внимание на тёмном фоне)",
       "status": "финальное (26.11.2026), проверено VLM владельца — без кадрирования, только сжатие"
     },
     {
-      "file": "products/prod-turnkey.jpg",
+      "file": "products/odiah-pid-kliuch-kolektsiia-futbolok.jpg",
       "block": "Послуги: Одяг під ключ",
       "source": "AGENT/assets-inbox/2026-11-26_карточки/ФИН/ (копия из Site/Корректировка фото и текстов/ФИН/) Створення одягу з нуля.jpg",
       "status": "финальное (26.11.2026), проверено VLM владельца — без кадрирования, только сжатие"
     },
     {
-      "file": "products/prod-print.jpg",
+      "file": "products/druk-na-kroi-zamovnyka.jpg",
       "block": "Послуги: Друк на ваших виробах",
-      "source": "AGENT/assets-inbox/2026-11-26_карточки/ФИН/ (копия из Site/Корректировка фото и текстов/ФИН/) Друк на замовлення.jpg",
+      "source": "AGENT/assets-inbox/2026-11-26_карточки/ФИН/ (копия из Site/Корректировка фото и текстов/ФИН/) Друк на замовлення2.jpg (замена 26.11 по решению владельца: вместо майки — крій BALANCE)",
       "status": "финальное (26.11.2026), проверено VLM владельца — без кадрирования, только сжатие"
     },
     {
-      "file": "products/prod-sewing.jpg",
+      "file": "products/poshyttia-partii-futbolok.jpg",
       "block": "Послуги: Пошиття партій одягу",
       "source": "AGENT/assets-inbox/2026-11-26_карточки/ФИН/ (копия из Site/Корректировка фото и текстов/ФИН/) Пошив_ФИНАЛ.jpg",
       "status": "финальное (26.11.2026), проверено VLM владельца — без кадрирования, только сжатие"
     },
     {
-      "file": "products/prod-merch.jpg",
+      "file": "products/korporatyvnyi-merch-z-lohotypom.jpg",
       "block": "Послуги: Корпоративний мерч",
       "source": "AGENT/assets-inbox/2026-11-26_карточки/ФИН/ (копия из Site/Корректировка фото и текстов/ФИН/) Корпоративний мерч.jpg",
       "status": "финальное (26.11.2026), проверено VLM владельца — без кадрирования, только сжатие"
     },
     {
-      "file": "products/prod-labels.jpg",
+      "file": "products/brendovani-strichky-ta-birky.jpg",
       "block": "Послуги: Бірки та брендовані стрічки",
       "source": "AGENT/assets-inbox/2026-11-26_карточки/ФИН/ (копия из Site/Корректировка фото и текстов/ФИН/) Бирки_NISHA_A.jpg",
       "status": "финальное (26.11.2026), проверено VLM владельца — без кадрирования, только сжатие"
     },
     {
-      "file": "products/prod-dtf-rolls.jpg",
+      "file": "products/dtf-druk-u-rulonakh.jpg",
       "block": "Послуги: DTF у рулонах",
       "source": "AGENT/assets-inbox/2026-11-26_карточки/ФИН/ (копия из Site/Корректировка фото и текстов/ФИН/) ДТФ у рулонах.png",
       "status": "финальное (26.11.2026), проверено VLM владельца — без кадрирования, только сжатие"

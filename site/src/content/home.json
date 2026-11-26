@@ -9,7 +9,7 @@
     "eyebrow": "Виробничий партнер для брендів одягу",
     "title": "Друк на тканині та пошив для брендів одягу",
     "lead": "Усі етапи — від ідеї до готового виробу.",
-    "image": "home/hero-silk-stack.jpg",
+    "image": "home/shovkotrafaretnyi-druk-chorni-futbolky.jpg",
     "imageAlt": "Стос чорних футболок з повноколірним растровим шовкотрафаретним принтом",
     "imageDraft": "ФОТО ТИМЧАСОВЕ",
     "imageFocus": "50% 100%",
@@ -48,7 +48,7 @@
   "complex": {
     "title": "Комплексні вироби — це повага до деталей",
     "intro": null,
-    "image": "home/complex-draft.jpg",
+    "image": "home/zip-khudi-povnokolirnyi-shovkotrafaret.jpg",
     "imageAlt": "Зіп-худі з повноколірним шовкотрафаретним принтом",
     "imageDraft": "ФОТО ТИМЧАСОВЕ",
     "callouts": [
@@ -86,7 +86,7 @@
       {
         "title": "Шовкотрафарет",
         "text": "Багатоколірний друк без обмежень за кольорами та розміром",
-        "image": "tech/tech-silkscreen.jpg",
+        "image": "tech/shovkotrafaretnyi-druk-na-futboltsi.jpg",
         "imageAlt": "Чорна футболка з багатоколірним шовкотрафаретним принтом: автомобіль і пальми на тлі заходу сонця",
         "href": null,
         "titleDisplay": "Шовко­трафарет"
@@ -94,21 +94,21 @@
       {
         "title": "ДТФ",
         "text": "Цифровий друк фотографічної якості",
-        "image": "tech/tech-dtf.jpg",
+        "image": "tech/dtf-druk-na-chornii-tkanyni.jpg",
         "imageAlt": "Повноколірний ДТФ-принт із класичною картиною в золотій рамці на чорній тканині",
         "href": null
       },
       {
         "title": "Вишивка",
         "text": "Виразна ниткова фактура для написів та графіки",
-        "image": "tech/tech-embroidery.jpg",
+        "image": "tech/vyshyvka-na-tkanyni.jpg",
         "imageAlt": "Рожева тканина з обʼємною вишивкою напису VISHNI в тон",
         "href": null
       },
       {
         "title": "Флок",
         "text": "Оксамитова фактура на тканині",
-        "image": "tech/tech-flock.jpg",
+        "image": "tech/flok-vizerunok-na-tkanyni.jpg",
         "imageAlt": "Чорний флоковий візерунок з оксамитовою фактурою на світло-сірій сітчастій тканині",
         "href": null
       }
@@ -123,42 +123,42 @@
       {
         "title": "Одяг під ключ",
         "text": "Розробка, крій, друк і пошив вашої колекції в одному місці",
-        "image": "products/prod-turnkey.jpg",
+        "image": "products/odiah-pid-kliuch-kolektsiia-futbolok.jpg",
         "imageAlt": "Готова колекція футболок на вішаках з принтом на спині та написом на рукаві",
         "href": null
       },
       {
         "title": "Друк на ваших виробах",
         "text": "Друк і вишивка на готових речах та крої",
-        "image": "products/prod-print.jpg",
-        "imageAlt": "Біла майка в рубчик із чорно-червоним принтом, нанесеним на виріб замовника",
+        "image": "products/druk-na-kroi-zamovnyka.jpg",
+        "imageAlt": "Три деталі крою з темно-сірого трикотажу з принтом BALANCE, нанесеним на крій замовника",
         "href": null
       },
       {
         "title": "Пошиття партій одягу",
         "text": "Футболки, худі, зіпки, штани — від лекал до готової партії",
-        "image": "products/prod-sewing.jpg",
+        "image": "products/poshyttia-partii-futbolok.jpg",
         "imageAlt": "Стоси пошитих білих футболок на столі швейного цеху",
         "href": null
       },
       {
         "title": "Корпоративний мерч",
         "text": "Футболки, худі, шопери, кепки — комплектами з вашим логотипом",
-        "image": "products/prod-merch.jpg",
+        "image": "products/korporatyvnyi-merch-z-lohotypom.jpg",
         "imageAlt": "Корпоративний мерч в одному стилі: футболки, шопер і кепка з логотипом",
         "href": null
       },
       {
         "title": "Бірки та брендовані стрічки",
         "text": "Для одягу та пакування",
-        "image": "products/prod-labels.jpg",
+        "image": "products/brendovani-strichky-ta-birky.jpg",
         "imageAlt": "Брендовані стрічки NISHA та стрічка з друкованими бірками догляду",
         "href": null
       },
       {
         "title": "DTF у рулонах",
         "text": "Готові термоналіпки на плівці під термопрес",
-        "image": "products/prod-dtf-rolls.jpg",
+        "image": "products/dtf-druk-u-rulonakh.jpg",
         "imageAlt": "Рулони плівки з надрукованими логотипами для перенесення термопресом",
         "href": null
       }
