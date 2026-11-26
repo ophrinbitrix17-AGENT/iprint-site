@@ -30,6 +30,7 @@ async function fillBasic(page: Page, name: string, contact = '0939013050') {
 test.describe('Форма заявки', () => {
   test('пустая отправка: ошибки у обязательных полей, красная рамка, фокус на первом', async ({ page }) => {
     await page.goto('/#zapyt');
+    await page.locator('[data-lead][data-ready]').waitFor({ state: 'attached' });
     await page.locator('.lead-form__submit').click();
     await expect(page.locator('#lead-name-err')).toBeVisible();
     await expect(page.locator('#lead-contact-err')).toBeVisible();
