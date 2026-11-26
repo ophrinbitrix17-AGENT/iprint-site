@@ -11,12 +11,12 @@ const addr = (site as { address?: string | null }).address;
     <div class="ftr__main">
       <div class="ftr__brand">
         <Logo />
-        <p class="ftr__tag muted">{site.tagline}. {site.city}.</p>
+        <p class="ftr__tag muted">{site.tagline}.</p>
       </div>
       <address class="ftr__contacts">
         <a href={`tel:${site.phone}`}><Icon name="phone" />{site.phoneDisplay}</a>
         <a href={`mailto:${site.email}`}><Icon name="mail" />{site.email}</a>
-        {addr && <span class="ftr__plain">{addr}</span>}
+        <span class="ftr__plain">{addr ?? `${site.city}, ${site.countryName}`}</span>
         {site.hours && <span class="ftr__plain">{site.hours}</span>}
         {(site.telegram || site.instagram) && (
           <span class="ftr__social">
@@ -30,6 +30,7 @@ const addr = (site as { address?: string | null }).address;
       <nav aria-label={site.footer.navLabel}>
         <ul class="ftr__links" role="list">
           {site.footer.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+          <li><a href={site.legal.privacyHref}>{site.ui.privacyLink}</a></li>
         </ul>
       </nav>
       <p class="ftr__copy">© {site.foundingYear}–{year} {site.name}. {site.footer.rights}</p>
@@ -42,9 +43,9 @@ const addr = (site as { address?: string | null }).address;
   .ftr__main { display: grid; gap: 20px; }
   .ftr__tag { margin-top: 8px; max-width: 34ch; }
   .ftr__contacts { font-style: normal; display: flex; flex-direction: column; align-items: flex-start; }
-  .ftr__contacts > a { display: inline-flex; align-items: center; gap: 10px; min-height: var(--tap); font-weight: 600; overflow-wrap: anywhere; }
+  .ftr__contacts > a { display: inline-flex; align-items: center; gap: 10px; min-height: var(--tap); font-weight: var(--fw-semi); overflow-wrap: anywhere; }
   .ftr__contacts > a:hover, .ftr__links a:hover { color: var(--accent-ink); }
-  .ftr__contacts :global(svg) { width: 18px; height: 18px; flex: none; color: var(--muted); }
+  .ftr__contacts :global(svg) { width: var(--icon-s); height: var(--icon-s); flex: none; color: var(--muted); }
   .ftr__plain { display: inline-flex; align-items: center; min-height: var(--tap); color: var(--muted); }
   .ftr__social { display: flex; gap: 8px; margin-top: 8px; }
   .ftr__bottom { margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 4px 24px; justify-content: space-between; align-items: center; font-size: var(--fs-small); color: var(--muted); }

@@ -178,10 +178,12 @@ const fill = (s: string) => s.replace('{max}', String(maxMb)).replace('{formats}
   .filepick__name { color: var(--muted); font-size: var(--fs-small); overflow-wrap: anywhere; min-width: 0; }
 
   .chips__list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
-  .chips__list--short { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
+  .chips__list--short { display: flex; flex-wrap: wrap; }
+  .chips__list--short .chip { flex: 1 1 auto; }
+  .chips__list--short .chip span { white-space: nowrap; }
   .chip { position: relative; display: flex; }
   .chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-  .chip span { display: flex; align-items: center; width: 100%; min-height: var(--tap); padding: 6px 14px; border-radius: 22px; border: 1.5px solid var(--line-strong); font-size: var(--fs-ui); font-weight: 500; line-height: 1.25; cursor: pointer; user-select: none; overflow-wrap: anywhere; }
+  .chip span { display: flex; align-items: center; width: 100%; min-height: var(--tap); padding: 6px 14px; border-radius: 22px; border: 1.5px solid var(--line-strong); font-size: var(--fs-ui); font-weight: var(--fw-medium); line-height: 1.25; cursor: pointer; user-select: none; overflow-wrap: anywhere; }
   .chip input:checked + span { background: var(--chip-on-bg); border-color: var(--chip-on-bg); color: var(--chip-on-fg); font-weight: var(--fw-bold); }
   .chip input:focus-visible + span { outline: 2.5px solid var(--focus); outline-offset: 2px; }
 

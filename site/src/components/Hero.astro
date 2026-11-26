@@ -48,7 +48,7 @@ const photo = img(data.image);
   .hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; margin-top: 22px; }
   .hero__actions .btn { flex: 1 1 auto; }
   /* второе действие — тихая текстовая ссылка, не вторая кнопка */
-  .hero__more { display: inline-flex; align-items: center; min-height: var(--tap); font-weight: 600; text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 5px; }
+  .hero__more { display: inline-flex; align-items: center; min-height: var(--tap); font-weight: var(--fw-semi); text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 5px; }
   .hero__more:hover { color: var(--accent); }
 
   @media (min-width: 700px) {
@@ -76,5 +76,10 @@ const photo = img(data.image);
     .hero__dots { right: 24px; top: 24px; width: 200px; height: 200px; }
     .hero__body { margin: 0; padding: 96px 0; width: 100%; }
     .hero__inner { max-width: 52%; }
+  }
+  /* невысокие окна ноутбуков (1366×768): «Виробництво без зайвих ризиків» — в первом экране */
+  @media (min-width: 1100px) and (max-height: 800px) {
+    .hero__body { padding: 56px 0; }
+    :global(.hero + .section) { padding-top: 64px; }
   }
 </style>

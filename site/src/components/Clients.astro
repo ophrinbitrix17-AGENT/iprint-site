@@ -10,7 +10,7 @@ const { data } = Astro.props;
     <div class="wrap">
       <h2 class="h2 clients__title" id="clients-title">{data.title}</h2>
       {data.intro && <p class="muted clients__intro">{data.intro}</p>}
-      <ul class="clients">
+      <ul class="clients" role="list">
         {data.logos.map((l) => (
           <li class="clients__item">
             {l.href

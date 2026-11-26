@@ -9,7 +9,7 @@ const date = updated ? new Date(updated).toLocaleDateString('uk-UA', { day: 'num
 <header class="ph">
   <div class="wrap">
     <nav class="crumbs" aria-label={site.ui.breadcrumbs}>
-      <ol>
+      <ol role="list">
         {crumbs.map((c, i) => (
           <li>{c.href && i < crumbs.length - 1 ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>
         ))}

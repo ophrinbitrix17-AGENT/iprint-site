@@ -14,7 +14,7 @@ const fromHome = (k?: string) => {
     <section class="cs__s">
       <h2 class="cs__h2">{s.h2}</h2>
       {s.paragraphs?.map((p) => <p>{p}</p>)}
-      {(s.list || s.listFrom) && <ul class="cs__list">{(s.list ?? fromHome(s.listFrom)).map((li) => <li>{li}</li>)}</ul>}
+      {(s.list || s.listFrom) && <ul class="cs__list" role="list">{(s.list ?? fromHome(s.listFrom)).map((li) => <li>{li}</li>)}</ul>}
     </section>
   ))}
 </div>

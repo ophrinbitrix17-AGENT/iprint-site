@@ -15,7 +15,7 @@ const { data } = Astro.props;
 <style>
   .soft { display: grid; gap: 18px; align-items: center; padding: 28px; border-radius: var(--radius-l); border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
   .soft__text { font-size: var(--fs-accent); max-width: 60ch; text-wrap: pretty; }
-  .soft__q { display: block; font-weight: 600; }
-  .soft__a { display: block; margin-top: 4px; color: var(--muted); font-weight: 500; }
+  .soft__q { display: block; font-weight: var(--fw-semi); }
+  .soft__a { display: block; margin-top: 4px; color: var(--muted); font-weight: var(--fw-medium); }
   @media (min-width: 700px) { .soft { grid-template-columns: 1fr auto; padding: 32px 40px; } }
 </style>
