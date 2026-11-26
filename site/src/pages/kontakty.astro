@@ -20,7 +20,7 @@ const rows = [
 ---
 <Base title={p.title} description={p.description} schema={[webPage('ContactPage', path, p.h1, p.description, p.updated), breadcrumbs(crumbs)]}>
   <PageHeader crumbs={crumbs} h1={p.h1} lead={p.lead} updated={p.updated} />
-  <section class="section">
+  <div class="section">
     <div class="wrap">
       <dl class="contacts">
         {rows.map((r) => (
@@ -34,7 +34,7 @@ const rows = [
       </dl>
       <a class="btn btn--primary cc__cta" href="/#zapyt">{p.formLink}<Icon name="arrow" /></a>
     </div>
-  </section>
+  </div>
 </Base>
 <style>
   .contacts { display: grid; gap: 12px; margin: 0; }

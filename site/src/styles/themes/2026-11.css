@@ -30,8 +30,12 @@
   --fs-accent: 19px;        /* акцентная строка (мягкий призыв) */
   --fs-cta-text: 17px;
   --fs-menu: 18px;          /* пункты мобильного меню */
-  --fs-ui: 15px;            /* кнопки в шапке */
-  --fs-eyebrow: 13px;       /* надзаголовки, подписи разделов */
+  --fs-ui: 15px;            /* подписи полей формы, чипы, кнопка «Меню» */
+  --fs-btn: 17px;           /* текст кнопок (на ≥1100 — 18px) */
+  --fs-btn-hdr: 16px;       /* кнопка «Розрахувати» в шапке */
+  --fs-eyebrow: clamp(14px, 12px + 0.2vw, 16px);       /* надзаголовки, подписи разделов: телефон 14, компьютер ~16 */
+  --fs-eyebrow-hero: clamp(13px, 10px + 0.55vw, 18px); /* надзаголовок Hero: телефон 13, компьютер 18 */
+  --fs-callout-num: 16px;   /* цифры в кружках выносок */
   --fs-tag: 11px;           /* метки «скоро», черновик */
   --fs-small: 14px;
   --lh-body: 1.6;
@@ -48,6 +52,9 @@
   --container: 1280px;
   --header-h: 64px;
   --tap: 44px;              /* минимальная зона касания */
+  --btn-h: 48px;            /* высота кнопок (на ≥1100 — 52px) */
+  --btn-px: 24px;           /* боковые отступы кнопок (на ≥1100 — 28px) */
+  --callout-dot: 32px;      /* кружок с номером выноски */
 
   /* движение */
   --ease: cubic-bezier(.2, .7, .2, 1);
@@ -68,13 +75,16 @@
   --accent: var(--lime-light);
   --accent-ink: #4A6A00;               /* акцентный текст/ссылки на светлом */
   --btn-bg: var(--graphite);           /* главная кнопка на светлом */
-  --btn-fg: var(--lime-light);
+  --btn-fg: var(--lime-dark);           /* лайм на графите — яркий (тёмный фон), аудит 26.11 Б12 */
   --btn-bg-hover: #2E2D28;
   --shadow: 0 1px 2px #1a19160f, 0 8px 24px #1a19160a;
   --focus: #4A6A00;
   --form-line: #857F75;          /* рамки полей формы ≥ 3:1 к карточке */
   --chip-on-bg: var(--graphite);  /* выбранный вариант в форме */
-  --chip-on-fg: var(--lime-light);
+  --chip-on-fg: var(--lime-dark);
+  /* надписи разделов: графит + лаймовая полоса-маркер (только светлая тема вне сцен) */
+  --eyebrow-fg: var(--text);
+  --eyebrow-mark: var(--lime-light);
   /* состояния формы */
   --danger: #B3261E;
   --danger-bg: #FBE4E1;
@@ -103,6 +113,8 @@
   --form-line: #857F75;
   --chip-on-bg: var(--lime-dark);
   --chip-on-fg: var(--graphite-deep);
+  --eyebrow-fg: var(--lime-dark);
+  --eyebrow-mark: transparent;
   --danger: #FF8A7A;
   --danger-bg: #3A1F1C;
   --danger-fg: #FFC9C0;
@@ -129,6 +141,8 @@
   --form-line: #857F75;
   --chip-on-bg: var(--lime-dark);
   --chip-on-fg: var(--graphite-deep);
+  --eyebrow-fg: var(--lime-dark);
+  --eyebrow-mark: transparent;
   --danger: #FF8A7A;
   --danger-bg: #3A1F1C;
   --danger-fg: #FFC9C0;
@@ -137,16 +151,17 @@
   color-scheme: dark;
 }
 :root[data-theme="dark"] .stage {
-  --bg: #201F1B;
-  --bg-alt: #201F1B;
+  /* сцена в тон странице (аудит 26.11, цвет «желательные» 5): границу держит только тонкая линия сверху */
+  --bg: #161513;
+  --bg-alt: #161513;
   --surface: #2B2A25;
-  --line-strong: #75716A;   /* ≥ 3:1 на фоне сцены */
-  box-shadow: inset 0 1px 0 var(--line);   /* сцены различимы и в тёмной теме */
+  --line-strong: #75716A;   /* ≥ 3:1 на фоне сцены и карточек */
+  box-shadow: inset 0 1px 0 var(--line);
 }
 
 @media (min-width: 700px) {
   :root { --gutter: 32px; --section-y: 80px; }
 }
 @media (min-width: 1100px) {
-  :root { --gutter: 48px; --section-y: 112px; --header-h: 76px; }
+  :root { --gutter: 48px; --section-y: 112px; --header-h: 76px; --fs-btn: 18px; --btn-h: 52px; --btn-px: 28px; }
 }

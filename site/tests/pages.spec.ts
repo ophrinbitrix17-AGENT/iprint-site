@@ -38,7 +38,8 @@ test.describe('Внутренние страницы', () => {
   test('ссылка на политику есть в форме и в подвале', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('.lead-form__consent a')).toHaveAttribute('href', '/polityka-konfidentsiinosti/');
-    await expect(page.locator('.ftr__copy a')).toHaveAttribute('href', '/polityka-konfidentsiinosti/');
+    await expect(page.locator('.ftr__links a[href="/polityka-konfidentsiinosti/"]')).toHaveCount(1);
+    await expect(page.locator('.ftr address a[href^="tel:"]')).toHaveCount(1);
   });
 
   test('превью для соцсетей: og:image 1200×630 доступна', async ({ page, request }) => {

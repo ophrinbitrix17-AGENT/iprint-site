@@ -12,12 +12,14 @@ const needs = [...home.products.cards.map((c) => c.title), f.needs.other];
 const maxMb = site.lead.maxFileMb;
 const accept = site.lead.fileExt.map((e) => `.${e}`).join(',');
 const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY as string | undefined;
-const fill = (s: string) => s.replace('{max}', String(maxMb));
+// форматы в подсказке и в ошибке — из того же списка, что принимает форма (без синонимов jpeg/tif)
+const formats = site.lead.fileExt.filter((e) => e !== 'jpeg' && e !== 'tif').map((e) => e.toUpperCase()).join(', ');
+const fill = (s: string) => s.replace('{max}', String(maxMb)).replace('{formats}', formats);
 ---
-<form class="lead-form" id="zapyt-forma" action="/api/lead" method="post" enctype="multipart/form-data" novalidate data-lead
+<form class="lead-form" id="zapyt-forma" aria-labelledby="lead-form-title" action="/api/lead" method="post" enctype="multipart/form-data" novalidate data-lead
   data-max-mb={maxMb} data-ext={site.lead.fileExt.join(',')}
   data-msgs={JSON.stringify({ sending: f.sending, success: f.success, successTest: f.successTest, fileFailed: f.fileFailed, submit: f.submit, errors: Object.fromEntries(Object.entries(f.errors).map(([k, v]) => [k, fill(v)])) })}>
-  <h3 class="lead-form__title">{f.title}</h3>
+  <h3 class="lead-form__title" id="lead-form-title">{f.title}</h3>
 
   <div class="lead-form__row">
     <div class="field">

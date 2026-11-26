@@ -1,67 +1,59 @@
 ---
-/** Подвал: тёмная сцена. Контакты, навигация, соцсети (появляются, когда владелец даст ссылки). */
+/** Подвал (компактный, аудит 26.11 Б10): лого + дескриптор, контакты в <address>, соцсети/адрес/график — только когда владелец их передал; строка ссылок на страницы и копирайт. Тексты — site.json → footer. */
 import site from '../content/site.json';
-import home from '../content/home.json';
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 const year = new Date().getFullYear();
+const addr = (site as { address?: string | null }).address;
 ---
-<footer class="ftr stage" id="kontakty">
+<footer class="ftr stage">
   <div class="wrap">
-    <div class="ftr__grid">
-      <div>
+    <div class="ftr__main">
+      <div class="ftr__brand">
         <Logo />
         <p class="ftr__tag muted">{site.tagline}. {site.city}.</p>
+      </div>
+      <address class="ftr__contacts">
+        <a href={`tel:${site.phone}`}><Icon name="phone" />{site.phoneDisplay}</a>
+        <a href={`mailto:${site.email}`}><Icon name="mail" />{site.email}</a>
+        {addr && <span class="ftr__plain">{addr}</span>}
+        {site.hours && <span class="ftr__plain">{site.hours}</span>}
         {(site.telegram || site.instagram) && (
-          <div class="ftr__social">
+          <span class="ftr__social">
             {site.telegram && <a class="icon-btn" href={site.telegram} rel="noopener" aria-label="Telegram"><Icon name="telegram" /></a>}
             {site.instagram && <a class="icon-btn" href={site.instagram} rel="noopener" aria-label="Instagram"><Icon name="instagram" /></a>}
-          </div>
+          </span>
         )}
-      </div>
-      <nav aria-label={home.products.eyebrow}>
-        <p class="ftr__h">{home.products.eyebrow}</p>
-        <ul class="ftr__list">
-          {home.products.cards.map((c) => <li>{c.href ? <a href={c.href}>{c.title}</a> : <span>{c.title}</span>}</li>)}
-        </ul>
-      </nav>
-      <nav aria-label={home.tech.eyebrow}>
-        <p class="ftr__h">{home.tech.eyebrow}</p>
-        <ul class="ftr__list">
-          {home.tech.cards.map((c) => <li>{c.href ? <a href={c.href}>{c.title}</a> : <span>{c.title}</span>}</li>)}
-        </ul>
-      </nav>
-      <div>
-        <p class="ftr__h">{site.ui.footerContacts}</p>
-        <ul class="ftr__list">
-          <li><a href={`tel:${site.phone}`}>{site.phoneDisplay}</a></li>
-          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-          <li><span>{site.city}, {site.countryName}</span></li>
-          {site.hours && <li><span>{site.hours}</span></li>}
-        </ul>
-      </div>
+      </address>
     </div>
-    <div class="ftr__copy">
-      <span>© {site.foundingYear}–{year} {site.name}</span>
-      <a href={site.legal.privacyHref}>{site.ui.privacyLink}</a>
+    <div class="ftr__bottom">
+      <nav aria-label={site.footer.navLabel}>
+        <ul class="ftr__links" role="list">
+          {site.footer.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        </ul>
+      </nav>
+      <p class="ftr__copy">© {site.foundingYear}–{year} {site.name}. {site.footer.rights}</p>
     </div>
   </div>
 </footer>
 
 <style>
-  .ftr { padding: 44px 0 calc(96px + env(safe-area-inset-bottom)); background: var(--bg); color: var(--text); border-top: 1px solid var(--line); }
-  .ftr__grid { display: grid; gap: 28px; }
-  .ftr__tag { margin-top: 10px; max-width: 34ch; }
-  .ftr__social { display: flex; gap: 8px; margin-top: 14px; }
-  .ftr__h { font-size: var(--fs-eyebrow); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: var(--fw-bold); margin-bottom: 4px; }
-  .ftr__list { list-style: none; }
-  .ftr__list a, .ftr__list span { display: inline-flex; align-items: center; min-height: var(--tap); }
-  .ftr__list span { color: var(--muted); }
-  .ftr__list a:hover { color: var(--accent-ink); }
-  .ftr__copy { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); font-size: var(--fs-small); color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 24px; justify-content: space-between; align-items: center; }
-  .ftr__copy a { display: inline-flex; align-items: center; min-height: var(--tap); text-decoration: underline; text-underline-offset: 3px; }
-  .ftr__grid { grid-template-columns: 1fr 1fr; }
-  .ftr__grid > :first-child, .ftr__grid > :last-child { grid-column: 1 / -1; }
-  @media (min-width: 700px) { .ftr__grid { grid-template-columns: 1.4fr 1fr 1fr; } .ftr__grid > :first-child { grid-column: auto; } }
-  @media (min-width: 1100px) { .ftr { padding-bottom: 44px; } .ftr__grid { grid-template-columns: 1.6fr 1fr 1fr 1fr; } .ftr__grid > :last-child { grid-column: auto; } }
+  .ftr { padding: 40px 0 calc(96px + env(safe-area-inset-bottom)); background: var(--bg); color: var(--text); border-top: 1px solid var(--line); }
+  .ftr__main { display: grid; gap: 20px; }
+  .ftr__tag { margin-top: 8px; max-width: 34ch; }
+  .ftr__contacts { font-style: normal; display: flex; flex-direction: column; align-items: flex-start; }
+  .ftr__contacts > a { display: inline-flex; align-items: center; gap: 10px; min-height: var(--tap); font-weight: 600; overflow-wrap: anywhere; }
+  .ftr__contacts > a:hover, .ftr__links a:hover { color: var(--accent-ink); }
+  .ftr__contacts :global(svg) { width: 18px; height: 18px; flex: none; color: var(--muted); }
+  .ftr__plain { display: inline-flex; align-items: center; min-height: var(--tap); color: var(--muted); }
+  .ftr__social { display: flex; gap: 8px; margin-top: 8px; }
+  .ftr__bottom { margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 4px 24px; justify-content: space-between; align-items: center; font-size: var(--fs-small); color: var(--muted); }
+  .ftr__links { list-style: none; display: flex; flex-wrap: wrap; column-gap: 20px; }
+  .ftr__links a { display: inline-flex; align-items: center; min-height: var(--tap); color: var(--text); text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 3px; }
+  .ftr__copy { padding: 10px 0; }
+  @media (min-width: 700px) {
+    .ftr__main { grid-template-columns: 1fr auto; align-items: start; }
+    .ftr__contacts { align-items: flex-end; }
+  }
+  @media (min-width: 1100px) { .ftr { padding-bottom: 40px; } }
 </style>

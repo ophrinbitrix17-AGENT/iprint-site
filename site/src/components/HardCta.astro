@@ -22,9 +22,9 @@ const { data } = Astro.props;
 </section>
 
 <style>
-  .cta { position: relative; padding: 48px 0; background: var(--bg); color: var(--text); border-top: 6px solid var(--lime-dark); }
+  .cta { position: relative; padding: var(--section-y) 0; background: var(--bg); color: var(--text); border-top: 6px solid var(--accent); }
   .cta::before { content: ""; display: none; position: absolute; right: 0; top: 0; width: 40%; height: 340px; pointer-events: none; opacity: .3;
-    background-image: radial-gradient(circle, var(--lime-dark) 1.3px, transparent 1.8px); background-size: 10px 10px;
+    background-image: radial-gradient(circle, var(--accent) 1.3px, transparent 1.8px); background-size: 10px 10px;
     -webkit-mask-image: radial-gradient(ellipse 90% 60% at 100% 10%, #000 0%, transparent 70%); mask-image: radial-gradient(ellipse 90% 60% at 100% 10%, #000 0%, transparent 70%); }
   .cta__grid { position: relative; display: grid; gap: 28px; }
   .cta__text { margin-top: 12px; font-size: var(--fs-cta-text); max-width: 56ch; color: var(--muted); }
@@ -32,7 +32,6 @@ const { data } = Astro.props;
   .cta__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
   @media (min-width: 1100px) {
     .cta::before { display: block; }   /* на широком экране растр в углу над формой, не под текстом */
-    .cta { padding: 88px 0; }
     .cta__grid { grid-template-columns: 1fr 1.15fr; align-items: start; gap: 56px; }
     .cta__intro { position: sticky; top: calc(var(--header-h) + 24px); }
   }

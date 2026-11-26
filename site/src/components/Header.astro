@@ -36,10 +36,10 @@ const ui = site.ui;
   </div>
   <nav class="mnav" id="mnav" aria-label={ui.mobileNav} hidden>
     <div class="wrap">
-      {site.nav.map((item) =>
+      {site.nav.map((item, i) =>
         item.children ? (
-          <div class="mnav__group">
-            <p class="mnav__title">{item.label}</p>
+          <div class="mnav__group" role="group" aria-labelledby={`mnav-g-${i}`}>
+            <p class="mnav__title" id={`mnav-g-${i}`}>{item.label}</p>
             {item.children.map((c) => c.href
               ? <a class="mnav__link mnav__link--sub" href={c.href}>{c.label}</a>
               : <span class="mnav__link mnav__link--sub mnav__link--soon">{c.label} <small>{ui.soon}</small></span>)}
@@ -102,7 +102,7 @@ const ui = site.ui;
   .hdr__row { display: flex; align-items: center; gap: 10px; height: var(--header-h); }
   .hdr__row > :global(.logo) { margin-right: auto; }
   .hdr__nav { display: none; }
-  .hdr__cta { display: none; min-height: 42px; padding: 0 16px; font-size: var(--fs-ui); }
+  .hdr__cta { display: none; min-height: var(--tap); padding: 0 18px; font-size: var(--fs-btn-hdr); }   /* по высоте — как переключатель темы */
   .hdr__burger { gap: 6px; padding: 0 12px; font-weight: var(--fw-bold); font-size: var(--fs-ui); display: inline-flex; align-items: center; }
   .hdr__burger :global(.hdr__burger-close) { display: none; }
   .hdr__burger[aria-expanded="true"] :global(.hdr__burger-open) { display: none; }

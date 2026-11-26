@@ -1,5 +1,5 @@
 ---
-/** Логотип iPrint из лого.svg владельца. Две версии: для светлого и тёмного фона — CSS показывает нужную по теме/сцене. */
+/** Логотип iPrint из лого.svg владельца. Две версии: для светлого и тёмного фона — CSS показывает нужную по теме/сцене (скрытая через display:none не читается, поэтому alt у обеих). */
 import onLight from '../assets/images/logo-light-bg.svg';
 import onDark from '../assets/images/logo-dark-bg.svg';
 import site from '../content/site.json';
@@ -7,9 +7,9 @@ interface Props { href?: string; height?: number; }
 const { href = '/', height = 30 } = Astro.props;
 const width = Math.round(height * (onLight.width / onLight.height));
 ---
-<a class="logo" href={href} aria-label={site.ui.homeLink}>
-  <img class="logo__img logo__img--light" src={onLight.src} alt={site.name} width={width} height={height} />
-  <img class="logo__img logo__img--dark" src={onDark.src} alt="" aria-hidden="true" width={width} height={height} />
+<a class="logo" href={href}>
+  <img class="logo__img logo__img--light" src={onLight.src} alt={site.ui.homeLink} width={width} height={height} />
+  <img class="logo__img logo__img--dark" src={onDark.src} alt={site.ui.homeLink} width={width} height={height} />
 </a>
 
 <style>

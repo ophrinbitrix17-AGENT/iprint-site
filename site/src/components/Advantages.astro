@@ -6,7 +6,7 @@ const { data } = Astro.props;
 <section class="section" aria-labelledby="adv-title">
   <div class="wrap">
     <h2 class="h2 adv__title" id="adv-title">{data.title}</h2>
-    <ol class="adv">
+    <ol class="adv" role="list">
       {data.items.map((it, i) => (
         <li class="adv__item">
           <span class="adv__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>

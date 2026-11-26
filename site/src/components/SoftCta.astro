@@ -1,19 +1,21 @@
 ---
-/** Мягкий призыв к действию. */
-interface Props { data: { text: string; button: { label: string; href: string } } }
+/** Мягкий призыв к действию: вопрос — первой строкой, ответ — второй (перенос по смыслу, аудит 26.11 Б5). Не раздел, а реплика — поэтому div. */
+interface Props { data: { question: string; text: string; button: { label: string; href: string } } }
 const { data } = Astro.props;
 ---
-<section class="section">
+<div class="section section--tight">
   <div class="wrap">
     <div class="soft">
-      <p class="soft__text">{data.text}</p>
+      <p class="soft__text"><span class="soft__q">{data.question}</span> <span class="soft__a">{data.text}</span></p>
       <a class="btn btn--primary" href={data.button.href}>{data.button.label}</a>
     </div>
   </div>
-</section>
+</div>
 
 <style>
   .soft { display: grid; gap: 18px; align-items: center; padding: 28px; border-radius: var(--radius-l); border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
-  .soft__text { font-size: var(--fs-accent); font-weight: 600; max-width: 60ch; }
+  .soft__text { font-size: var(--fs-accent); max-width: 60ch; text-wrap: pretty; }
+  .soft__q { display: block; font-weight: 600; }
+  .soft__a { display: block; margin-top: 4px; color: var(--muted); font-weight: 500; }
   @media (min-width: 700px) { .soft { grid-template-columns: 1fr auto; padding: 32px 40px; } }
 </style>

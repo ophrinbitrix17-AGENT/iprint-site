@@ -3,12 +3,12 @@
 import site from '../content/site.json';
 import Icon from './Icon.astro';
 ---
-<div class="sbar" data-sbar>
+<aside class="sbar" data-sbar aria-label={site.ui.quickActions}>
   <a class="btn btn--primary sbar__main" href={site.cta.href}>{site.ui.stickyMain}</a>
   {site.telegram
     ? <a class="icon-btn sbar__icon" href={site.telegram} rel="noopener" aria-label={site.ui.writeTelegram}><Icon name="telegram" /></a>
     : <a class="icon-btn sbar__icon" href={`tel:${site.phone}`} aria-label={`${site.ui.callPrefix}: ${site.phoneDisplay}`}><Icon name="phone" /></a>}
-</div>
+</aside>
 
 <script>
   // Пока на экране главная кнопка Hero — панель спрятана (не дублируем CTA). Без JS панель просто видна.

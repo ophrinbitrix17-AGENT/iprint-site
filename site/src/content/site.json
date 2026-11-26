@@ -15,6 +15,7 @@
   "telegram": null,
   "instagram": null,
   "hours": null,
+  "address": null,
   "themeColors": {
     "light": "#F5F3EE",
     "dark": "#161513"
@@ -60,21 +61,21 @@
     "themeToDark": "Увімкнути темну тему",
     "themeToLight": "Увімкнути світлу тему",
     "stickyMain": "Розрахувати вартість",
-    "writeTelegram": "Написати в Telegram",
-    "callPrefix": "Подзвонити",
+    "writeTelegram": "Написати в Telegram",
+    "callPrefix": "Зателефонувати",
     "photoSoon": "незабаром",
     "photoPlaceholder": "ФОТО",
     "placeholderDraft": "ДОРАБОТАТЬ",
     "clientLogo": "Лого клієнта",
-    "footerContacts": "Контакти",
     "emailSubject": "Запит з сайту",
     "orCall": "або зателефонуйте:",
-    "contactAlt": "Зручніше голосом або в месенджері?",
-    "breadcrumbs": "Навігація сторінкою",
+    "contactAlt": "Зручніше голосом або в месенджері?",
+    "breadcrumbs": "Шлях до сторінки",
     "home": "Головна",
     "updated": "Оновлено",
     "privacyLink": "Політика конфіденційності",
-    "draftText": "ДОРАБОТАТЬ — чернетка тексту"
+    "draftText": "ДОРАБОТАТЬ — чернетка тексту",
+    "quickActions": "Швидкий звʼязок"
   },
   "legal": {
     "privacyHref": "/polityka-konfidentsiinosti/"
@@ -100,5 +101,23 @@
     ]
   },
   "ogSubtitle": "Шовкотрафарет · DTF · вишивка · пошив — Одеса",
-  "domain": "iprint.com.ua"
+  "domain": "iprint.com.ua",
+  "footer": {
+    "navLabel": "Інформація",
+    "links": [
+      {
+        "label": "Про компанію",
+        "href": "/pro-kompaniiu/"
+      },
+      {
+        "label": "Контакти",
+        "href": "/kontakty/"
+      },
+      {
+        "label": "Політика конфіденційності",
+        "href": "/polityka-konfidentsiinosti/"
+      }
+    ],
+    "rights": "Усі права захищені."
+  }
 }

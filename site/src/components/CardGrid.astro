@@ -1,49 +1,58 @@
 ---
-/** Секция с сеткой карточек. variant: tech (2×2 на телефоне) | products (строки на телефоне). Число карточек — любое. */
+/** Секция с сеткой карточек. variant: tech | products. На телефоне (< 700 px) обе — строками «миниатюра + текст». Число карточек — любое. */
 import Card from './Card.astro';
 type CardData = { title: string; text?: string; image?: string | null; imageAlt?: string; placeholder?: string; href?: string | null };
 interface Props { data: { id?: string; eyebrow?: string; title: string; cards: CardData[] }; variant: 'tech' | 'products'; alt?: boolean; }
 const { data, variant, alt = false } = Astro.props;
 const sizes = variant === 'tech'
-  ? '(min-width: 1100px) 300px, (min-width: 900px) 25vw, 50vw'
+  ? '(min-width: 1100px) 300px, (min-width: 900px) 25vw, (min-width: 700px) 50vw, 104px'
   : '(min-width: 1100px) 400px, 104px';
 const titleId = `${data.id ?? variant}-title`;
 ---
 <section class:list={['section', { 'section--alt': alt }]} id={data.id} aria-labelledby={titleId}>
   <div class="wrap">
-    {data.eyebrow && <p class="eyebrow">{data.eyebrow}</p>}
-    <h2 class="h2 grid__title" id={titleId}>{data.title}</h2>
-    <div class:list={['grid', `grid--${variant}`]}>
-      {data.cards.map((c) => <Card {...c} sizes={sizes} />)}
-    </div>
+    <hgroup class="grid__head">
+      {data.eyebrow && <p class="eyebrow"><span>{data.eyebrow}</span></p>}
+      <h2 class="h2" id={titleId}>{data.title}</h2>
+    </hgroup>
+    <ul class:list={['grid', `grid--${variant}`]} role="list">
+      {data.cards.map((c) => <li class="grid__item"><Card {...c} sizes={sizes} /></li>)}
+    </ul>
   </div>
 </section>
 
 <style>
-  .grid__title { margin-bottom: 28px; }
-  .grid { display: grid; gap: 12px; }
-  .grid--tech { grid-template-columns: 1fr 1fr; }
+  .grid__head { margin-bottom: 28px; }
+  .grid { list-style: none; display: grid; gap: 12px; }
+  .grid__item { display: flex; flex-direction: column; min-width: 0; }
+  .grid__item > :global(.card) { flex: 1; }
 
-  /* продукты на телефоне — компактные строки: миниатюра + текст */
+  /* телефон — компактные строки: миниатюра + текст (услуги всегда до 1100, технологии — до 700; Б1 §8, решение 26.11) */
   .grid--products :global(.card) { display: grid; grid-template-columns: 116px 1fr; align-items: center; }
   .grid--products :global(.card .card__media) { width: 104px; height: 104px; aspect-ratio: 1 / 1; margin: 6px; border-radius: var(--radius-s); }   /* миниатюра «плашкой» — одинаково в строках любой высоты */
   .grid--products :global(.card .card__go) { position: static; margin-right: 12px; }
   .grid--products :global(.card--link) { grid-template-columns: 116px 1fr auto; }
+  @media (max-width: 699.98px) {
+    .grid--tech :global(.card) { display: grid; grid-template-columns: 116px 1fr; align-items: center; }
+    .grid--tech :global(.card .card__media) { width: 104px; height: 104px; aspect-ratio: 1 / 1; margin: 6px; border-radius: var(--radius-s); }
+    .grid--tech :global(.card .card__go) { position: static; margin-right: 12px; }
+    .grid--tech :global(.card--link) { grid-template-columns: 116px 1fr auto; }
+  }
 
   @media (min-width: 700px) {
-    .grid--products { grid-template-columns: 1fr 1fr; }
+    .grid--tech, .grid--products { grid-template-columns: 1fr 1fr; }
   }
   @media (min-width: 900px) {
     .grid--tech { grid-template-columns: repeat(4, 1fr); }
   }
   @media (min-width: 1100px) {
-    .grid { gap: 20px; }
-    .grid--tech { align-items: start; }
-    .grid--tech > :global(:nth-child(even)) { margin-top: 40px; }        /* «лесенка» — только сеткой */
-    .grid--products { grid-template-columns: repeat(3, 1fr); align-items: start; }
+    /* «лесенка» — сдвигом, а не отступом: все карточки одной высоты, ступенька ровная (аудит 26.11 Б8) */
+    .grid { gap: 20px; align-items: stretch; padding-bottom: 48px; }
+    .grid--tech > :nth-child(even) { transform: translateY(48px); }
+    .grid--products { grid-template-columns: repeat(3, 1fr); }
     .grid--products :global(.card) { display: block; }
     .grid--products :global(.card .card__media) { width: auto; aspect-ratio: 1 / 1; height: auto; margin: 0; border-radius: 0; }   /* фото владельца — квадрат 1:1, без обрезки */
     .grid--products :global(.card .card__go) { position: absolute; margin: 0; }
-    .grid--products > :global(:nth-child(3n + 2)) { margin-top: 40px; }   /* та же «лесенка», что у технологий */
+    .grid--products > :nth-child(3n + 2) { transform: translateY(48px); }
   }
 </style>

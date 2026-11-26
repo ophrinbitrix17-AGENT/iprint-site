@@ -149,7 +149,7 @@ export function formatLead(l: Lead): string {
   const time = new Date().toLocaleString('uk-UA', { timeZone: 'Europe/Kyiv' });
   const build = (comment: string) => [
     '<b>🧾 Нова заявка з сайту iPrint</b>',
-    `<b>Ім'я:</b> ${esc(l.name)}`,
+    `<b>Імʼя:</b> ${esc(l.name)}`,
     `<b>Контакт:</b> ${esc(l.contact)}`,
     l.needs.length ? `<b>Що потрібно:</b> ${esc(l.needs.join(', '))}` : '',
     l.qty ? `<b>Тираж:</b> ${esc(l.qty)}` : '',

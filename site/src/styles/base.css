@@ -38,6 +38,9 @@ ul, ol { margin: 0; padding: 0; }
 }
 .section { padding: var(--section-y) 0; background: var(--bg); color: var(--text); }
 .section--alt { background: var(--bg-alt); }
+.section--tight { padding-block: calc(var(--section-y) / 2); }   /* короткая реплика (мягкий призыв) — половинный отступ */
+/* переход по якорю: раздел «приземляется» ≈ в 23 px под шапкой, верхний отступ секции уходит под неё (при обычной прокрутке ритм не меняется) */
+.section[id] { scroll-margin-top: calc(12px - var(--section-y)); }
 
 /* ---- типографика ---- */
 .h1 { overflow-wrap: break-word; hyphens: auto; font-size: var(--fs-h1); line-height: var(--lh-tight); letter-spacing: -0.02em; font-weight: var(--fw-black); text-wrap: balance; }
@@ -47,8 +50,10 @@ ul, ol { margin: 0; padding: 0; }
 .muted { color: var(--muted); }
 .eyebrow {
   display: flex; align-items: center; gap: 8px; margin: 0 0 10px;
-  font-size: var(--fs-eyebrow); letter-spacing: .08em; text-transform: uppercase; font-weight: var(--fw-bold); color: var(--accent-ink);
+  font-size: var(--fs-eyebrow); letter-spacing: .08em; text-transform: uppercase; font-weight: var(--fw-bold); color: var(--eyebrow-fg);
 }
+/* лаймовая полоса-маркер под текстом (светлая тема вне сцен; в тёмной и в сценах — прозрачная) */
+.eyebrow > span { background: linear-gradient(transparent 60%, var(--eyebrow-mark) 60%); padding: 0 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 /* точка-мишень */
 .eyebrow::before {
   content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
@@ -58,8 +63,8 @@ ul, ol { margin: 0; padding: 0; }
 /* ---- кнопки ---- */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  min-height: 48px; padding: 0 22px; border-radius: var(--radius-s);
-  font-weight: var(--fw-bold); font-size: var(--fs-body); line-height: 1.2; text-align: center;
+  min-height: var(--btn-h); padding: 0 var(--btn-px); border-radius: var(--radius-s);
+  font-weight: var(--fw-bold); font-size: var(--fs-btn); line-height: 1.2; text-align: center;
   border: 1.5px solid transparent; cursor: pointer;
   transition: transform var(--t-fast) var(--ease), background-color var(--t-mid), border-color var(--t-mid);
 }

@@ -45,7 +45,7 @@ test.describe('Форма заявки', () => {
     const name = uid();
     await fillBasic(page, name, '@iprint_test');
     await page.locator('.chip', { hasText: 'Друк на ваших виробах' }).click();
-    await page.locator('.chip', { hasText: '50–200' }).click();
+    await page.locator('.chip', { hasText: '51–200' }).click();
     await page.fill('#lead-comment', 'худі, принт на спині <b>тест</b> & ще');
     await humanTime(page);
     await page.locator('.lead-form__submit').click();
@@ -56,7 +56,7 @@ test.describe('Форма заявки', () => {
     expect(body.chat_id).toBe('100');
     expect(body.text).toContain('@iprint_test');
     expect(body.text).toContain('Друк на ваших виробах');
-    expect(body.text).toContain('50–200');
+    expect(body.text).toContain('51–200');
     expect(body.text).toContain('&lt;b&gt;тест&lt;/b&gt; &amp; ще');   // HTML пользователя экранирован
     await expect(page.locator('#lead-name')).toHaveValue('');
   });

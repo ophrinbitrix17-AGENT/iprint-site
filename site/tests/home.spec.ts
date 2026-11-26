@@ -96,6 +96,20 @@ test.describe('Главная', () => {
     expect([...new Set(missing)]).toEqual([]);
   });
 
+  test('переход по якорю: раздел начинается сразу под шапкой (≈ 23 px)', async ({ page }) => {
+    await page.goto('/');
+    for (const id of ['tekhnolohii', 'poslugy']) {
+      await page.evaluate((h) => { location.hash = h; }, id);
+      await page.waitForTimeout(150);
+      const gap = await page.evaluate((h) => {
+        const hdr = document.querySelector('.hdr')!.getBoundingClientRect().bottom;
+        return document.querySelector(`#${h} .eyebrow`)!.getBoundingClientRect().top - hdr;
+      }, id);
+      expect(gap, `#${id}`).toBeGreaterThan(14);
+      expect(gap, `#${id}`).toBeLessThan(32);
+    }
+  });
+
   test('тема: по умолчанию светлая, переключатель работает и запоминается', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
@@ -176,7 +190,7 @@ test.describe('Главная', () => {
   test('зоны касания ≥ 44 px у кнопок и ссылок', async ({ page, isMobile }) => {
     test.skip(!isMobile, 'только телефоны');
     await page.goto('/');
-    const small = await page.evaluate(() => [...document.querySelectorAll<HTMLElement>('.btn, .icon-btn, .ftr__list a')]
+    const small = await page.evaluate(() => [...document.querySelectorAll<HTMLElement>('.btn, .icon-btn, .ftr a, .hero__more')]
       .filter((el) => el.offsetParent !== null)
       .map((el) => ({ t: el.textContent?.trim().slice(0, 30), h: el.getBoundingClientRect().height }))
       .filter((x) => x.h < 44));

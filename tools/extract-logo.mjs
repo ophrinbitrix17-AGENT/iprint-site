@@ -1,6 +1,6 @@
 // Вырезает из лого.svg (лист CorelDRAW) два чистых логотипа iPrint:
 //  logo-light-bg.svg — для светлого фона (тёмное слово, лайм #A6D93C)
-//  logo-dark-bg.svg  — для тёмного фона (серое слово, лайм #A5F200)
+//  logo-dark-bg.svg  — для тёмного фона: белая группа владельца _2701079445184 (#FAFAFA, лайм #A5F200), аудит 26.11 Б9
 // node extract-logo.mjs <лого.svg> <out-dir>
 import fs from 'node:fs';
 import path from 'node:path';
@@ -11,10 +11,10 @@ const svg = fs.readFileSync(src, 'utf8');
 const lines = svg.split(/\r?\n/);
 const pick = (needle) => lines.findIndex((l) => l.includes(needle));
 
-// Экземпляры: светлый фон — кольцо cx=15991.05 cy=-12314.03; тёмный — кольцо cx=16112.01 cy=4271.04
+// Экземпляры: светлый фон — кольцо cx=15991.05 cy=-12314.03; тёмный — белая группа, кольцо cx=25572.88 cy=-5066.81
 const variants = {
   'logo-light-bg': { start: pick('cx="15991.05" cy="-12314.03"'), ring: '#2B2A29', word: '#2B2A29', dot: '#A6D93C', ringW: 170 },
-  'logo-dark-bg': { start: pick('cx="16112.01" cy="4271.04"'), ring: '#C7C2B8', word: '#BFBBB2', dot: '#A5F200', ringW: 150 },
+  'logo-dark-bg': { start: pick('cx="25572.88" cy="-5066.81"'), ring: '#FAFAFA', word: '#FAFAFA', dot: '#A5F200', ringW: 150 },
 };
 
 for (const [name, v] of Object.entries(variants)) {
