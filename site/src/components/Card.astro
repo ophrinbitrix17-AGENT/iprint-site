@@ -12,7 +12,7 @@ const Tag = href ? 'a' : 'div';
 <Tag class:list={['card', { 'card--link': href }]} href={href ?? undefined}>
   <div class="card__media">
     {photo
-      ? <Picture src={photo} alt={imageAlt ?? ''} formats={['avif', 'webp']} widths={[320, 480, 720]} sizes={sizes} loading="lazy" />
+      ? <Picture src={photo} alt={imageAlt ?? ''} formats={['avif', 'webp']} widths={[320, 480, 720, 960]} sizes={sizes} loading="lazy" />
       : <div class="card__ph" role="img" aria-label={`${site.ui.photoPlaceholder}: ${title} — ${site.ui.photoSoon}`}><span>{placeholder ?? site.ui.photoPlaceholder}<br />{site.ui.placeholderDraft}</span></div>}
   </div>
   <div class="card__body">
@@ -38,5 +38,5 @@ const Tag = href ? 'a' : 'div';
   .card__ph { position: relative; width: 100%; height: 100%; display: grid; place-items: center; }
   .card__ph::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle, var(--accent) 1.2px, transparent 1.7px); background-size: 8px 8px; opacity: .5; }
   .card__ph span { position: relative; font-size: var(--fs-tag); font-weight: var(--fw-black); letter-spacing: .06em; background: var(--bg); color: var(--text); padding: 4px 7px; border-radius: 4px; text-align: center; line-height: 1.25; }
-  @media (min-width: 1100px) { .card__body { padding: 18px 20px 22px; } }
+  @media (min-width: 1100px) { .card__body { padding: 18px 20px 22px; } .card__title, .card__text { hyphens: manual; } }   /* на широких — без автопереносов */
 </style>

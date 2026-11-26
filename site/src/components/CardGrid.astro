@@ -5,8 +5,8 @@ type CardData = { title: string; text?: string; image?: string | null; imageAlt?
 interface Props { data: { id?: string; eyebrow?: string; title: string; cards: CardData[] }; variant: 'tech' | 'products'; alt?: boolean; }
 const { data, variant, alt = false } = Astro.props;
 const sizes = variant === 'tech'
-  ? '(min-width: 1100px) 25vw, (min-width: 700px) 50vw, 50vw'
-  : '(min-width: 1100px) 33vw, (min-width: 700px) 30vw, 120px';
+  ? '(min-width: 1100px) 300px, (min-width: 900px) 25vw, 50vw'
+  : '(min-width: 1100px) 400px, 104px';
 const titleId = `${data.id ?? variant}-title`;
 ---
 <section class:list={['section', { 'section--alt': alt }]} id={data.id} aria-labelledby={titleId}>
@@ -25,10 +25,10 @@ const titleId = `${data.id ?? variant}-title`;
   .grid--tech { grid-template-columns: 1fr 1fr; }
 
   /* продукты на телефоне — компактные строки: миниатюра + текст */
-  .grid--products :global(.card) { display: grid; grid-template-columns: 112px 1fr; align-items: center; }
-  .grid--products :global(.card .card__media) { width: 112px; height: 112px; aspect-ratio: 1 / 1; }
+  .grid--products :global(.card) { display: grid; grid-template-columns: 116px 1fr; align-items: center; }
+  .grid--products :global(.card .card__media) { width: 104px; height: 104px; aspect-ratio: 1 / 1; margin: 6px; border-radius: var(--radius-s); }   /* миниатюра «плашкой» — одинаково в строках любой высоты */
   .grid--products :global(.card .card__go) { position: static; margin-right: 12px; }
-  .grid--products :global(.card--link) { grid-template-columns: 112px 1fr auto; }
+  .grid--products :global(.card--link) { grid-template-columns: 116px 1fr auto; }
 
   @media (min-width: 700px) {
     .grid--products { grid-template-columns: 1fr 1fr; }
@@ -42,8 +42,8 @@ const titleId = `${data.id ?? variant}-title`;
     .grid--tech > :global(:nth-child(even)) { margin-top: 40px; }        /* «лесенка» — только сеткой */
     .grid--products { grid-template-columns: repeat(3, 1fr); align-items: start; }
     .grid--products :global(.card) { display: block; }
-    .grid--products :global(.card .card__media) { width: auto; aspect-ratio: 4 / 3; height: auto; }
+    .grid--products :global(.card .card__media) { width: auto; aspect-ratio: 1 / 1; height: auto; margin: 0; border-radius: 0; }   /* фото владельца — квадрат 1:1, без обрезки */
     .grid--products :global(.card .card__go) { position: absolute; margin: 0; }
-    .grid--products > :global(:nth-child(3n + 2)) { margin-top: 24px; }
+    .grid--products > :global(:nth-child(3n + 2)) { margin-top: 40px; }   /* та же «лесенка», что у технологий */
   }
 </style>

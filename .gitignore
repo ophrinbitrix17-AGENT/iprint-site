@@ -10,3 +10,4 @@ site/playwright-report/
 site/screenshots/
 site/.wrangler/
 site/.dev.vars
+assets-inbox/*/
