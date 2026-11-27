@@ -9,11 +9,10 @@
     "eyebrow": "Виробничий партнер для брендів одягу",
     "title": "Друк на тканині та пошив для брендів одягу",
     "lead": "Усі етапи — від ідеї до готового виробу.",
-    "image": "home/shovkotrafaretnyi-druk-chorni-futbolky.jpg",
-    "imageAlt": "Стос чорних футболок з повноколірним растровим шовкотрафаретним принтом",
-    "imageDraft": "ФОТО ТИМЧАСОВЕ",
-    "imageFocus": "50% 100%",
-    "imageFocusDesktop": "50% 60%",
+    "image": "home/shovkotrafaretnyi-druk-na-chornomu-khudi.jpg",
+    "imageAlt": "Чорне худі з шовкотрафаретним принтом: світлі концентричні кола з блакитним сяйвом",
+    "imageFocus": "50% 50%",
+    "imageFocusDesktop": "50% 45%",
     "primary": {
       "label": "Розрахувати вартість",
       "href": "/#zapyt"
