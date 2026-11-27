@@ -77,9 +77,16 @@ const photo = img(data.image);
     .hero__body { margin: 0; padding: 96px 0; width: 100%; }
     .hero__inner { max-width: 52%; }
   }
-  /* невысокие окна ноутбуков (1366×768): «Виробництво без зайвих ризиків» — в первом экране */
-  @media (min-width: 1100px) and (max-height: 800px) {
-    .hero__body { padding: 56px 0; }
-    :global(.hero + .section) { padding-top: 64px; }
+  /* невысокие окна (ноутбук 1366×768, масштаб Windows 125–150 %, браузер 110 %): отступы и H1 плавно зависят от высоты окна,
+     чтобы «Виробництво без зайвих ризиків» было видно в первом экране (аудит 27.11; выше 950 px — без изменений) */
+  @media (min-width: 1100px) and (max-height: 950px) {
+    .hero__body { padding: clamp(28px, 7svh, 96px) 0; }
+    .hero :global(.h1) { font-size: clamp(44px, 8svh, var(--fs-h1)); }
+    :global(.hero + .section) { padding-top: clamp(40px, 8svh, 112px); }
+  }
+  /* планшет лёжа (1024×768 и т. п.) */
+  @media (min-width: 700px) and (max-width: 1099px) and (orientation: landscape) and (min-height: 521px) {
+    .hero__media { max-height: 38svh; }
+    :global(.hero + .section) { padding-top: 56px; }
   }
 </style>
