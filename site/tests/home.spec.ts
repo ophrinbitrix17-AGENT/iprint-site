@@ -167,10 +167,10 @@ test.describe('Главная', () => {
 
   test('нет имён классов и id, которые прячут блокировщики рекламы', async ({ page }) => {
     // 27.11.2026: EasyList «###adv-title» прятал заголовок «Виробництво без зайвих ризиків» у владельца на компьютере.
-    for (const url of ['/', '/kontakty/', '/pro-kompaniiu/', '/polityka-konfidentsiinosti/']) {
+    for (const url of ['/', '/kontakty/', '/pro-kompaniiu/', '/polityka-konfidentsiinosti/', '/dyakuyemo/', '/pomylka/', '/ne-isnuie/']) {
       await page.goto(url);
       const bad = await page.evaluate(() => {
-        const risky = /(^|[-_])(adv|ads?|advert\w*|banner\w*|sponsor\w*|promo\w*)([-_]|$)/i;
+        const risky = /(^|[-_])(adv\d*|ads?|advert\w*|sponsor\w*|promo\w*|rekl\w*|popup\w*)([-_]|$)|ad(box|slot|unit|banner|sbox)|banner|[a-z]Ad([A-Z]|$)/;
         const names = [...document.querySelectorAll('[id],[class]')].flatMap((el) => [el.id, ...el.classList].filter(Boolean));
         return [...new Set(names.filter((n) => risky.test(n)))];
       });

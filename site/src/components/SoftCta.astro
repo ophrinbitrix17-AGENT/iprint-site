@@ -13,7 +13,7 @@ const { data } = Astro.props;
 </div>
 
 <style>
-  .soft { display: grid; gap: 18px; align-items: center; padding: 28px; border-radius: var(--radius-l); border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
+  .soft { display: grid; gap: 18px; align-items: center; padding: 28px; border-radius: var(--radius-l); border: 1px solid var(--card-line); background: var(--surface); box-shadow: var(--shadow); }
   .soft__text { font-size: var(--fs-accent); max-width: 60ch; text-wrap: pretty; }
   /* вопрос — призыв (жирный), ответ — пояснение (обычный, мельче): контраст как «заголовок карточки → текст» (владелец 27.11) */
   .soft__q { display: block; font-weight: var(--fw-bold); }
@@ -22,6 +22,5 @@ const { data } = Astro.props;
   @media (min-width: 700px) {
     .soft { grid-template-columns: 1fr auto; padding: 32px 40px; }
     .soft .btn { justify-self: auto; }
-    .soft__a { font-size: var(--fs-lead); }
   }
 </style>
