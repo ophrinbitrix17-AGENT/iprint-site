@@ -11,7 +11,7 @@ const photo = img(data.image);
   <div class="hero__media">
     {photo && (
       <Picture src={photo} alt={data.imageAlt ?? ''} formats={['avif', 'webp']} widths={[480, 768, 1080, 1440]}
-        sizes="(min-width: 1100px) 50vw, 100vw" loading="eager" fetchpriority="high" class="hero__img" />
+        sizes="(min-width: 900px) 50vw, 100vw" loading="eager" fetchpriority="high" class="hero__img" />
     )}
     {data.imageDraft && <span class="draft hero__draft" aria-hidden="true">{data.imageDraft}</span>}
   </div>
@@ -53,8 +53,8 @@ const photo = img(data.image);
     .hero__body { margin-top: -96px; }
     .hero__actions .btn { flex: 0 0 auto; }
   }
-  /* телефон лёжа: первый экран должен вместить заголовок и кнопку */
-  @media (orientation: landscape) and (max-height: 520px) {
+  /* телефон лёжа: первый экран должен вместить заголовок и кнопку (только до версии компьютера — на ней свой шаг для низких окон) */
+  @media (orientation: landscape) and (max-height: 520px) and (max-width: 899.98px) {
     .hero__media { max-height: 30svh; }
     .hero__body { margin-top: -32px; padding-bottom: 24px; }
     .hero .eyebrow { display: none; }
@@ -64,7 +64,7 @@ const photo = img(data.image);
     .hero__lead { margin-top: 6px; }
     .hero__actions { margin-top: 12px; }
   }
-  @media (min-width: 1100px) {
+  @media (min-width: 900px) {
     /* под Hero всегда видно ≥ 200 px следующего раздела (аудит 26.11 Б7) */
     .hero { min-height: min(calc(100svh - var(--header-h) - 200px), 760px); display: flex; align-items: center; }
     .hero__media { position: absolute; top: 0; right: 0; bottom: 0; width: 48%; aspect-ratio: auto; max-height: none; }
@@ -75,13 +75,24 @@ const photo = img(data.image);
   }
   /* невысокие окна (ноутбук 1366×768, масштаб Windows 125–150 %, браузер 110 %): отступы и H1 плавно зависят от высоты окна,
      чтобы «Виробництво без зайвих ризиків» было видно в первом экране (аудит 27.11; выше 950 px — без изменений) */
-  @media (min-width: 1100px) and (max-height: 950px) {
+  @media (min-width: 900px) and (max-height: 950px) {
     .hero__body { padding: clamp(28px, 7svh, 96px) 0; }
-    .hero :global(.h1) { font-size: clamp(44px, 8svh, var(--fs-h1)); }
+    .hero :global(.h1) { font-size: clamp(38px, 7.6svh, var(--fs-h1)); }   /* 7,6svh: на 1366×657 H1 в 2 строки без переноса «по-шив» (27.11) */
     :global(.hero + .section) { padding-top: clamp(40px, 8svh, 112px); }
   }
-  /* планшет лёжа (1024×768 и т. п.) */
-  @media (min-width: 700px) and (max-width: 1099px) and (orientation: landscape) and (min-height: 521px) {
+  /* узкий компьютер 900–1099 (ноутбук 1366 с масштабом Windows 125–150 %): колонка текста шире, чтобы кнопка и «Що можна замовити» стояли в один ряд */
+  @media (min-width: 900px) and (max-width: 1099.98px) {
+    .hero__media { width: 44%; }
+    .hero__inner { max-width: 58%; }
+  }
+  /* очень низкое окно компьютера (1366×768 при 150 % ≈ 910×430): под Hero виден следующий раздел */
+  @media (min-width: 900px) and (max-height: 520px) {
+    .hero__body { padding: 18px 0; }
+    .hero__lead { margin-top: 8px; }
+    .hero__actions { margin-top: 14px; }
+  }
+  /* планшет (до 899 px) лёжа */
+  @media (min-width: 700px) and (max-width: 899.98px) and (orientation: landscape) and (min-height: 521px) {
     .hero__media { max-height: 38svh; }
     /* полоса ~3,5:1 — темнее низ под надписью, кадр чуть выше центра принта (рецензия 27.11) */
     .hero__media::after { background: linear-gradient(180deg, transparent 5%, var(--bg) 82%); }

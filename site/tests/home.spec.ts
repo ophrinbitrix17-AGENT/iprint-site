@@ -139,7 +139,7 @@ test.describe('Главная', () => {
   });
 
   test('выпадающее меню «Підтримка» работает с клавиатуры', async ({ page, isMobile }) => {
-    test.skip(isMobile || (page.viewportSize()?.width ?? 0) < 1100, 'только компьютер');
+    test.skip(isMobile || (page.viewportSize()?.width ?? 0) < 900, 'только компьютер');
     await page.goto('/');
     await page.locator('.dd summary').focus();
     await page.keyboard.press('Enter');

@@ -25,7 +25,7 @@ test.describe('Внутренние страницы', () => {
 
   test('меню «Підтримка» ведёт на «Про компанію» и «Контакти»', async ({ page, isMobile }) => {
     await page.goto('/');
-    if (isMobile || (page.viewportSize()?.width ?? 0) < 1100) {
+    if (isMobile || (page.viewportSize()?.width ?? 0) < 900) {
       await page.locator('[data-menu-toggle]').click();
       await page.locator('#mnav a', { hasText: 'Контакти' }).click();
     } else {

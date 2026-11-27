@@ -4,9 +4,10 @@ import Card from './Card.astro';
 type CardData = { title: string; text?: string; image?: string | null; imageAlt?: string; placeholder?: string; href?: string | null };
 interface Props { data: { id?: string; eyebrow?: string; title: string; cards: CardData[] }; variant: 'tech' | 'products'; alt?: boolean; }
 const { data, variant, alt = false } = Astro.props;
+// 1100px здесь — не порог раскладки (он 900px), а ширина, с которой размер карточки упирается в max-width контейнера
 const sizes = variant === 'tech'
   ? '(min-width: 1100px) 300px, (min-width: 900px) 25vw, (min-width: 700px) 50vw, 104px'
-  : '(min-width: 1100px) 400px, 104px';
+  : '(min-width: 1100px) 400px, (min-width: 900px) 34vw, 104px';
 const titleId = `${data.id ?? variant}-title`;
 ---
 <section class:list={['section', { 'section--alt': alt }]} id={data.id} aria-labelledby={titleId}>
@@ -27,7 +28,7 @@ const titleId = `${data.id ?? variant}-title`;
   .grid__item { display: flex; flex-direction: column; min-width: 0; }
   .grid__item > :global(.card) { flex: 1; }
 
-  /* телефон — компактные строки: миниатюра + текст (услуги всегда до 1100, технологии — до 700; Б1 §8, решение 26.11) */
+  /* телефон — компактные строки: миниатюра + текст (услуги всегда до 900, технологии — до 700; Б1 §8, решение 26.11) */
   .grid--products :global(.card) { display: grid; grid-template-columns: 116px 1fr; align-items: center; }
   .grid--products :global(.card .card__media) { width: 104px; height: 104px; aspect-ratio: 1 / 1; margin: 6px; border-radius: var(--radius-s); }   /* миниатюра «плашкой» — одинаково в строках любой высоты */
   .grid--products :global(.card .card__go) { position: static; margin-right: 12px; }
@@ -50,7 +51,7 @@ const titleId = `${data.id ?? variant}-title`;
     .grid--tech :global(.card .card__media) { margin: var(--card-mat) var(--card-mat) 0; border-radius: var(--card-mat-radius); }
     .grid--tech :global(.card .card__go) { top: calc(var(--card-mat) + 8px); right: calc(var(--card-mat) + 8px); }
   }
-  @media (min-width: 1100px) {
+  @media (min-width: 900px) {
     /* «лесенка» — сдвигом, а не отступом: все карточки одной высоты, ступенька ровная (аудит 26.11 Б8) */
     .grid { gap: 20px; align-items: stretch; padding-bottom: 48px; }
     .grid--tech > :nth-child(even) { transform: translateY(48px); }

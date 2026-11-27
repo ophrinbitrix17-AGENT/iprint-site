@@ -30,6 +30,7 @@ const { data } = Astro.props;
   .cta__text { margin-top: 12px; font-size: var(--fs-cta-text); max-width: 56ch; color: var(--muted); }
   .cta__alt-title { margin-top: 24px; font-weight: 600; }
   .cta__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+  /* две колонки — только с 1100 px: на 900–1099 форма в колонке ~400 px сжимается (рецензия 27.11) */
   @media (min-width: 1100px) {
     .cta::before { display: block; }   /* на широком экране растр в углу над формой, не под текстом */
     .cta__grid { grid-template-columns: 1fr 1.15fr; align-items: start; gap: 56px; }

@@ -39,5 +39,6 @@ const Tag = href ? 'a' : 'div';
   .card__ph::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle, var(--accent) 1.2px, transparent 1.7px); background-size: 8px 8px; opacity: .5; }
   .card__ph span { position: relative; font-size: var(--fs-tag); font-weight: var(--fw-black); letter-spacing: .06em; background: var(--bg); color: var(--text); padding: 4px 7px; border-radius: 4px; text-align: center; line-height: 1.25; }
   @media (min-width: 700px) { .card__title, .card__text { hyphens: manual; } }   /* от планшета — без автопереносов с дефисом */
-  @media (min-width: 1100px) { .card__body { padding: 18px 20px 22px; } }
+  @media (min-width: 900px) { .card__body { padding: 18px 20px 22px; } }
+  @media (min-width: 900px) and (max-width: 1099.98px) { .card__body { padding: 14px 14px 18px; } }   /* узкий компьютер: карточки ~150 px, место — тексту */
 </style>
