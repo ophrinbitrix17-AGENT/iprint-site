@@ -1,6 +1,6 @@
 import type { ImageMetadata } from 'astro';
 
-/** Реестр фото: ключ из текстов (например "tech/shovkotrafaretnyi-druk-na-futboltsi.jpg") → файл в src/assets/images. */
+/** Реестр фото: ключ из текстов (например "tech/shovkotrafaretnyi-druk-pero-na-chornii-tkanyni.jpg") → файл в src/assets/images. */
 const files = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/**/*.{jpg,jpeg,png,webp,avif}', { eager: true });
 
 /** Правило имён (tools/ИЗОБРАЖЕНИЯ.md): латиница, нижний регистр, слова через дефис, 2+ слова по сути кадра. */
