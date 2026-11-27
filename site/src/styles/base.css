@@ -49,15 +49,16 @@ ul, ol { margin: 0; padding: 0; }
 .lead { font-size: var(--fs-lead); color: var(--muted); max-width: 46ch; }
 .muted { color: var(--muted); }
 .eyebrow {
-  display: flex; align-items: center; gap: 8px; margin: 0 0 10px;
-  font-size: var(--fs-eyebrow); letter-spacing: .08em; text-transform: uppercase; font-weight: var(--fw-bold); color: var(--eyebrow-fg);
+  display: flex; align-items: center; gap: var(--eyebrow-gap); margin: 0 0 10px;
+  font-size: var(--fs-eyebrow); line-height: 1.2; letter-spacing: .08em; text-transform: uppercase; font-weight: var(--fw-bold); color: var(--eyebrow-fg);
 }
-/* лаймовая полоса-маркер под текстом (светлая тема вне сцен; в тёмной и в сценах — прозрачная) */
-.eyebrow > span { background: linear-gradient(transparent 60%, var(--eyebrow-mark) 60%); padding: 0 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-/* точка-мишень */
+/* текст заглавными: центр букв (а не строки) — по центру мишени */
+.eyebrow > span { position: relative; top: -0.035em; }
+/* точка-мишень: лаймовая точка в кольце; размеры — токены темы */
 .eyebrow::before {
-  content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
-  box-shadow: 0 0 0 3px var(--bg), 0 0 0 4.5px var(--muted);
+  content: ""; flex: none; box-sizing: border-box; width: var(--eyebrow-dot); height: var(--eyebrow-dot);
+  padding: var(--eyebrow-ring-gap); border: var(--eyebrow-ring-w) solid var(--eyebrow-ring); border-radius: 50%;
+  background: var(--accent) content-box;
 }
 
 /* ---- кнопки ---- */

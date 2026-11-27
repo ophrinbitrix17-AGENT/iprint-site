@@ -85,9 +85,17 @@
   --form-line: #857F75;          /* рамки полей формы ≥ 3:1 к карточке */
   --chip-on-bg: var(--graphite);  /* выбранный вариант в форме */
   --chip-on-fg: var(--lime-dark);
-  /* надписи разделов: графит + лаймовая полоса-маркер (только светлая тема вне сцен) */
+  /* надписи разделов: графит + крупная мишень — лаймовая точка в графитовом кольце (решение 27.11) */
   --eyebrow-fg: var(--text);
-  --eyebrow-mark: var(--lime-light);
+  --eyebrow-dot: 20px;            /* диаметр мишени */
+  --eyebrow-ring: var(--text);    /* кольцо */
+  --eyebrow-ring-w: 2px;
+  --eyebrow-ring-gap: 3px;        /* просвет между кольцом и точкой (точка 10 px) */
+  --eyebrow-gap: 10px;            /* от мишени до текста */
+  /* карточки: чёткий контур + белое поле вокруг фото (решение 27.11) */
+  --card-line: #B3AC9F;
+  --card-mat: 10px;
+  --card-mat-radius: 8px;
   /* состояния формы */
   --danger: #B3261E;
   --danger-bg: #FBE4E1;
@@ -117,7 +125,12 @@
   --chip-on-bg: var(--lime-dark);
   --chip-on-fg: var(--graphite-deep);
   --eyebrow-fg: var(--lime-dark);
-  --eyebrow-mark: transparent;
+  --eyebrow-dot: 17px;            /* малая мишень: точка 8 px, тонкое кольцо */
+  --eyebrow-ring: var(--muted);
+  --eyebrow-ring-w: 1.5px;
+  --eyebrow-ring-gap: 3px;
+  --eyebrow-gap: 6px;
+  --card-line: #4A4740;
   --danger: #FF8A7A;
   --danger-bg: #3A1F1C;
   --danger-fg: #FFC9C0;
@@ -145,7 +158,12 @@
   --chip-on-bg: var(--lime-dark);
   --chip-on-fg: var(--graphite-deep);
   --eyebrow-fg: var(--lime-dark);
-  --eyebrow-mark: transparent;
+  --eyebrow-dot: 17px;            /* малая мишень: точка 8 px, тонкое кольцо */
+  --eyebrow-ring: var(--muted);
+  --eyebrow-ring-w: 1.5px;
+  --eyebrow-ring-gap: 3px;
+  --eyebrow-gap: 6px;
+  --card-line: #4A4740;
   --danger: #FF8A7A;
   --danger-bg: #3A1F1C;
   --danger-fg: #FFC9C0;
