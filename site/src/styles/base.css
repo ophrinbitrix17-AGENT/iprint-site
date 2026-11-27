@@ -49,14 +49,14 @@ ul, ol { margin: 0; padding: 0; }
 .lead { font-size: var(--fs-lead); color: var(--muted); max-width: 46ch; }
 .muted { color: var(--muted); }
 .eyebrow {
-  display: flex; align-items: center; gap: var(--eyebrow-gap); margin: 0 0 10px;
+  display: flex; align-items: flex-start; gap: var(--eyebrow-gap); margin: 0 0 10px;
   font-size: var(--fs-eyebrow); line-height: 1.2; letter-spacing: .08em; text-transform: uppercase; font-weight: var(--fw-bold); color: var(--eyebrow-fg);
 }
-/* текст заглавными: центр букв (а не строки) — по центру мишени */
-.eyebrow > span { position: relative; top: -0.035em; }
+/* мишень — напротив первой строки (надпись может переноситься); центр заглавных — по центру мишени */
+.eyebrow > span { position: relative; top: var(--eyebrow-cap-shift, 0em); }
 /* точка-мишень: лаймовая точка в кольце; размеры — токены темы */
 .eyebrow::before {
-  content: ""; flex: none; box-sizing: border-box; width: var(--eyebrow-dot); height: var(--eyebrow-dot);
+  content: ""; flex: none; box-sizing: border-box; margin-top: calc((1.2em - var(--eyebrow-dot)) / 2); width: var(--eyebrow-dot); height: var(--eyebrow-dot);
   padding: var(--eyebrow-ring-gap); border: var(--eyebrow-ring-w) solid var(--eyebrow-ring); border-radius: 50%;
   background: var(--accent) content-box;
 }

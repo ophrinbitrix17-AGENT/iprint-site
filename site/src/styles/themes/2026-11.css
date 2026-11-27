@@ -92,6 +92,7 @@
   --eyebrow-ring-w: 2px;
   --eyebrow-ring-gap: 3px;        /* просвет между кольцом и точкой (точка 10 px) */
   --eyebrow-gap: 10px;            /* от мишени до текста */
+  --eyebrow-cap-shift: 0.05em;    /* оптическое выравнивание заглавных по центру мишени (замер по пикселям 27.11) */
   /* карточки: чёткий контур + белое поле вокруг фото (решение 27.11) */
   --card-line: #B3AC9F;
   --card-mat: 10px;
@@ -127,9 +128,10 @@
   --eyebrow-fg: var(--lime-dark);
   --eyebrow-dot: 17px;            /* малая мишень: точка 8 px, тонкое кольцо */
   --eyebrow-ring: var(--muted);
-  --eyebrow-ring-w: 1.5px;
+  --eyebrow-ring-w: 1px;
   --eyebrow-ring-gap: 3px;
   --eyebrow-gap: 6px;
+  --eyebrow-cap-shift: 0.05em;
   --card-line: #4A4740;
   --danger: #FF8A7A;
   --danger-bg: #3A1F1C;
@@ -160,9 +162,10 @@
   --eyebrow-fg: var(--lime-dark);
   --eyebrow-dot: 17px;            /* малая мишень: точка 8 px, тонкое кольцо */
   --eyebrow-ring: var(--muted);
-  --eyebrow-ring-w: 1.5px;
+  --eyebrow-ring-w: 1px;
   --eyebrow-ring-gap: 3px;
   --eyebrow-gap: 6px;
+  --eyebrow-cap-shift: 0em;
   --card-line: #4A4740;
   --danger: #FF8A7A;
   --danger-bg: #3A1F1C;
