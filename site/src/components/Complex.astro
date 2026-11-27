@@ -1,8 +1,12 @@
 ---
-/** «Комплексні вироби»: тёмная сцена, фото изделия + нумерованные выноски отдельным слоем (текстом в HTML — читаемо на телефоне и для ИИ). */
+/** «Комплексні вироби»: тёмная сцена, фото изделия + список признаков текстом в HTML (читаемо на телефоне и для ИИ).
+ *  27.11.2026: финальное фото дизайнера с впечатанными подписями (исключение по решению владельца) — поэтому
+ *  пункты без номеров (лаймовые точки), а фото по нажатию открывается целиком, чтобы на телефоне прочитать подписи. */
 import { Picture } from 'astro:assets';
 import { img } from '../lib/images';
-interface Props { data: { title: string; intro?: string | null; image?: string | null; imageAlt?: string; imageDraft?: string; callouts: { title: string; text: string }[] } }
+import site from '../content/site.json';
+import Icon from './Icon.astro';
+interface Props { data: { title: string; intro?: string | null; image?: string | null; imageAlt?: string; callouts: { title: string; text: string }[] } }
 const { data } = Astro.props;
 const photo = img(data.image);
 ---
@@ -12,12 +16,17 @@ const photo = img(data.image);
     {data.intro && <p class="complex__intro muted">{data.intro}</p>}
     <div class="complex">
       <div class="complex__media">
-        {photo && <Picture src={photo} alt={data.imageAlt ?? ''} formats={['avif', 'webp']} widths={[480, 768, 1200]} sizes="(min-width: 900px) 60vw, 100vw" loading="lazy" />}
-        {data.imageDraft && <span class="draft complex__draft" aria-hidden="true">{data.imageDraft}</span>}
+        {photo && (
+          <a class="complex__zoom" href={photo.src} target="_blank" rel="noopener">
+            <Picture src={photo} alt={data.imageAlt ?? ''} formats={['avif', 'webp']} widths={[480, 768, 1200, 1600]} sizes="(min-width: 900px) 60vw, 100vw" loading="lazy" />
+            <span class="visually-hidden">{site.ui.photoFull}</span>
+            <span class="complex__hint" aria-hidden="true"><Icon name="zoom" />{site.ui.photoZoom}</span>
+          </a>
+        )}
       </div>
-      <ol class="callouts" role="list">
+      <ul class="callouts" role="list">
         {data.callouts.map((c) => <li><span><strong>{c.title}</strong> — {c.text}</span></li>)}
-      </ol>
+      </ul>
     </div>
   </div>
 </section>
@@ -26,12 +35,17 @@ const photo = img(data.image);
   .complex__title { margin-bottom: 24px; }
   .complex__intro { margin: -8px 0 24px; max-width: 60ch; }
   .complex__media { position: relative; margin: 0; border-radius: var(--radius-m); overflow: hidden; background: var(--surface); }
+  .complex__zoom { display: block; cursor: zoom-in; }
+  .complex__zoom:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
   .complex__media :global(img) { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
-  .complex__draft { position: absolute; left: max(12px, env(safe-area-inset-left)); top: 12px; }
-  .callouts { list-style: none; counter-reset: c; display: grid; margin-top: 18px; }
+  /* видимая подсказка «Збільшити»: на телефоне впечатанные подписи мелкие, курсора-лупы нет */
+  .complex__hint { position: absolute; right: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: color-mix(in srgb, var(--bg) 82%, transparent); color: var(--text); font-size: var(--fs-small); font-weight: var(--fw-bold); pointer-events: none; }
+  .complex__hint :global(svg) { width: 18px; height: 18px; }
+  .callouts { list-style: none; display: grid; margin-top: 18px; }
   .callouts li { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--line); }
-  /* кружок по центру первой строки текста; цифра всегда графитовая на лайме */
-  .callouts li::before { counter-increment: c; content: counter(c); flex: none; width: var(--callout-dot); height: var(--callout-dot); margin-top: calc((var(--lh-body) * var(--fs-body) - var(--callout-dot)) / 2); border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--graphite-deep); font-weight: var(--fw-black); font-size: var(--fs-callout-num); line-height: 1; }
+  .callouts li:last-child { border-bottom: 0; }
+  /* лаймовая точка по центру первой строки текста (без номеров: на фото подписи без цифр) */
+  .callouts li::before { content: ''; flex: none; width: var(--callout-dot); height: var(--callout-dot); margin-top: calc((var(--lh-body) * var(--fs-body) - var(--callout-dot)) / 2); border-radius: 50%; background: var(--accent); }
   .callouts strong { font-weight: var(--fw-bold); }
   @media (min-width: 900px) {
     .complex { display: grid; grid-template-columns: 1.7fr 1fr; gap: 40px; align-items: center; }

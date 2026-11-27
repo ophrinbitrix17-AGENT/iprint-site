@@ -75,7 +75,9 @@
     "updated": "Оновлено",
     "privacyLink": "Політика конфіденційності",
     "draftText": "ДОРАБОТАТЬ — чернетка тексту",
-    "quickActions": "Швидкий звʼязок"
+    "quickActions": "Швидкий звʼязок",
+    "photoFull": "Відкрити фото в повному розмірі (нова вкладка)",
+    "photoZoom": "Збільшити"
   },
   "legal": {
     "privacyHref": "/polityka-konfidentsiinosti/"
