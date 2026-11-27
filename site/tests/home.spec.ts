@@ -165,6 +165,19 @@ test.describe('Главная', () => {
     expect(dur.split(',').every((d) => parseFloat(d) <= 0.01)).toBe(true);
   });
 
+  test('нет имён классов и id, которые прячут блокировщики рекламы', async ({ page }) => {
+    // 27.11.2026: EasyList «###adv-title» прятал заголовок «Виробництво без зайвих ризиків» у владельца на компьютере.
+    for (const url of ['/', '/kontakty/', '/pro-kompaniiu/', '/polityka-konfidentsiinosti/']) {
+      await page.goto(url);
+      const bad = await page.evaluate(() => {
+        const risky = /(^|[-_])(adv|ads?|advert\w*|banner\w*|sponsor\w*|promo\w*)([-_]|$)/i;
+        const names = [...document.querySelectorAll('[id],[class]')].flatMap((el) => [el.id, ...el.classList].filter(Boolean));
+        return [...new Set(names.filter((n) => risky.test(n)))];
+      });
+      expect(bad, url).toEqual([]);
+    }
+  });
+
   test('все картинки загрузились и имеют alt', async ({ page }) => {
     await page.goto('/');
     // Ленивые картинки (loading="lazy") грузятся только у экрана: подводим к каждой и ждём её загрузки.

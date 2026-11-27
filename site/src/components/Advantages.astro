@@ -1,17 +1,18 @@
 ---
+/* Имена классов/id без «adv», «ad-», «banner», «promo», «sponsor»: блокировщики рекламы (EasyList: ###adv-title) прятали заголовок «без ризиків» на компьютере (27.11). */
 /** «Виробництво без зайвих ризиків»: нумерованный типографический список (без иконок-обещаний — Б1 §10). Любое число пунктов. */
 interface Props { data: { title: string; items: { title: string; text: string }[] } }
 const { data } = Astro.props;
 ---
-<section class="section" aria-labelledby="adv-title">
+<section class="section" aria-labelledby="perevahy-title">
   <div class="wrap">
-    <h2 class="h2 adv__title" id="adv-title">{data.title}</h2>
-    <ol class="adv" role="list">
+    <h2 class="h2 perevahy__title" id="perevahy-title">{data.title}</h2>
+    <ol class="perevahy" role="list">
       {data.items.map((it, i) => (
-        <li class="adv__item">
-          <span class="adv__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+        <li class="perevahy__item">
+          <span class="perevahy__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
           <h3 class="h3">{it.title}</h3>
-          <p class="adv__text">{it.text}</p>
+          <p class="perevahy__text">{it.text}</p>
         </li>
       ))}
     </ol>
@@ -19,11 +20,11 @@ const { data } = Astro.props;
 </section>
 
 <style>
-  .adv__title { margin-bottom: 28px; }
-  .adv { list-style: none; display: grid; gap: 4px 28px; }
-  .adv__item { border-top: 2px solid var(--line-strong); padding: 18px 0 22px; }
-  .adv__num { display: block; font-size: var(--fs-num); font-weight: var(--fw-black); line-height: 1; letter-spacing: -.03em; color: var(--accent-ink); margin-bottom: 12px; font-variant-numeric: tabular-nums; }
-  .adv__text { margin-top: 6px; color: var(--muted); }
-  @media (min-width: 700px) { .adv { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1100px) { .adv { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); } }
+  .perevahy__title { margin-bottom: 28px; }
+  .perevahy { list-style: none; display: grid; gap: 4px 28px; }
+  .perevahy__item { border-top: 2px solid var(--line-strong); padding: 18px 0 22px; }
+  .perevahy__num { display: block; font-size: var(--fs-num); font-weight: var(--fw-black); line-height: 1; letter-spacing: -.03em; color: var(--accent-ink); margin-bottom: 12px; font-variant-numeric: tabular-nums; }
+  .perevahy__text { margin-top: 6px; color: var(--muted); }
+  @media (min-width: 700px) { .perevahy { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .perevahy { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); } }
 </style>
