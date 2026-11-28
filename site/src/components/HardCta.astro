@@ -11,10 +11,10 @@ const { data } = Astro.props;
     <div class="cta__intro">
       <h2 class="h2" id="cta-title">{data.title}</h2>
       <p class="cta__text">{data.text}</p>
-      <p class="cta__alt-title">{site.ui.contactAlt}</p>
+      <p class="cta__alt-title">{site.telegram ? site.ui.contactAlt : site.ui.contactAltPhone}</p>
       <div class="cta__actions">
         {site.telegram && <a class="btn btn--ghost" href={site.telegram} rel="noopener"><Icon name="telegram" />{site.ui.writeTelegram}</a>}
-        <a class="btn btn--ghost" href={`tel:${site.phone}`}><Icon name="phone" />{site.phoneDisplay}</a>
+        <a class="btn btn--ghost cta__phone" href={`tel:${site.phone}`}><Icon name="phone" />{site.phoneDisplay}</a>
       </div>
     </div>
     <LeadForm />
@@ -29,7 +29,12 @@ const { data } = Astro.props;
   .cta__grid { position: relative; display: grid; gap: 28px; }
   .cta__text { margin-top: 12px; font-size: var(--fs-cta-text); max-width: 56ch; color: var(--muted); }
   .cta__alt-title { margin-top: 24px; font-weight: 600; }
-  .cta__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+  .cta__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; margin-top: 10px; }
+  /* компьютер: номер — текст с иконкой, а не кнопка (звонок с ПК — не главный путь; tel: остаётся для Mac→iPhone и Phone Link). Решение 28.11 */
+  @media (min-width: 900px) {
+    .cta__phone { min-height: 44px; padding: 0; border-color: transparent; font-size: var(--fs-body); user-select: text; }
+    .cta__phone:hover { border-color: transparent; text-decoration: underline; text-underline-offset: 3px; }
+  }
   /* две колонки — только с 1100 px: на 900–1099 форма в колонке ~400 px сжимается (рецензия 27.11) */
   @media (min-width: 1100px) {
     .cta::before { display: block; }   /* на широком экране растр в углу над формой, не под текстом */
