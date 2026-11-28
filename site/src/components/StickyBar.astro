@@ -1,13 +1,12 @@
 ---
-/** Липкая нижняя панель действий — только на телефоне/планшете (Б1 §8). Telegram появится, когда владелец даст ссылку; пока — звонок. */
+/** Липкая нижняя панель действий — только на телефоне/планшете (Б1 §8). Telegram (если задан в site.json) + звонок — обе иконки (рецензия 28.11: звонок на телефоне не терять). */
 import site from '../content/site.json';
 import Icon from './Icon.astro';
 ---
 <aside class="sbar" data-sbar aria-label={site.ui.quickActions}>
   <a class="btn btn--primary sbar__main" href={site.cta.href}>{site.ui.stickyMain}</a>
-  {site.telegram
-    ? <a class="icon-btn sbar__icon" href={site.telegram} rel="noopener" aria-label={site.ui.writeTelegram}><Icon name="telegram" /></a>
-    : <a class="icon-btn sbar__icon" href={`tel:${site.phone}`} aria-label={`${site.ui.callPrefix}: ${site.phoneDisplay}`}><Icon name="phone" /></a>}
+  {site.telegram && <a class="icon-btn sbar__icon" href={site.telegram} rel="noopener" aria-label={site.ui.writeTelegram}><Icon name="telegram" /></a>}
+  <a class="icon-btn sbar__icon" href={`tel:${site.phone}`} aria-label={`${site.ui.callPrefix}: ${site.phoneDisplay}`}><Icon name="phone" /></a>
 </aside>
 
 <script>
@@ -32,5 +31,7 @@ import Icon from './Icon.astro';
   .sbar--hidden, :global(body.menu-open) .sbar { transform: translateY(110%); visibility: hidden; }
   .sbar__main { flex: 1; }
   .sbar__icon { flex: none; width: 48px; height: 48px; }
+  /* до 360 px с двумя иконками главной кнопке ~176 px — текст в одну строку мельче */
+  @media (max-width: 359.98px) { .sbar__main { font-size: var(--fs-small); padding: 0 10px; white-space: nowrap; } }
   @media (min-width: 900px) { .sbar { display: none; } }
 </style>

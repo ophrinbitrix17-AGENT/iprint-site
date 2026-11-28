@@ -20,7 +20,7 @@ const isProduction = process.env.SITE_ENV === 'production';
 const robotsNoindex = noindex || !isProduction;
 
 const orgId = `${site.url}/#org`;
-const sameAs = [site.instagram, site.telegram].filter(Boolean);
+const sameAs = [site.instagram].filter(Boolean);   // t.me/iprintmanager — рабочий аккаунт менеджеров, не официальный профиль: в sameAs не ставим (рецензия 28.11)
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
